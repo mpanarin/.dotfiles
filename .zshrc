@@ -87,10 +87,6 @@ source $ZSH/oh-my-zsh.sh
 ZSH_TMUX_AUTOSTART=false
 [[ $TMUX == "" ]] && tmux new-session
 
-#if command -v tmux>/dev/null; then
-#  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-#fi
-
 source "/home/m-panarin/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
 SPACESHIP_USER_SHOW=false
 SPACESHIP_HG_SHOW=false
@@ -132,7 +128,7 @@ function doco_migrate() {
     if [ $1 != "" ]
     then
         db=$1
-    else 
+    else
         return "no db name"
     fi
     if [ $2 != "" ]
@@ -160,7 +156,7 @@ function doco_ant() {
     if [ $1 != "" ]
     then
         db=$1
-    else 
+    else
         return "no db name"
     fi
     doco run --rm -e DB_NAME=$db odoo anthem
@@ -176,19 +172,3 @@ alias dood_test_run='docker-compose run --rm -e DB_NAME=testdb odoo pytest -s'
 alias dood_test_run_odoo='docker-compose run --rm -e DEMO=True -e DB_NAME=testdb -e MIGRATE=False odoo odoo --workers=0 --test-enable --stop-after-init'
 
 alias dood_test_run_travis='docker-compose run --rm odoo runtests'
-# alias psql_restore='pg_restore -U odoo -d odoodb -h localhost -p'
-
-# function psql_restore() {
-#     if [ $1 != "" ]
-#     then
-#         port=$1
-#     else 
-#         return "no port selected"
-#     fi
-#     if [ $2 != "" ]
-#     then
-#         filename=$2
-#     else
-#         return "no file specified"
-#     fi
-# }
