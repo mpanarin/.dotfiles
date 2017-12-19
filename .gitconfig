@@ -1,0 +1,6 @@
+[user]
+	name = mpanarin
+	email = m.panarin@mobilunity.com
+[core]
+	excludesfile = /home/m-panarin/.gitignore_global
+	editor = vim
