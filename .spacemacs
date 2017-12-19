@@ -325,6 +325,9 @@ you should place your code here."
   (spacemacs/toggle-auto-completion-on)
   ;; don't show filthy *.pyc files in neotree
   (setq neo-show-hidden-files nil)
+  ;; make auto-save more frequent and less painful
+  (setq auto-save-interval 100)
+  (setq auto-save-timeout 5)
   ;; add a line on 80 symbols
   (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
   ;; Unbind annoying sticky M-x on <menu>
