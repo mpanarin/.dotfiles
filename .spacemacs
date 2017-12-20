@@ -216,7 +216,7 @@ values."
    dotspacemacs-helm-use-fuzzy 'always
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-transient-state t
+   dotspacemacs-enable-paste-transient-state nil
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -332,6 +332,8 @@ you should place your code here."
   (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
   ;; Unbind annoying sticky M-x on <menu>
   (define-key global-map (kbd "<menu>") nil)
+  ;; No lock files plz
+  (setq create-lockfiles nil)
  )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
