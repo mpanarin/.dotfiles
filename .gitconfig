@@ -4,3 +4,12 @@
 [core]
 	excludesfile = /home/m-panarin/.gitignore_global
 	editor = vim
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool]
+	prompt = false
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
