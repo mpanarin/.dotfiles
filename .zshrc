@@ -111,6 +111,8 @@ SPACESHIP_KUBECONTEXT_SHOW=false
 SPACESHIP_BATTERY_SHOW=false
 SPACESHIP_DOCKER_SHOW=false
 
+alias gdt='git difftool'
+
 alias doco=docker-compose
 alias doco_templatedb='doco run --rm odoo createdb -T odoodb'
 alias doco_dropdb='doco run --rm odoo dropdb'
