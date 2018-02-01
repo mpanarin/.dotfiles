@@ -164,6 +164,15 @@ function doco_ant() {
     fi
     doco run --rm -e DB_NAME=$db odoo anthem
 }
+function doco_psql() {
+    if [ $1 != "" ]
+    then
+        container=$1
+    else
+        return "no container name"
+    fi
+    docker exec -it $container psql -U odoo
+}
 # setup test database. Just run `dood_test_setup`
 alias dood_test_setup='docker-compose run --rm -e DB_NAME=testdb odoo testdb-gen -i base'
 # reuse testdb and install or update modules on demand. Just run `dood_test_update -i/u something`
