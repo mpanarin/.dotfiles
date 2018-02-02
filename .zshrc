@@ -164,6 +164,7 @@ function doco_ant() {
     fi
     doco run --rm -e DB_NAME=$db odoo anthem
 }
+
 function doco_psql() {
     if [ $1 != "" ]
     then
@@ -172,6 +173,16 @@ function doco_psql() {
         return "no container name"
     fi
     docker exec -it $container psql -U odoo
+}
+
+function doco_bash() {
+    if [ $1 != "" ]
+    then
+        container=$1
+    else
+        return "no container name"
+    fi
+    docker exec -it $container bash
 }
 # setup test database. Just run `dood_test_setup`
 alias dood_test_setup='docker-compose run --rm -e DB_NAME=testdb odoo testdb-gen -i base'
