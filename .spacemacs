@@ -456,6 +456,7 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (spacemacs/enable-transparency)
   (spaceline-toggle-minor-modes-off)
+  (spaceline-toggle-purpose-off)
   (spacemacs/toggle-auto-completion-on)
   ;; bind Ibuffer to SPC-b-b
   (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
