@@ -473,6 +473,8 @@ you should place your code here."
   (evil-leader/set-key (kbd "0") 'treemacs-select-window)
   ;; No lock files plz
   (setq create-lockfiles nil)
+  ;; always follow symlinks pls
+  (setq vc-follow-symlinks t)
   ;; add additional python checker
   (flycheck-add-next-checker 'python-flake8 'python-pylint)
   ;; Hack Treemacs a bit
