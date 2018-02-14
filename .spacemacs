@@ -52,7 +52,8 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      (python :variables
-             python-fill-column 80)
+             python-fill-column 80
+             python-indent-offset 4)
      javascript
      markdown
      themes-megapack
@@ -460,6 +461,8 @@ you should place your code here."
   (spacemacs/toggle-auto-completion-on)
   ;; bind Ibuffer to SPC-b-b
   (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
+  ;; bind pyvenv workon in python MM to ,-v
+  (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "v") 'pyvenv-workon)
   ;; make auto-save more frequent and less painful
   (setq auto-save-interval 100)
   (setq auto-save-timeout 5)
