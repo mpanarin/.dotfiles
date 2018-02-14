@@ -111,6 +111,9 @@ SPACESHIP_KUBECONTEXT_SHOW=false
 SPACESHIP_BATTERY_SHOW=false
 SPACESHIP_DOCKER_SHOW=false
 
+# VIRTUALENV WRAPPER STUFFS
+source /usr/local/bin/virtualenvwrapper.sh
+
 alias gdt='git difftool'
 
 alias doco=docker-compose
