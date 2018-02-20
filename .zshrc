@@ -198,4 +198,5 @@ alias dood_test_run='docker-compose run --rm -e DB_NAME=testdb odoo pytest -s'
 alias dood_test_run_odoo='docker-compose run --rm -e DEMO=True -e DB_NAME=testdb -e MIGRATE=False odoo odoo --workers=0 --test-enable --stop-after-init'
 
 alias dood_test_run_travis='docker-compose run --rm odoo runtests'
-alias gsubi='git submodule init && git submodule sync && git submodule update'
+alias gsubsi='g submodule init && g submodule sync && g submodule update'
+alias gsubi='g submodule update --init'
