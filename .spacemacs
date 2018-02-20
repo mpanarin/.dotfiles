@@ -53,7 +53,8 @@ This function should only modify configuration layer settings."
      git
      (python :variables
              python-fill-column 80
-             python-indent-offset 4)
+             python-indent-offset 4
+             python-backend 'anaconda)
      javascript
      markdown
      themes-megapack
