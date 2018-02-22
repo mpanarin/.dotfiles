@@ -117,6 +117,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 alias gdt='git difftool'
 
 alias doco=docker-compose
+alias doco_rebuild='doco down -v && doco up --build'
 alias doco_templatedb='doco run --rm odoo createdb -T odoodb'
 alias doco_dropdb='doco run --rm odoo dropdb'
 
