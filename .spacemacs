@@ -463,6 +463,9 @@ you should place your code here."
   (spacemacs/toggle-auto-completion-on)
   ;; bind Ibuffer to SPC-b-b
   (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
+  ;; swap safe revert buffer and persp remove buffer
+  (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
+  (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
   ;; bind pyvenv workon in python MM to ,-v
   (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "v") 'pyvenv-workon)
   ;; make auto-save more frequent and less painful
