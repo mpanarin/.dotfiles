@@ -51,10 +51,11 @@ This function should only modify configuration layer settings."
      better-defaults
      emacs-lisp
      git
+     lsp
      (python :variables
              python-fill-column 80
              python-indent-offset 4
-             python-backend 'anaconda)
+             python-backend 'lsp)
      javascript
      markdown
      themes-megapack
