@@ -198,6 +198,15 @@ alias dood_test_run='docker-compose run --rm -e DB_NAME=testdb odoo pytest -s'
 # run tests using std odoo test machinery (eg: you need an HttpCase). Just run `dood_test_run_odoo -u module`
 alias dood_test_run_odoo='docker-compose run --rm -e DEMO=True -e DB_NAME=testdb -e MIGRATE=False odoo odoo --workers=0 --test-enable --stop-after-init'
 
+function dood_test_with_cov() {
+    if [ -z "$1" ]
+    then
+        echo 'no module path'
+    else
+        doco run --rm -e DB_NAME=testdb odoo pytest -s $1 --cov=$1
+    fi
+}
+
 alias dood_test_run_travis='docker-compose run --rm odoo runtests'
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
