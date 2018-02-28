@@ -467,9 +467,9 @@ you should place your code here."
   (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
   ;; bind copy whole buffer to lowercase y (whatafaqerino)
-  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemaacs/copy-whole-buffer-to-clipboard)
-  ;; bind pyvenv workon in python MM to ,-v
-  (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "v") 'pyvenv-workon)
+  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
+  ;; ;; bind pyvenv workon in python MM to ,-v
+  ;; (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "v") 'pyvenv-workon)
   ;; make auto-save more frequent and less painful
   (setq auto-save-interval 100)
   (setq auto-save-timeout 5)
