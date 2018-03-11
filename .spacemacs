@@ -496,6 +496,9 @@ you should place your code here."
   (add-to-list 'treemacs-ignored-file-predicates
                (lambda (filename filepath)
                  (string-match-p "\.pyc$" filename)))
+  ;; fix treemacs horizontal/vertical ace
+  (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
+  (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
  )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
