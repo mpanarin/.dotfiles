@@ -1,3 +1,5 @@
+set rtp+=~/.fzf
+
 colorscheme solarized8_high
 set background=dark
 

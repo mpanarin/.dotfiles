@@ -201,3 +201,4 @@ alias dood_test_run_odoo='docker-compose run --rm -e DEMO=True -e DB_NAME=testdb
 alias dood_test_run_travis='docker-compose run --rm odoo runtests'
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
