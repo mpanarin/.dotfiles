@@ -214,4 +214,5 @@ alias gsubi='g submodule update --init'
 alias xa='exa -lh --git'
 alias xat='exa -lTh --git'
 
+export FZF_TMUX=1
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
