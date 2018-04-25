@@ -122,27 +122,27 @@ alias doco_templatedb='doco run --rm odoo createdb -T odoodb'
 alias doco_dropdb='doco run --rm odoo dropdb'
 
 function doco_run() {
-    if [ $1 != "" ]
+    if [ -z "$1" ]
     then
-        db=$1
-    else
         db=odoodb
+    else
+        db=$1
     fi
     doco run --rm -e DB_NAME=$db -p 80:8069 odoo odoo --workers=0
 }
 
 function doco_migrate() {
-    if [ $1 != "" ]
+    if [ -z "$1" ]
     then
+        return "no db name provided"
+    else
         db=$1
-    else
-        return "no db name"
     fi
-    if [ $2 != "" ]
+    if [ -z "$2" ]
     then
-        version=$2
-    else
         return "no version specified"
+    else
+        version=$2
     fi
     doco run --rm -e MARABUNTA_FORCE_VERSION=$version -e DB_NAME=$db odoo migrate
 }
@@ -150,43 +150,40 @@ function doco_migrate() {
 alias doco_log='docker-compose logs'
 
 function doco_sh() {
-    if [ $1 != "" ]
+    if [ -z "$1" ]
     then
-        db=$1
-    else
         db=odoodb
+    else
+        db=$1
     fi
     doco run --rm -e DB_NAME=$db odoo odoo shell
 }
 
 function doco_ant() {
-    if [ $1 != "" ]
+    if [ -z "$1" ]
     then
-        db=$1
+        echo "no db name"
     else
-        return "no db name"
+        doco run --rm -e DB_NAME=$1 odoo anthem
     fi
-    doco run --rm -e DB_NAME=$db odoo anthem
 }
 
 function doco_psql() {
-    if [ $1 != "" ]
+    if [ -z "$1" ]
     then
-        container=$1
+        echo "no container name"
     else
-        return "no container name"
+        docker exec -it $1 psql -U odoo
     fi
-    docker exec -it $container psql -U odoo
 }
 
 function doco_bash() {
-    if [ $1 != "" ]
+    if [ -z "$1" ]
     then
-        container=$1
+        echo "no container name"
     else
-        return "no container name"
+        docker exec -it $1 bash
     fi
-    docker exec -it $container bash
 }
 # setup test database. Just run `dood_test_setup`
 alias dood_test_setup='docker-compose run --rm -e DB_NAME=testdb odoo testdb-gen -i base'
