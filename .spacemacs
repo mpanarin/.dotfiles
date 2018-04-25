@@ -499,8 +499,16 @@ you should place your code here."
   ;; fix treemacs horizontal/vertical ace
   (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
   (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
+  ;; enable zoning
   (require 'zone)
-  (zone-when-idle 120)
+  (zone-when-idle 240)
+  ;; helm please. Allow me to move cursor normally
+  (define-key helm-map (kbd "<left>") 'backward-char)
+  (define-key helm-map (kbd "<right>") 'forward-char)
+  (require 'helm-ag)
+  ;; helm-ag please. Allow me to move cursor normally
+  (define-key helm-ag-map (kbd "<left>") 'backward-char)
+  (define-key helm-ag-map (kbd "<right>") 'forward-char)
  )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
