@@ -128,7 +128,17 @@ function doco_run() {
     else
         db=$1
     fi
-    doco run --rm -e DB_NAME=$db -p 80:8069 odoo odoo --workers=0
+    doco run --rm -e DB_NAME=$db -p 80:8069 odoo odoo --workers=0 --dev=qweb,xml
+}
+
+function doco_old_run() {
+    if [ -z "$1" ]
+    then
+        db=odoodb
+    else
+        db=$1
+    fi
+    doco run --rm -e DB_NAME=$db -p 80:8069 odoo odoo --workers=0 --dev
 }
 
 function doco_migrate() {
@@ -201,6 +211,17 @@ function dood_test_with_cov() {
         echo 'no module path'
     else
         doco run --rm -e DB_NAME=testdb odoo pytest -s $1 --cov=$1
+    fi
+}
+
+function omae_wa_mou_shideiru() {
+    echo 'NANI?!'
+    sleep 1
+    if [ -z "$1" ]
+    then
+        shutdown now
+    else
+        pkill $1
     fi
 }
 
