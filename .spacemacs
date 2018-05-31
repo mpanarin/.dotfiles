@@ -44,6 +44,7 @@ This function should only modify configuration layer settings."
      html
      yaml
      markdown
+     django
      docker
      semantic
      helm
@@ -51,6 +52,7 @@ This function should only modify configuration layer settings."
      prodigy
      better-defaults
      emacs-lisp
+     elixir
      git
      lsp
      (python :variables
@@ -205,7 +207,12 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-dark
+   dotspacemacs-themes '(
+                         ;;twilight-anti-bright
+                         ;;smyx
+                         ;;fogus
+                         ;;madhat2r
+                         solarized-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -523,9 +530,6 @@ you should place your code here."
   ;; fix treemacs horizontal/vertical ace
   (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
   (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
-  ;; enable zoning
-  (require 'zone)
-  (zone-when-idle 240)
   ;; helm please. Allow me to move cursor normally
   (define-key helm-map (kbd "<left>") 'backward-char)
   (define-key helm-map (kbd "<right>") 'forward-char)
@@ -533,6 +537,26 @@ you should place your code here."
   ;; helm-ag please. Allow me to move cursor normally
   (define-key helm-ag-map (kbd "<left>") 'backward-char)
   (define-key helm-ag-map (kbd "<right>") 'forward-char)
+  ;; enable zoning
+  (require 'zone)
+  (zone-when-idle 120)
+  (setq zone-programs [
+                       zone-pgm-jitter
+                       zone-pgm-putz-with-case
+                       zone-pgm-dissolve
+                       zone-pgm-explode
+                       zone-pgm-whack-chars
+                       zone-pgm-rotate-LR-variable
+                       zone-pgm-rotate-RL-variable
+                       zone-pgm-drip
+                       zone-pgm-five-oclock-swan-dive
+                       zone-pgm-martini-swan-dive
+                       zone-pgm-rat-race
+                       zone-pgm-paragraph-spaz
+                       zone-pgm-stress
+                       zone-pgm-stress-destress
+                       zone-pgm-random-life
+                       ])
  )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.

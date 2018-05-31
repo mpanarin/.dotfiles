@@ -1,3 +1,5 @@
+export ZSH=/home/panarinm/.oh-my-zsh
+source "/home/panarinm/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -221,6 +223,8 @@ function omae_wa_mou_shideiru() {
 alias dood_test_run_travis='docker-compose run --rm odoo runtests'
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
+# Django aliases
+alias pman='python manage.py'
 
 alias xa='exa -lh --git'
 alias xat='exa -lTh --git'
