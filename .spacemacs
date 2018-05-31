@@ -40,6 +40,7 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      csv
+     debug
      html
      yaml
      markdown
@@ -67,6 +68,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      (auto-completion :variables
+                      auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t)
      (treemacs :variables
                treemacs-use-follow-mode t
@@ -107,6 +109,25 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
+   ;; If non-nil then enable support for the portable dumper. You'll need
+   ;; to compile Emacs 27 from source following the instructions in file
+   ;; EXPERIMENTAL.org at to root of the git repository.
+   ;; (default nil)
+   dotspacemacs-enable-emacs-pdumper nil
+
+   ;; File path pointing to emacs 27.1 executable compiled with support
+   ;; for the portable dumper (this is currently the branch pdumper).
+   ;; (default "emacs")
+   dotspacemacs-emacs-pdumper-executable-file "emacs"
+
+   ;; Name of the Spacemacs dump file. This is the file will be created by the
+   ;; portable dumper in the cache directory under dumps sub-directory.
+   ;; To load it when starting Emacs add the parameter `--dump-file'
+   ;; when invoking Emacs 27.1 executable on the command line, for instance:
+   ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
+   ;; (default spacemacs.pdmp)
+   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
    ;; environment, otherwise it is strongly recommended to let it set to t.
@@ -127,7 +148,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
-   ;; lastest version of packages from MELPA. (default nil)
+   ;; latest version of packages from MELPA. (default nil)
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
@@ -394,6 +415,10 @@ It should only modify the values of Spacemacs settings."
    ;; emphasis the current one). (default 'all)
    dotspacemacs-highlight-delimiters 'all
 
+   ;; If non-nil, start an Emacs server if one is not already running.
+   ;; (default nil)
+   dotspacemacs-enable-server nil
+
    ;; If non-nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
    dotspacemacs-persistent-server nil
@@ -481,8 +506,6 @@ you should place your code here."
   (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
   ;; Unbind annoying sticky M-x on <menu>
   (define-key global-map (kbd "<menu>") nil)
-  ;; Fix SPC-0 finally wtf spacemacs
-  (evil-leader/set-key (kbd "0") 'treemacs-select-window)
   ;; No lock files plz
   (setq create-lockfiles nil)
   ;; always follow symlinks pls
@@ -493,6 +516,7 @@ you should place your code here."
   (require 'treemacs)
   ;; treemacs set simple git mode
   (treemacs--setup-git-mode 'simple)
+  (treemacs-toggle-show-dotfiles)
   (add-to-list 'treemacs-ignored-file-predicates
                (lambda (filename filepath)
                  (string-match-p "\.pyc$" filename)))
