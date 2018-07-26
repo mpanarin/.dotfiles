@@ -225,7 +225,7 @@ function omae_wa_mou_shideiru() {
     sleep 1
     if [ -z "$1" ]
     then
-        shutdown now
+        systemctl poweroff -i
     else
         pkill $1
     fi
