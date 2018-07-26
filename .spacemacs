@@ -517,22 +517,27 @@ you should place your code here."
   ;; always follow symlinks pls
   (setq vc-follow-symlinks t)
   ;; add additional python checker
-  (flycheck-add-next-checker 'python-flake8 'python-pylint)
+  (with-eval-after-load 'flycheck
+    (flycheck-add-next-checker 'python-flake8 'python-pylint)
+   )
   ;; Hack Treemacs a bit
-  (require 'treemacs)
-  ;; treemacs set simple git mode
-  (treemacs--setup-git-mode 'simple)
-  (treemacs-toggle-show-dotfiles)
-  (add-to-list 'treemacs-ignored-file-predicates
-               (lambda (filename filepath)
-                 (string-match-p "\.pyc$" filename)))
-  ;; fix treemacs horizontal/vertical ace
-  (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
-  (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
+  (with-eval-after-load 'treemacs
+    ;; treemacs set simple git mode
+    (treemacs--setup-git-mode 'simple)
+    (treemacs-toggle-show-dotfiles)
+    (add-to-list 'treemacs-ignored-file-predicates
+                 (lambda (filename filepath)
+                   (string-match-p "\.pyc$" filename)))
+    ;; fix treemacs horizontal/vertical ace
+    (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
+    (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
+  )
   ;; enable zoning
-  (require 'zone)
-  (zone-when-idle 240)
+  (with-eval-after-load 'zone
+    (zone-when-idle 240)
+  )
   ;; helm please. Allow me to move cursor normally
+  (require 'helm)
   (define-key helm-map (kbd "<left>") 'backward-char)
   (define-key helm-map (kbd "<right>") 'forward-char)
   (require 'helm-ag)
