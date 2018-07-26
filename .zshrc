@@ -138,7 +138,13 @@ function doco_old_run() {
     else
         db=$1
     fi
-    doco run --rm -e DB_NAME=$db -p 80:8069 odoo odoo --workers=0 --dev
+    if [ -z "$2" ]
+    then
+        port=80
+    else
+        port=$2
+    fi
+    doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0 --dev
 }
 
 function doco_migrate() {
