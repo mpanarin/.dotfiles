@@ -180,7 +180,7 @@ function doco_ant() {
     then
         echo "no db name"
     else
-        doco run --rm -e DB_NAME=$1 odoo anthem
+        doco run --rm -e DB_NAME=$1 odoo anthem $2
     fi
 }
 
