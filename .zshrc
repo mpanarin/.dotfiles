@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/m-panarin/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -128,7 +128,29 @@ function doco_run() {
     else
         db=$1
     fi
-    doco run --rm -e DB_NAME=$db -p 80:8069 odoo odoo --workers=0 --dev=qweb,xml
+    if [ -z "$2" ]
+    then
+        port=80
+    else
+        port=$1
+    fi
+    doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0
+}
+
+function doco_run_dev() {
+    if [ -z "$1" ]
+    then
+        db=odoodb
+    else
+        db=$1
+    fi
+    if [ -z "$2" ]
+    then
+        port=80
+    else
+        port=$1
+    fi
+    doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0 --dev=qweb,xml
 }
 
 function doco_old_run() {
