@@ -220,7 +220,7 @@ function dood_test_with_cov() {
     fi
 }
 
-function omae_wa_mou_shideiru() {
+function omae_wa_mou_shindeiru() {
     echo 'NANI?!'
     sleep 1
     if [ -z "$1" ]
