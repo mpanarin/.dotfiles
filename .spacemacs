@@ -78,6 +78,7 @@ This function should only modify configuration layer settings."
                treemacs-use-filewatch-mode t)
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
+     pdf
      )
 
    ;; List of additional packages that will be installed without being
