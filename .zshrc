@@ -83,12 +83,11 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-source /var/lib/gems/2.3.0/gems/tmuxinator-0.10.1/completion/tmuxinator.zsh
+#
+source ~/.gem/ruby/2.5.0/gems/tmuxinator-0.12.0/completion/tmuxinator.zsh
 ZSH_TMUX_AUTOSTART=false
 [[ $TMUX == "" ]] && tmux new-session
 
-source "/home/m-panarin/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
 SPACESHIP_USER_SHOW=false
 SPACESHIP_HG_SHOW=false
 SPACESHIP_HG_STATUS_SHOW=false
@@ -112,7 +111,8 @@ SPACESHIP_BATTERY_SHOW=false
 SPACESHIP_DOCKER_SHOW=false
 
 # VIRTUALENV WRAPPER STUFFS
-source /usr/local/bin/virtualenvwrapper.sh
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+source /usr/bin/virtualenvwrapper.sh
 
 alias gdt='git difftool'
 

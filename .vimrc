@@ -7,3 +7,6 @@ set number
 set colorcolumn=80
 set ruler
 set cursorline
+
+filetype plugin on
+syntax on
