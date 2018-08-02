@@ -2,7 +2,7 @@
 	name = mpanarin
 	email = m.panarin@mobilunity.com
 [core]
-	excludesfile = /home/m-panarin/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	editor = vim
 [merge]
 	tool = vimdiff
