@@ -487,10 +487,10 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (spacemacs/enable-transparency)
-  (require 'spaceline)
-  (spaceline-toggle-minor-modes-off)
-  (spaceline-toggle-purpose-off)
-
+  (with-eval-after-load 'spaceline
+    (spaceline-toggle-minor-modes-off)
+    (spaceline-toggle-purpose-off)
+  )
   (spacemacs/toggle-auto-completion-on)
   ;; bind Ibuffer to SPC-b-b
   (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
