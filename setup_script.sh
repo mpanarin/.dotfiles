@@ -44,10 +44,6 @@ ln -fs ~/.dotfiles/.spacemacs ~/.spacemacs
 # install all the fonts
 bash ~/.dotfiles/install_fonts.sh
 
-# install all the pip packages
-sudo pip install gtimelog
-# pip install --user powerline-status
-
 # symlink tmux config
 ln -fs ~/.dotfiles/.tmux.conf ~/.tmux.conf
 
