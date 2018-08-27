@@ -79,6 +79,7 @@ ln -fs ~/.dotfiles/.vimrc ~/.vimrc
 ln -fs ~/.dotfiles/konsole-profile/Custom\ Solarized.colorscheme ~/.local/share/konsole/Custom\ Solarized.colorscheme
 ln -fs ~/.dotfiles/konsole-profile/Shell.profile ~/.local/share/konsole/Shell.profile
 
-echo "DO NOT FORGET TO INSTALL CHROME,TELEGRAM,HIPCHAT WITH YAY"
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
+
+yay -S goolge-chrome telegram-desktop hipchat rocketchat-desktop gtimelog gpmdp
