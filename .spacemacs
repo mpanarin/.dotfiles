@@ -532,6 +532,8 @@ you should place your code here."
   (spacemacs/toggle-automatic-symbol-highlight-on)
   ;; add a line on 80 symbols
   (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  ;; use 2 spaces to indent web-mode
+  (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
   ;; Make csv open always aligned with delimiters
   (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
   ;; Unbind annoying sticky M-x on <menu>
