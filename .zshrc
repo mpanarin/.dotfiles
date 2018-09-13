@@ -73,7 +73,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
+export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -254,12 +254,36 @@ function omae_wa_mou_shindeiru() {
     fi
 }
 
+
+function tnew() {
+    if [ -z "$1" ]
+    then
+        name=""
+    else
+        name=" -s $1"
+    fi
+    tmux detach-client -t /dev/pts/1 -E "tmux new $name"
+}
+
+function tatt() {
+    if [ -z "$1" ]
+    then
+        name=""
+    else
+        name=" -t $1"
+    fi
+    tmux detach-client -t /dev/pts/1 -E "tmux attach $name"
+}
+
 alias dood_test_run_travis='docker-compose run --rm odoo runtests'
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
 
 alias xa='exa -lh --git'
 alias xat='exa -lTh --git'
+
+alias ezsh='vim ~/.zshrc'
+alias tkill='tmux kill-session -t'
 
 export FZF_TMUX=1
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
