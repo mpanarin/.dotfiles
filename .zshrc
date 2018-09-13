@@ -111,6 +111,11 @@ SPACESHIP_KUBECONTEXT_SHOW=false
 SPACESHIP_BATTERY_SHOW=false
 SPACESHIP_DOCKER_SHOW=false
 
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
+bindkey '^ ' autosuggest-accept
+
 # VIRTUALENV WRAPPER STUFFS
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source /usr/bin/virtualenvwrapper.sh

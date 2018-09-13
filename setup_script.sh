@@ -24,7 +24,8 @@ sudo pacman -S --noconfirm emacs \
 	ruby-rdoc \
 	unzip \
 	docker \
-	docker-compose
+	docker-compose \
+  zsh-autosuggestions
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
