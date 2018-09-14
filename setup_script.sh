@@ -25,7 +25,8 @@ sudo pacman -S --noconfirm emacs \
 	unzip \
 	docker \
 	docker-compose \
-  zsh-autosuggestions
+  zsh-autosuggestions \
+  zsh-syntax-highlighting
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
