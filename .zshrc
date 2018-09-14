@@ -114,6 +114,7 @@ SPACESHIP_DOCKER_SHOW=false
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
+ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd
 bindkey '^ ' autosuggest-accept
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
