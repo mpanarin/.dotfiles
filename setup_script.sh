@@ -80,6 +80,8 @@ ln -fs ~/.dotfiles/.pylintrc ~/.pylintrc
 ln -fs ~/.dotfiles/.vimrc ~/.vimrc
 ln -fs ~/.dotfiles/konsole-profile/Custom\ Solarized.colorscheme ~/.local/share/konsole/Custom\ Solarized.colorscheme
 ln -fs ~/.dotfiles/konsole-profile/Shell.profile ~/.local/share/konsole/Shell.profile
+ln -fs ~/.dotfiles/konsole-profile/Courses.profile ~/.local/share/konsole/Courses.profile
+ln -fs ~/.dotfiles/konsole-profile/solarized\ courses.colorscheme ~/.local/share/konsole/solarized\ courses.colorscheme
 ln -fs ~/.dotfiles/.fzf.bash ~/.fzf.bash
 ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 
