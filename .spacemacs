@@ -556,6 +556,8 @@ you should place your code here."
     (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
     (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
   )
+  ;; Stop with your stupid warning lsp
+  (setq lsp-message-project-root-warning t)
   ;; enable zoning
   (with-eval-after-load 'zone
     (zone-when-idle 240)
