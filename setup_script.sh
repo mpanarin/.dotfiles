@@ -88,4 +88,4 @@ ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
 
-yay -S goolge-chrome telegram-desktop hipchat rocketchat-desktop gtimelog gpmdp
+yay -S google-chrome telegram-desktop hipchat rocketchat-desktop gtimelog gpmdp
