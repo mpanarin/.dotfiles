@@ -524,6 +524,10 @@ you should place your code here."
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
   ;; bind copy whole buffer to lowercase y (whatafaqerino)
   (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
+  ;; org have mercy, ,Tc is a terrible bind
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
+  )
   ;; ;; bind pyvenv workon in python MM to ,-v
   ;; (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "v") 'pyvenv-workon)
   ;; make auto-save more frequent and less painful
