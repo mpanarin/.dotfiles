@@ -9,3 +9,6 @@ Parent=FALLBACK/
 [Scrolling]
 HistoryMode=0
 ScrollBarPosition=2
+
+[Terminal Features]
+UrlHintsModifiers=134217728
