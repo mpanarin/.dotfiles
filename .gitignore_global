@@ -3,3 +3,4 @@
 *.pyc
 .ropeproject/
 .mypy_cache/
+.venv
