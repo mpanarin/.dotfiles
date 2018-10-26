@@ -567,8 +567,13 @@ you should place your code here."
   (with-eval-after-load 'zone
     (zone-when-idle 240)
   )
-  ;; helm please. Allow me to move cursor normally
   (require 'helm)
+  (defun helm-persistent-action-display-window (&optional split-onewindow)
+    "Return the window that will be used for persistent action.
+If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
+    (with-helm-window
+      (setq helm-persistent-action-display-window (get-mru-window))))
+  ;; helm please. Allow me to move cursor normally
   (define-key helm-map (kbd "<left>") 'backward-char)
   (define-key helm-map (kbd "<right>") 'forward-char)
   (require 'helm-ag)
