@@ -537,6 +537,7 @@ you should place your code here."
   (setq auto-save-timeout 5)
   ;; add a line on 80 symbols
   (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  (add-hook 'elixir-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
   ;; use 2 spaces to indent web-mode
   (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
   ;; Make csv open always aligned with delimiters
