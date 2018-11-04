@@ -567,9 +567,8 @@ you should place your code here."
   ;; Stop with your stupid warning lsp
   (setq lsp-message-project-root-warning t)
   ;; enable zoning
-  (with-eval-after-load 'zone
-    (zone-when-idle 240)
-  )
+  (require 'zone)
+  (zone-when-idle 240)
   (require 'helm)
   (defun helm-persistent-action-display-window (&optional split-onewindow)
     "Return the window that will be used for persistent action.
