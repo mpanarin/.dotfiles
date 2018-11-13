@@ -555,6 +555,7 @@ you should place your code here."
   ;; Hack Treemacs a bit
   (with-eval-after-load 'treemacs
     ;; treemacs set simple git mode
+    (setq aw-ignored-buffers (delete 'treemacs-mode aw-ignored-buffers))
     (treemacs--setup-git-mode 'simple)
     (treemacs-toggle-show-dotfiles)
     (add-to-list 'treemacs-ignored-file-predicates
