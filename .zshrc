@@ -289,7 +289,7 @@ alias gsubi='g submodule update --init'
 alias xa='exa -lh --git'
 alias xat='exa -lTh --git'
 
-alias ezsh='vim ~/.zshrc'
+alias ezsh='vim ~/.zshrc && source ~/.zshrc'
 alias tkill='tmux kill-session -t'
 
 export FZF_TMUX=1
