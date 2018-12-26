@@ -5,3 +5,4 @@ __pycache__/
 .ropeproject/
 .mypy_cache/
 .venv
+.git-credentials
