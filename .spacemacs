@@ -550,10 +550,6 @@ you should place your code here."
   (setq create-lockfiles nil)
   ;; always follow symlinks pls
   (setq vc-follow-symlinks t)
-  ;; add additional python checker
-  (with-eval-after-load 'flycheck
-    (flycheck-add-next-checker 'python-flake8 'python-pylint)
-   )
   ;; Hack Treemacs a bit
   (with-eval-after-load 'treemacs
     ;; treemacs set simple git mode
