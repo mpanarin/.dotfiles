@@ -294,3 +294,6 @@ alias tkill='tmux kill-session -t'
 
 export FZF_TMUX=1
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# added by pipsi (https://github.com/mitsuhiko/pipsi)
+export PATH="/home/m-panarin/.local/bin:$PATH"
