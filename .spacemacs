@@ -530,13 +530,6 @@ you should place your code here."
   (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
   ;; bind alchemist project run to a proper bind, wtf spacemacs
   (spacemacs/set-leader-keys-for-major-mode 'elixir-mode (kbd "r") 'alchemist-iex-project-run)
-  ;; add a bind to start phoenix server
-  (defun phoenix-server-start ()
-    "start phoenix server"
-    (interactive)
-    (alchemist-mix-execute "phoenix.server")
-    )
-  (spacemacs/set-leader-keys-for-major-mode 'elixir-mode (kbd "f x") 'phoenix-server-start)
   ;; org have mercy, ,Tc is a terrible bind
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
