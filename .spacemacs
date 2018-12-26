@@ -519,6 +519,8 @@ you should place your code here."
     (spaceline-toggle-purpose-off)
   )
   (spacemacs/toggle-auto-completion-on)
+  ;; add connection to saved sql
+  (spacemacs/set-leader-keys-for-major-mode 'sql-mode (kbd "x") 'sql-connect)
   ;; bind Ibuffer to SPC-b-b
   (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
   ;; swap safe revert buffer and persp remove buffer
