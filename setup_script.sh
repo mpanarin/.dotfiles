@@ -18,15 +18,16 @@ sudo pacman -S --noconfirm emacs \
 	yay \
 	tmux \
 	npm \
-  python-virtualenvwrapper \
+	python-virtualenvwrapper \
 	powerline-fonts \
 	powerline \
 	ruby-rdoc \
 	unzip \
 	docker \
 	docker-compose \
-  zsh-autosuggestions \
-  zsh-syntax-highlighting
+	zsh-autosuggestions \
+	zsh-syntax-highlighting \
+	kitty
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
@@ -85,6 +86,8 @@ ln -fs ~/.dotfiles/konsole-profile/Courses.profile ~/.local/share/konsole/Course
 ln -fs ~/.dotfiles/konsole-profile/solarized\ courses.colorscheme ~/.local/share/konsole/solarized\ courses.colorscheme
 ln -fs ~/.dotfiles/.fzf.bash ~/.fzf.bash
 ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
+ln -fs ~/.dotfiles/kitty.conf ~/.config/kitty/kitty.conf
+ln -fs ~/.dotfiles/snazzy.conf ~/.config/kitty/snazzy.conf
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
