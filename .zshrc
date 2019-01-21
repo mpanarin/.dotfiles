@@ -84,7 +84,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
-source ~/.gem/ruby/2.5.0/gems/tmuxinator-0.12.0/completion/tmuxinator.zsh
+source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
 ZSH_TMUX_AUTOSTART=false
 [[ $TMUX == "" ]] && tmux new-session
 powerline-config tmux setup
