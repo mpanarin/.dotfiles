@@ -88,6 +88,7 @@ ln -fs ~/.dotfiles/.fzf.bash ~/.fzf.bash
 ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 ln -fs ~/.dotfiles/kitty.conf ~/.config/kitty/kitty.conf
 ln -fs ~/.dotfiles/snazzy.conf ~/.config/kitty/snazzy.conf
+ln -fs ~/.dotfiles/tmux_get_startup_command ~/tmux_get_startup_command
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm

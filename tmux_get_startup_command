@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+import subprocess
+
+try:
+    sessions = subprocess.check_output(["tmux", "list-session"]).decode()
+except subprocess.CalledProcessError:
+    print('[[ $TMUX == "" ]] && tmux new-session')
+else:
+    print(f'[[ $TMUX == "" ]] && tmux attach -t {sessions[0]}')

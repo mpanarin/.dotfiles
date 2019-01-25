@@ -86,7 +86,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 #
 source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
 ZSH_TMUX_AUTOSTART=false
-[[ $TMUX == "" ]] && tmux new-session
+eval $(~/tmux_get_startup_command)
 powerline-config tmux setup
 
 SPACESHIP_USER_SHOW=false
