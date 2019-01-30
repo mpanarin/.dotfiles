@@ -93,4 +93,4 @@ ln -fs ~/.dotfiles/tmux_get_startup_command ~/tmux_get_startup_command
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
 
-yay -S google-chrome telegram-desktop hipchat rocketchat-desktop gtimelog gpmdp peco
+yay -S google-chrome telegram-desktop rocketchat-desktop gtimelog gpmdp peco slack-desktop-dark
