@@ -509,6 +509,163 @@ This function is called only while dumping Spacemacs configuration. You can
 dump."
   )
 
+(defun custom/add-hooks ()
+  "This is all the hooks I use"
+  ;; Add a line on 80 symbols
+  (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  (add-hook 'elixir-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  ;; Use 2 spaces to indent web-mode
+  (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
+  ;; Make csv open always aligned with delimiters
+  (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
+  )
+
+(defun custom/spacemacs-improvements ()
+  "Several fixes from spacemacs issues"
+  ;; Don't remember what it was fixing :\
+  (ido-mode -1)
+  ;; Disable useless parts of spaceline
+  (with-eval-after-load 'spaceline
+    (spaceline-toggle-minor-modes-off)
+    (spaceline-toggle-purpose-off)
+    )
+  ;; Make auto-save more frequent and less painful
+  (setq auto-save-interval 100)
+  (setq auto-save-timeout 5)
+  ;; No lock files plz
+  (setq create-lockfiles nil)
+  ;; Always follow symlinks pls
+  (setq vc-follow-symlinks t)
+  ;; Please use transparency
+  (spacemacs/enable-transparency)
+  )
+
+(defun custom/lsp-generic ()
+  "Generic LSP changes"
+  ;; Stop with your stupid warning lsp
+  (setq lsp-message-project-root-warning t)
+  ;; Stop printing your output to *Warnings*
+  (setq lsp-print-io 1)
+  )
+
+(defun custom/python-specific ()
+  "Changes specific to python-mode"
+  ;; Add venvs to lsp
+  (setq lsp-clients-python-library-directories (quote ("~/.virtualenvs" "/usr/")))
+  )
+
+(defun custom/elixir-specific ()
+  "Changes specific to elixir-mode"
+  ;; Bind alchemist project run to a proper bind, wtf spacemacs
+  (spacemacs/set-leader-keys-for-major-mode 'elixir-mode (kbd "r") 'alchemist-iex-project-run)
+  )
+
+(defun custom/sql-specific ()
+  "Changes specific to sql-mode"
+  ;; Add connection to saved sql
+  (spacemacs/set-leader-keys-for-major-mode 'sql-mode (kbd "x") 'sql-connect)
+  )
+
+(defun custom/org-specific ()
+  "Changes specific to org-mode"
+  ;; Org have mercy, ", T c" is a terrible bind
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
+    )
+  )
+
+(defun custom/treemacs-specific ()
+  "Changes specific to treemacs-mode"
+  (with-eval-after-load 'treemacs
+    ;; Treemacs set simple git mode
+    (treemacs--setup-git-mode 'simple)
+    ;; Hide dotfiles by default
+    (treemacs-toggle-show-dotfiles)
+    ;; Ignore *.pyc files
+    (add-to-list 'treemacs-ignored-file-predicates
+                 (lambda (filename filepath)
+                   (string-match-p "\.pyc$" filename)))
+    ;; Swap treemacs horizontal/vertical ace
+    (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
+    (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
+    )
+  )
+
+(defun custom/helm-specific ()
+  "Changes specific to helm-mode"
+  (require 'helm)
+  ;; Fix for the window splits
+  (defun helm-persistent-action-display-window (&optional split-onewindow)
+    "Return the window that will be used for persistent action.
+If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
+    (with-helm-window
+      (setq helm-persistent-action-display-window (get-mru-window))))
+  ;; Helm please. Allow me to move cursor normally
+  (define-key helm-map (kbd "<left>") 'backward-char)
+  (define-key helm-map (kbd "<right>") 'forward-char)
+  (require 'helm-ag)
+  ;; Helm-ag please. Allow me to move cursor normally
+  (define-key helm-ag-map (kbd "<left>") 'backward-char)
+  (define-key helm-ag-map (kbd "<right>") 'forward-char)
+  )
+
+(defun custom/generic-define-keys ()
+  "Generic key defines I use, that are not tied to some specific mode,
+   or mode I rarely use."
+  ;; Unbind annoying sticky M-x on <menu>
+  (define-key global-map (kbd "<menu>") nil)
+  ;; Bind Ibuffer to SPC-b-b
+  (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
+  ;; Swap safe revert buffer and persp remove buffer
+  (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
+  (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
+  ;; Bind copy whole buffer to lowercase y (whatafaqerino)
+  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
+  )
+
+(defun custom/zoning ()
+  "Changes specific to zoning"
+  (require 'zone)
+  (zone-when-idle 240)
+  (setq zone-programs [
+                       zone-pgm-jitter
+                       zone-pgm-putz-with-case
+                       zone-pgm-dissolve
+                       zone-pgm-explode
+                       zone-pgm-whack-chars
+                       zone-pgm-rotate-LR-variable
+                       zone-pgm-rotate-RL-variable
+                       zone-pgm-drip
+                       zone-pgm-five-oclock-swan-dive
+                       zone-pgm-martini-swan-dive
+                       zone-pgm-rat-race
+                       zone-pgm-paragraph-spaz
+                       zone-pgm-stress
+                       zone-pgm-stress-destress
+                       zone-pgm-random-life
+                       ])
+  )
+
+(defun custom/faces ()
+  "Customized faces for snazzy theme"
+  (custom-set-faces
+   ;; No wavy flycheck, please
+   '(flycheck-error ((t (:background "#2d2e2e" :underline "#e74c3c"))))
+   '(flycheck-info ((t (:background "#2d2e2e" :underline "#b6e63e"))))
+   '(flycheck-warning ((t (:background "#2d2e2e" :underline "#e2c770"))))
+   '(flyspell-duplicate ((t (:underline "DarkOrange"))))
+   '(flyspell-incorrect ((t (:underline "#e74c3c"))))
+   ;; Highlight yellow is used on python and elixir debugging lines, they should be readable
+   '(hi-yellow ((t (:background "#e2c770" :foreground "black"))))
+   ;; The line should be less annoying
+   '(hl-line ((t (:background "gray17"))))
+   ;; Make lsp highlight like the emacs automatic word highlight - less intrusive
+   '(lsp-face-highlight-read ((t (:background "gray12" :foreground "magenta" :weight bold))))
+   '(lsp-face-highlight-textual ((t (:background "gray12" :foreground "magenta" :weight bold))))
+   '(lsp-face-highlight-write ((t (:background "gray12" :foreground "magenta" :weight bold))))
+   )
+  )
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -516,75 +673,24 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (ido-mode -1)
-  (spacemacs/enable-transparency)
-  (with-eval-after-load 'spaceline
-    (spaceline-toggle-minor-modes-off)
-    (spaceline-toggle-purpose-off)
-  )
-  (spacemacs/toggle-auto-completion-on)
-  ;; add connection to saved sql
-  (spacemacs/set-leader-keys-for-major-mode 'sql-mode (kbd "x") 'sql-connect)
-  ;; bind Ibuffer to SPC-b-b
-  (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
-  ;; swap safe revert buffer and persp remove buffer
-  (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
-  (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
-  ;; bind copy whole buffer to lowercase y (whatafaqerino)
-  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
-  ;; bind alchemist project run to a proper bind, wtf spacemacs
-  (spacemacs/set-leader-keys-for-major-mode 'elixir-mode (kbd "r") 'alchemist-iex-project-run)
-  ;; org have mercy, ,Tc is a terrible bind
-  (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
-  )
-  ;; make auto-save more frequent and less painful
-  (setq auto-save-interval 100)
-  (setq auto-save-timeout 5)
-  ;; add a line on 80 symbols
-  (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
-  (add-hook 'elixir-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
-  ;; use 2 spaces to indent web-mode
-  (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
-  ;; Make csv open always aligned with delimiters
-  (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
-  ;; Unbind annoying sticky M-x on <menu>
-  (define-key global-map (kbd "<menu>") nil)
-  ;; No lock files plz
-  (setq create-lockfiles nil)
-  ;; always follow symlinks pls
-  (setq vc-follow-symlinks t)
-  ;; Hack Treemacs a bit
-  (with-eval-after-load 'treemacs
-    ;; treemacs set simple git mode
-    (setq aw-ignored-buffers (delete 'treemacs-mode aw-ignored-buffers))
-    (treemacs--setup-git-mode 'simple)
-    (treemacs-toggle-show-dotfiles)
-    (add-to-list 'treemacs-ignored-file-predicates
-                 (lambda (filename filepath)
-                   (string-match-p "\.pyc$" filename)))
-    ;; fix treemacs horizontal/vertical ace
-    (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
-    (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
-  )
-  ;; Stop with your stupid warning lsp
-  (setq lsp-message-project-root-warning t)
-  ;; enable zoning
-  (require 'zone)
-  (zone-when-idle 240)
-  (require 'helm)
-  (defun helm-persistent-action-display-window (&optional split-onewindow)
-    "Return the window that will be used for persistent action.
-If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
-    (with-helm-window
-      (setq helm-persistent-action-display-window (get-mru-window))))
-  ;; helm please. Allow me to move cursor normally
-  (define-key helm-map (kbd "<left>") 'backward-char)
-  (define-key helm-map (kbd "<right>") 'forward-char)
-  (require 'helm-ag)
-  ;; helm-ag please. Allow me to move cursor normally
-  (define-key helm-ag-map (kbd "<left>") 'backward-char)
-  (define-key helm-ag-map (kbd "<right>") 'forward-char)
+  (custom/add-hooks)
+
+  (custom/spacemacs-improvements)
+  (custom/generic-define-keys)
+
+  (custom/lsp-generic)
+
+  (custom/python-specific)
+  (custom/elixir-specific)
+  (custom/sql-specific)
+
+  (custom/org-specific)
+  (custom/treemacs-specific)
+  (custom/helm-specific)
+
+  (custom/zoning)
+
+  (custom/faces)
  )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -598,8 +704,6 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(lsp-clients-python-library-directories (quote ("~/.virtualenvs" "/usr/")))
- '(lsp-print-io nil)
  '(package-selected-packages
    (quote
     (evil-goggles doom-modeline diff-hl auto-yasnippet counsel ivy helm helm-core lsp-mode magit git-commit treemacs org-plus-contrib zenburn-theme zen-and-art-theme yasnippet-snippets yapfify yaml-mode xterm-color ws-butler with-editor winum white-sand-theme which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme treemacs-projectile treemacs-evil toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon swiper sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection stickyfunc-enhance srefactor sql-indent spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shrink-path shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme realgud ranger rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme prodigy prettier-js popwin planet-theme pippel pipenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme pfuture persp-mode pdf-tools pcre2el password-generator paradox overseer orgit organic-green-theme org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme ob-elixir noctilux-theme naquadah-theme nameless mwim mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-svn magit-gitflow madhat2r-theme macrostep lush-theme lsp-ui lsp-python lsp-javascript-typescript lorem-ipsum livid-mode live-py-mode link-hint light-soap-theme kaolin-themes json-navigator js2-refactor js-doc jbeans-theme jazz-theme ir-black-theme inkpot-theme indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete ht hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ ghub gh-md gandalf-theme fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-mix flycheck-credo flx-ido flatui-theme flatland-theme fill-column-indicator farmhouse-theme fancy-battery eziam-theme eyebrowse expand-region exotica-theme evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dracula-theme dotenv-mode doom-themes dockerfile-mode docker django-theme diminish define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme csv-mode counsel-projectile company-web company-tern company-statistics company-lsp company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme centered-cursor-mode busybee-theme bubbleberry-theme browse-at-remote birds-of-paradise-plus-theme badwolf-theme auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes alchemist aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell))))
@@ -608,14 +712,5 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(flycheck-error ((t (:background "#2d2e2e" :underline "#e74c3c"))))
- '(flycheck-info ((t (:background "#2d2e2e" :underline "#b6e63e"))))
- '(flycheck-warning ((t (:background "#2d2e2e" :underline "#e2c770"))))
- '(flyspell-duplicate ((t (:underline "DarkOrange"))))
- '(flyspell-incorrect ((t (:underline "#e74c3c"))))
- '(hi-yellow ((t (:background "#e2c770" :foreground "black"))))
- '(hl-line ((t (:background "gray17"))))
- '(lsp-face-highlight-read ((t (:background "gray12" :foreground "magenta" :weight bold))))
- '(lsp-face-highlight-textual ((t (:background "gray12" :foreground "magenta" :weight bold))))
- '(lsp-face-highlight-write ((t (:background "gray12" :foreground "magenta" :weight bold)))))
+ )
 )
