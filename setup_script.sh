@@ -27,7 +27,13 @@ sudo pacman -S --noconfirm emacs \
 	docker-compose \
 	zsh-autosuggestions \
 	zsh-syntax-highlighting \
-	kitty
+	kitty \
+	glu \
+	mesa \
+	wxgtk2 \
+	libpng \
+	erlang \
+	elixir
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
