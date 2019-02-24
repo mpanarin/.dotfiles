@@ -21,6 +21,7 @@ sudo pacman -S --noconfirm emacs \
 	python-virtualenvwrapper \
 	powerline-fonts \
 	powerline \
+	powerline-vim \
 	ruby-rdoc \
 	unzip \
 	docker \

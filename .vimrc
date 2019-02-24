@@ -1,3 +1,7 @@
+" configuration for powerline
+let g:powerline_pycmd="py"
+set laststatus=2
+
 set rtp+=~/.fzf
 set nocompatible              " required
 filetype off                  " required
