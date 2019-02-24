@@ -60,6 +60,7 @@ This function should only modify configuration layer settings."
      django
      elixir
      phoenix
+     erlang
      sql
      javascript
      markdown
