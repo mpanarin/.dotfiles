@@ -576,6 +576,12 @@ dump."
     )
   )
 
+(defun custom/markdown-specific ()
+  "Changes specific to markdown-mode"
+  ;; Always hide markup in markdown-mode
+  (setq markdown-hide-markup 1)
+  )
+
 (defun custom/treemacs-specific ()
   "Changes specific to treemacs-mode"
   (with-eval-after-load 'treemacs
@@ -692,6 +698,7 @@ you should place your code here."
   (custom/sql-specific)
 
   (custom/org-specific)
+  (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
   (custom/buffer-expose-specific)
