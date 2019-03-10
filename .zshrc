@@ -297,3 +297,7 @@ export FZF_TMUX=1
 
 # added by pipsi (https://github.com/mitsuhiko/pipsi)
 export PATH="/home/m-panarin/.local/bin:$PATH"
+
+# pipenv completion
+eval "$(pipenv --completion)"
+
