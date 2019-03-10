@@ -140,7 +140,7 @@ function doco_run() {
     then
         port=80
     else
-        port=$1
+        port=$2
     fi
     doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0
 }
