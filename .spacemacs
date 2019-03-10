@@ -572,6 +572,7 @@ dump."
   ;; Org have mercy, ", T c" is a terrible bind
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
+    (setq org-hide-emphasis-markers t)
     )
   )
 
