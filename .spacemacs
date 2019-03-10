@@ -92,7 +92,6 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       snazzy-theme
-                                      buffer-expose
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -617,11 +616,6 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
   (define-key helm-ag-map (kbd "<right>") 'forward-char)
   )
 
-(defun custom/buffer-expose-specific ()
-  (buffer-expose-mode 1)
-  (define-key evil-normal-state-local-map (kbd "SPC b b") 'buffer-expose)
-  )
-
 (defun custom/generic-define-keys ()
   "Generic key defines I use, that are not tied to some specific mode,
    or mode I rarely use."
@@ -701,7 +695,6 @@ you should place your code here."
   (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
-  (custom/buffer-expose-specific)
 
   (custom/zoning)
 
