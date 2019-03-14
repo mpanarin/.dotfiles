@@ -1,7 +1,3 @@
-" configuration for powerline
-let g:powerline_pycmd="py"
-set laststatus=2
-
 set rtp+=~/.fzf
 set nocompatible              " required
 filetype off                  " required
@@ -9,9 +5,6 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
@@ -24,15 +17,20 @@ Bundle 'Valloric/YouCompleteMe'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-
-" ...
+Plugin 'connorholyday/vim-snazzy'
+Plugin 'w0rp/ale'
+Plugin 'elixir-editors/vim-elixir'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-colorscheme solarized8_high
-set background=dark
+colorscheme snazzy
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+let g:airline_powerline_fonts = 1
 
 set number
 set colorcolumn=80
@@ -41,4 +39,6 @@ set cursorline
 
 " filetype plugin on
 let python_highlight_all=1
+" elixir stuff
+"let g:ale_elixir_elixir_ls_release = '~/.config/vimpackages/elixir-ls/rel'
 syntax on
