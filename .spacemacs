@@ -92,6 +92,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       snazzy-theme
+                                      dap-mode
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -551,6 +552,16 @@ dump."
 
 (defun custom/python-specific ()
   "Changes specific to python-mode"
+  (with-eval-after-load 'python
+    (require 'dap-mode)
+    (require 'dap-ui)
+    (dap-mode 1)
+    (dap-ui-mode 1)
+    (require 'dap-python)
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "d d") 'dap-breakpoint-toggle)
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "d r") 'dap-debug)
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "d .") 'dap-hydra)
+    )
   ;; Add venvs to lsp
   (setq lsp-clients-python-library-directories (quote ("~/.virtualenvs" "/usr/")))
   )
