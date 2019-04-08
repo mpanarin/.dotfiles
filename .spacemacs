@@ -81,6 +81,7 @@ This function should only modify configuration layer settings."
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      pdf
+     games
      )
 
    ;; List of additional packages that will be installed without being
@@ -96,7 +97,9 @@ This function should only modify configuration layer settings."
                                       )
 
    ;; A list of packages that cannot be updated.
-   dotspacemacs-frozen-packages '()
+   dotspacemacs-frozen-packages '(
+                                  window-purpose
+                                  )
 
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '()
