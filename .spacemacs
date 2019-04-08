@@ -587,6 +587,7 @@ dump."
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
     (setq org-hide-emphasis-markers t)
+    (setq org-enable-sticky-header t)
     )
   )
 
@@ -601,6 +602,8 @@ dump."
   (with-eval-after-load 'treemacs
     ;; Treemacs set simple git mode
     (treemacs--setup-git-mode 'simple)
+    ;; keep the width locked
+    (setq treemacs-lock-width 1)
     ;; Hide dotfiles by default
     (treemacs-toggle-show-dotfiles)
     ;; Ignore *.pyc files
