@@ -54,7 +54,7 @@ This function should only modify configuration layer settings."
      git
      lsp
      (python :variables
-             python-fill-column 80
+             python-fill-column 120
              python-indent-offset 4
              python-backend 'lsp)
      django
