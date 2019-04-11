@@ -587,7 +587,6 @@ dump."
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
     (setq org-hide-emphasis-markers t)
-    (setq org-enable-sticky-header t)
     )
   )
 
