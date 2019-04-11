@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=solarized courses
+ColorScheme=New Color Scheme
 Font=Noto Mono,12,-1,5,50,0,0,0,0,0,Regular
 
 [General]
