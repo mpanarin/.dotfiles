@@ -34,7 +34,8 @@ sudo pacman -S --noconfirm emacs \
 	wxgtk2 \
 	libpng \
 	erlang \
-	elixir
+	elixir \
+	xsel
 
 # add user to docker group and enable the service
 sudo systemctl enable docker

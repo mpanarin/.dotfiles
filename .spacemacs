@@ -82,6 +82,7 @@ This function should only modify configuration layer settings."
               ibuffer-group-buffers-by 'projects)
      pdf
      games
+     xclipboard
      )
 
    ;; List of additional packages that will be installed without being
@@ -683,10 +684,6 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
    '(hi-yellow ((t (:background "#e2c770" :foreground "black"))))
    ;; The line should be less annoying
    '(hl-line ((t (:background "gray17"))))
-   ;; Make lsp highlight like the emacs automatic word highlight - less intrusive
-   '(lsp-face-highlight-read ((t (:background "gray12" :foreground "magenta" :weight bold))))
-   '(lsp-face-highlight-textual ((t (:background "gray12" :foreground "magenta" :weight bold))))
-   '(lsp-face-highlight-write ((t (:background "gray12" :foreground "magenta" :weight bold))))
    )
   )
 
