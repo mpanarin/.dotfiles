@@ -63,6 +63,7 @@ This function should only modify configuration layer settings."
      erlang
      sql
      javascript
+     rust
      markdown
      themes-megapack
      org
