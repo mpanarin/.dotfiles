@@ -639,7 +639,7 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
   ;; Unbind annoying sticky M-x on <menu>
   (define-key global-map (kbd "<menu>") nil)
   ;; Bind Ibuffer to SPC-b-B
-  (define-key evil-normal-state-local-map (kbd "SPC b B") 'ibuffer)
+  (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
   ;; Swap safe revert buffer and persp remove buffer
   (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
