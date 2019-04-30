@@ -35,7 +35,8 @@ sudo pacman -S --noconfirm emacs \
 	libpng \
 	erlang \
 	elixir \
-	xsel
+	xsel \
+	flameshot
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
