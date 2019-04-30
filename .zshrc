@@ -10,7 +10,7 @@ ENABLE_CORRECTION="true"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git python vi-mode django docker extract lol mix pip elixir)
+plugins=(git python vi-mode django docker extract lol mix pip elixir poetry)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -77,9 +77,6 @@ export FZF_TMUX=1
 
 # added by pipsi (https://github.com/mitsuhiko/pipsi)
 export PATH="/home/m-panarin/.local/bin:$PATH"
-
-# pipenv completion
-eval "$(pipenv --completion)"
 
 # Aliases
 alias gdt='git difftool'
@@ -250,4 +247,3 @@ alias xat='exa -lTh --git'
 
 alias ezsh='vim ~/.zshrc && source ~/.zshrc'
 alias tkill='tmux kill-session -t'
-
