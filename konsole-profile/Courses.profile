@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=New Color Scheme
+ColorScheme=SolarizedLight
 Font=Noto Mono,12,-1,5,50,0,0,0,0,0,Regular
 
 [General]
