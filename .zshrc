@@ -78,6 +78,9 @@ export FZF_TMUX=1
 # added by pipsi (https://github.com/mitsuhiko/pipsi)
 export PATH="/home/m-panarin/.local/bin:$PATH"
 
+# Poetry
+export PATH="$PATH:/home/$USER/.poetry/bin"
+
 # Aliases
 alias gdt='git difftool'
 
