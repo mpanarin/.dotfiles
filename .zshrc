@@ -4,9 +4,6 @@ export ZSH=~/.oh-my-zsh
 # Name of the theme to load.
 ZSH_THEME="spaceship"
 
-# Enable command auto-correction.
-ENABLE_CORRECTION="true"
-
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
