@@ -96,13 +96,14 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       snazzy-theme
                                       dap-mode
+                                      exunit
                                       )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(alchemist)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -551,6 +552,14 @@ dump."
   (setq lsp-message-project-root-warning t)
   ;; Stop printing your output to *Warnings*
   (setq lsp-print-io 1)
+  (use-package lsp-mode
+    :commands lsp
+    :ensure t
+    :diminish lsp-mode
+    :hook
+    (elixir-mode . lsp)
+    :init
+    (add-to-list 'exec-path "/home/m-panarin/elixir-ls/release"))
   )
 
 (defun custom/python-specific ()
@@ -569,8 +578,17 @@ dump."
 
 (defun custom/elixir-specific ()
   "Changes specific to elixir-mode"
-  ;; Bind alchemist project run to a proper bind, wtf spacemacs
-  (spacemacs/set-leader-keys-for-major-mode 'elixir-mode (kbd "r") 'alchemist-iex-project-run)
+  (with-eval-after-load 'elixir-mode
+    (spacemacs/declare-prefix-for-mode 'elixir-mode
+      "mt" "tests" "testing related functionality")
+    (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
+      "tb" 'exunit-verify-all
+      "ta" 'exunit-verify
+      "tk" 'exunit-rerun
+      "tt" 'exunit-verify-single)
+    (require 'dap-elixir)
+    (dap-ui-mode)
+    (dap-mode))
   )
 
 (defun custom/sql-specific ()
@@ -597,6 +615,8 @@ dump."
 (defun custom/treemacs-specific ()
   "Changes specific to treemacs-mode"
   (with-eval-after-load 'treemacs
+    ;; autohide files ignored by git please
+    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
     ;; Treemacs set simple git mode
     (treemacs--setup-git-mode 'simple)
     ;; keep the width locked
