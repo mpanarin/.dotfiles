@@ -90,6 +90,7 @@ ln -fs ~/.dotfiles/.gitconfig ~/.gitconfig
 ln -fs ~/.dotfiles/.gitignore_global ~/.gitignore_global
 ln -fs ~/.dotfiles/.bashrc ~/.bashrc
 ln -fs ~/.dotfiles/.pylintrc ~/.pylintrc
+ln -fs ~/.dotfiles/.mypy.ini ~/.mypy.ini
 ln -fs ~/.dotfiles/.pycodestyle ~/.config/pycodestyle
 ln -fs ~/.dotfiles/flake8 ~/.config/flake8
 ln -fs ~/.dotfiles/.vimrc ~/.vimrc
