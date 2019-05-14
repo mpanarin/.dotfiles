@@ -247,3 +247,6 @@ alias xat='exa -lTh --git'
 
 alias ezsh='vim ~/.zshrc && source ~/.zshrc'
 alias tkill='tmux kill-session -t'
+
+
+source /home/m-panarin/.local/share/dephell/_dephell_zsh_autocomplete

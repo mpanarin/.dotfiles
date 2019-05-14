@@ -47,6 +47,9 @@ sudo usermod -a -G docker $USER
 sudo pip install --upgrade pip
 sudo pip2 install --upgrade pip
 
+# install poetry and dephell
+pip install --user poetry dephell
+
 # install spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d -b develop
 
