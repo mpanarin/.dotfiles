@@ -615,10 +615,8 @@ dump."
 (defun custom/treemacs-specific ()
   "Changes specific to treemacs-mode"
   (with-eval-after-load 'treemacs
-    ;; autohide files ignored by git please
-    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
-    ;; Treemacs set simple git mode
-    (treemacs--setup-git-mode 'simple)
+    ;; Treemacs use deferred git-mode
+    (treemacs-git-mode 'deferred)
     ;; keep the width locked
     (setq treemacs-lock-width 1)
     ;; Hide dotfiles by default
@@ -627,6 +625,8 @@ dump."
     (add-to-list 'treemacs-ignored-file-predicates
                  (lambda (filename filepath)
                    (string-match-p "\.pyc$" filename)))
+    ;; autohide files ignored by git please
+    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
     ;; Swap treemacs horizontal/vertical ace
     (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
     (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
