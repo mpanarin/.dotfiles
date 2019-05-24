@@ -94,6 +94,7 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
+                                      srcery-theme
                                       snazzy-theme
                                       dap-mode
                                       exunit
@@ -219,7 +220,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(snazzy
+   dotspacemacs-themes '(srcery
+                         snazzy
                          doom-molokai
                          solarized-dark
                          spacemacs-light)
@@ -729,7 +731,7 @@ you should place your code here."
 
   (custom/zoning)
 
-  (custom/faces)
+  ;; (custom/faces)
  )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
