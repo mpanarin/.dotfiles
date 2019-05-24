@@ -59,6 +59,9 @@ ln -fs ~/.dotfiles/.spacemacs ~/.spacemacs
 # install all the fonts
 bash ~/.dotfiles/install_fonts.sh
 
+# install tmp - tmux plugin manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 # symlink tmux config
 ln -fs ~/.dotfiles/.tmux.conf ~/.tmux.conf
 
