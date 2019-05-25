@@ -601,9 +601,8 @@ dump."
 
 (defun custom/org-specific ()
   "Changes specific to org-mode"
-  ;; Org have mercy, ", T c" is a terrible bind
   (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "M-t") 'org-toggle-checkbox)
+    ;; Autohide markup elements
     (setq org-hide-emphasis-markers t)
     )
   )
