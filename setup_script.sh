@@ -36,7 +36,8 @@ sudo pacman -S --noconfirm emacs \
 	erlang \
 	elixir \
 	xsel \
-	flameshot
+	flameshot \
+  otf-fira-code
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
