@@ -4,8 +4,7 @@
 sudo pacman -Syu --noconfirm
 
 # install all needed packages
-sudo pacman -S --noconfirm emacs \
-	python2-pip \
+sudo pacman -S --noconfirm python2-pip \
 	zsh \
 	ruby \
 	curl \
@@ -38,6 +37,12 @@ sudo pacman -S --noconfirm emacs \
 	xsel \
 	flameshot \
   otf-fira-code
+
+# remove yakuake as it annoys me as well as i don't use it at all.
+sudo pacman -R yakuake --noconfirm
+
+# Additional packages from AUR
+yay -S emacs-git google-chrome telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
@@ -111,8 +116,3 @@ ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 ln -fs ~/.dotfiles/kitty.conf ~/.config/kitty/kitty.conf
 ln -fs ~/.dotfiles/snazzy.conf ~/.config/kitty/snazzy.conf
 ln -fs ~/.dotfiles/tmux_get_startup_command ~/tmux_get_startup_command
-
-# remove yakuake as it annoys me as well as i don't use it at all.
-sudo pacman -R yakuake --noconfirm
-
-yay -S google-chrome telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git
