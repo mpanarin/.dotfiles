@@ -98,6 +98,15 @@ ln -fs ~/.dotfiles/.zshrc ~/.zshrc
 mkdir -p ~/.vim/pack/themes/opt
 git clone https://github.com/lifepillar/vim-solarized8.git ~/.vim/pack/themes/opt/solarized8
 
+# add kitty config folder
+mkdir -p ~/.config/kitty
+
+# add several zsh plugins
+git clone https://github.com/gusaiani/elixir-oh-my-zsh.git ~/.oh-my-zsh/custom/plugins/elixir
+
+# set-up vim Vundle
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
 # symlink remaining files
 ln -fs ~/.dotfiles/.gitconfig ~/.gitconfig
 ln -fs ~/.dotfiles/.gitignore_global ~/.gitignore_global
