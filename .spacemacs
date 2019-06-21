@@ -613,6 +613,12 @@ dump."
   (with-eval-after-load 'lsp-ui-doc
     (setq lsp-ui-doc-use-webkit t)
     )
+  (with-eval-after-load 'lsp-ui-peek
+    ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g d") 'lsp-ui-peek-find-definitions)
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
+    )
   )
 
 (defun custom/python-specific ()
