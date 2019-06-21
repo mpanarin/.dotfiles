@@ -634,13 +634,12 @@ dump."
 (defun custom/elixir-specific ()
   "Changes specific to elixir-mode"
   (with-eval-after-load 'elixir-mode
-    (spacemacs/declare-prefix-for-mode 'elixir-mode
-      "mt" "tests" "testing related functionality")
+    (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m t") "tests" "testing related functionality")
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
-      "tb" 'exunit-verify-all
-      "ta" 'exunit-verify
-      "tk" 'exunit-rerun
-      "tt" 'exunit-verify-single)
+      (kbd "t b") 'exunit-verify-all
+      (kbd "t a") 'exunit-verify
+      (kbd "t k") 'exunit-rerun
+      (kbd "t t") 'exunit-verify-single)
     (require 'dap-elixir)
     (dap-ui-mode)
     (dap-mode))
