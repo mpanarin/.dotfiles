@@ -53,6 +53,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      lsp
+     dap
      (python :variables
              python-fill-column 120
              python-indent-offset 4
@@ -559,6 +560,38 @@ dump."
   (spacemacs/enable-transparency)
   )
 
+(defun custom/dap-generic ()
+  "Generic LSP dap changes"
+
+  (defun custom/window-visible (b-name)
+    "Return whether B-NAME is visible."
+    (-> (-compose 'buffer-name 'window-buffer)
+        (-map (window-list))
+        (-contains? b-name)))
+
+  (defun custom/show-debug-windows (session)
+    "Show debug windows."
+    (let ((lsp--cur-workspace (dap--debug-session-workspace session)))
+      (save-excursion
+        ;; display locals
+        (unless (custom/window-visible dap-ui--locals-buffer)
+          (dap-ui-locals))
+        ;; display sessions
+        (unless (custom/window-visible dap-ui--sessions-buffer)
+          (dap-ui-sessions)))))
+
+  (defun custom/hide-debug-windows (session)
+    "Hide debug windows when all debug sessions are dead."
+    (unless (-filter 'dap--session-running (dap--get-sessions))
+      (and (get-buffer dap-ui--sessions-buffer)
+           (kill-buffer dap-ui--sessions-buffer))
+      (and (get-buffer dap-ui--locals-buffer)
+           (kill-buffer dap-ui--locals-buffer))))
+
+  (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
+  (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
+  )
+
 (defun custom/lsp-generic ()
   "Generic LSP changes"
   ;; Stop with your stupid warning lsp
@@ -578,14 +611,10 @@ dump."
 (defun custom/python-specific ()
   "Changes specific to python-mode"
   (with-eval-after-load 'python
-    (require 'dap-mode)
-    (require 'dap-ui)
-    (dap-mode 1)
-    (dap-ui-mode 1)
-    (require 'dap-python)
-    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "d d") 'dap-breakpoint-toggle)
-    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "d r") 'dap-debug)
-    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "d .") 'dap-hydra)
+    (with-eval-after-load 'dap-mode
+      (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b b") 'spacemacs/python-toggle-breakpoint)
+      (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b d") 'dap-breakpoint-toggle)
+      )
     )
   )
 
@@ -731,6 +760,7 @@ you should place your code here."
   (custom/generic-define-keys)
 
   (custom/lsp-generic)
+  (custom/dap-generic)
 
   (custom/python-specific)
   (custom/elixir-specific)
@@ -745,6 +775,7 @@ you should place your code here."
 
   (custom/faces)
  )
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
