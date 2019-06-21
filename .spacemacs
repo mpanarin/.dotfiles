@@ -610,6 +610,9 @@ dump."
     (elixir-mode . lsp)
     :init
     (add-to-list 'exec-path "/home/m-panarin/elixir-ls/release"))
+  (with-eval-after-load 'lsp-ui-doc
+    (setq lsp-ui-doc-use-webkit t)
+    )
   )
 
 (defun custom/python-specific ()
