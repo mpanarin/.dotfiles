@@ -101,6 +101,7 @@ This function should only modify configuration layer settings."
                                       snazzy-theme
                                       dap-mode
                                       exunit
+                                      autopair
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -538,6 +539,9 @@ dump."
   (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
   ;; use "russian compuhter in org-mode"
   (add-hook 'org-mode-hook 'reverse-im-mode)
+  ;; autopair stuff in snippets plz
+  (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
+  (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
   )
 
 (defun custom/spacemacs-improvements ()
