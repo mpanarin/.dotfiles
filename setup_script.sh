@@ -54,7 +54,8 @@ sudo pip install --upgrade pip
 sudo pip2 install --upgrade pip
 
 # install poetry and dephell
-pip install --user poetry dephell
+curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+pip install --user dephell
 
 # install spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d -b develop
