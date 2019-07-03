@@ -84,129 +84,7 @@ alias gdt='git difftool'
 
 alias doco=docker-compose
 alias doco_rebuild='doco down -v && doco up --build'
-alias doco_templatedb='doco run --rm odoo createdb -T odoodb'
-alias doco_dropdb='doco run --rm odoo dropdb'
-
-function doco_run() {
-    if [ -z "$1" ]
-    then
-        db=odoodb
-    else
-        db=$1
-    fi
-    if [ -z "$2" ]
-    then
-        port=80
-    else
-        port=$2
-    fi
-    doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0
-}
-
-function doco_run_dev() {
-    if [ -z "$1" ]
-    then
-        db=odoodb
-    else
-        db=$1
-    fi
-    if [ -z "$2" ]
-    then
-        port=80
-    else
-        port=$1
-    fi
-    doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0 --dev=qweb,xml
-}
-
-function doco_old_run() {
-    if [ -z "$1" ]
-    then
-        db=odoodb
-    else
-        db=$1
-    fi
-    if [ -z "$2" ]
-    then
-        port=80
-    else
-        port=$2
-    fi
-    doco run --rm -e DB_NAME=$db -p $port:8069 odoo odoo --workers=0 --dev
-}
-
-function doco_migrate() {
-    if [ -z "$1" ]
-    then
-        return "no db name provided"
-    else
-        db=$1
-    fi
-    if [ -z "$2" ]
-    then
-        return "no version specified"
-    else
-        version=$2
-    fi
-    doco run --rm -e MARABUNTA_FORCE_VERSION=$version -e DB_NAME=$db odoo migrate
-}
-
 alias doco_log='docker-compose logs'
-
-function doco_sh() {
-    if [ -z "$1" ]
-    then
-        db=odoodb
-    else
-        db=$1
-    fi
-    doco run --rm -e DB_NAME=$db odoo odoo shell
-}
-
-function doco_ant() {
-    if [ -z "$1" ]
-    then
-        echo "no db name"
-    else
-        doco run --rm -e DB_NAME=$1 odoo anthem $2
-    fi
-}
-
-function doco_psql() {
-    if [ -z "$1" ]
-    then
-        echo "no container name"
-    else
-        docker exec -it $1 psql -U odoo
-    fi
-}
-
-function doco_bash() {
-    if [ -z "$1" ]
-    then
-        echo "no container name"
-    else
-        docker exec -it $1 bash
-    fi
-}
-# setup test database. Just run `dood_test_setup`
-alias dood_test_setup='docker-compose run --rm -e DB_NAME=testdb odoo testdb-gen -i base'
-# reuse testdb and install or update modules on demand. Just run `dood_test_update -i/u something`
-alias dood_test_update='docker-compose run --rm -e DB_NAME=testdb odoo testdb-update'
-# run tests using pytest. Just run `dood_test_run path/to/your/module`
-# NOTE: you need to run dood_test_update 1st IF xml or models have been updated
-alias dood_test_run='docker-compose run --rm -e DB_NAME=testdb odoo pytest -s'
-# run tests using std odoo test machinery (eg: you need an HttpCase). Just run `dood_test_run_odoo -u module`
-alias dood_test_run_odoo='docker-compose run --rm -e DEMO=True -e DB_NAME=testdb -e MIGRATE=False odoo odoo --workers=0 --test-enable --stop-after-init'
-
-function dood_test_with_cov() {
-    if [ -z "$1" ]
-    then
-        echo 'no module path'
-    else
-        doco run --rm -e DB_NAME=testdb odoo pytest -s $1 --cov=$1
-    fi
-}
 
 function omae_wa_mou_shindeiru() {
     echo 'NANI?!'
@@ -239,7 +117,6 @@ function tatt() {
     tmux detach-client -t /dev/pts/1 -E "tmux attach $name"
 }
 
-alias dood_test_run_travis='docker-compose run --rm odoo runtests'
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
 
