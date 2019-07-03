@@ -104,6 +104,8 @@ This function should only modify configuration layer settings."
                                       exunit
                                       autopair
                                       solaire-mode
+                                      treemacs-magit
+                                      treemacs-icons-dired
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -544,6 +546,8 @@ dump."
   ;; autopair stuff in snippets plz
   (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
   (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
+  ;; Show treemacs icons in dired
+  (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
   )
 
 (defun custom/spacemacs-improvements ()
