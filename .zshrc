@@ -17,7 +17,7 @@ source $ZSH/oh-my-zsh.sh
  if [[ -n $SSH_CONNECTION ]]; then
    export EDITOR='nano'
  else
-   export EDITOR='vim'
+   export EDITOR='nvim'
  fi
 
 # Compilation flags
@@ -117,14 +117,15 @@ function tatt() {
     tmux detach-client -t /dev/pts/1 -E "tmux attach $name"
 }
 
+alias vim='nvim'
+
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
 
 alias xa='exa -lh --git'
 alias xat='exa -lTh --git'
 
-alias ezsh='vim ~/.zshrc && source ~/.zshrc'
+alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
 alias tkill='tmux kill-session -t'
-
 
 source /home/m-panarin/.local/share/dephell/_dephell_zsh_autocomplete

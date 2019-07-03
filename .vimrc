@@ -1,3 +1,4 @@
+let g:powerline_loaded = 1
 set rtp+=~/.fzf
 set nocompatible              " required
 filetype off                  " required
@@ -22,6 +23,7 @@ Plugin 'w0rp/ale'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'airblade/vim-gitgutter'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -38,6 +40,17 @@ set cursorline
 
 " filetype plugin on
 let python_highlight_all=1
-" elixir stuff
-"let g:ale_elixir_elixir_ls_release = '~/.config/vimpackages/elixir-ls/rel'
+
 syntax on
+
+" start syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_pylint_exe = 'python3 -m pylint3'
+" end syntastic
