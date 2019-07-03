@@ -85,6 +85,7 @@ This function should only modify configuration layer settings."
               ibuffer-group-buffers-by 'projects)
      pdf
      games
+     selectric
      xclipboard
      )
 
