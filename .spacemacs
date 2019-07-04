@@ -621,6 +621,8 @@ dump."
     (setq lsp-ui-doc-use-webkit t)
     )
   (with-eval-after-load 'lsp-ui-peek
+    ;; always use fontify, otherwise highlight is broken in the left half
+    (setq lsp-ui-peek-fontify 'always)
     ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
     (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g d") 'lsp-ui-peek-find-definitions)
     (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
@@ -762,6 +764,10 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
    '(hi-yellow ((t (:background "#e2c770" :foreground "black"))))
    ;; The line should be less annoying
    '(hl-line ((t (:background "gray17"))))
+   ;; Lsp pick should be a bit prettier :3
+   '(lsp-ui-peek-highlight ((t (:background "white" :distant-foreground "black" :foreground "black" :box (:line-width -1 :color "white")))))
+   '(lsp-ui-peek-line-number ((t nil)))
+   '(lsp-ui-peek-list ((t (:background "#031A25"))))
    )
   )
 
