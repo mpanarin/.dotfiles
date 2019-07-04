@@ -36,13 +36,14 @@ sudo pacman -S --noconfirm python2-pip \
 	elixir \
 	xsel \
 	flameshot \
-  otf-fira-code
+  otf-fira-code \
+  brave
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
 
 # Additional packages from AUR
-yay -S emacs-git google-chrome telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git
+yay -S emacs-git telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
