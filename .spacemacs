@@ -610,6 +610,8 @@ dump."
   "Generic LSP changes"
   ;; Stop with your stupid warning lsp
   (setq lsp-message-project-root-warning t)
+  ;; disable garbage rope completion in pyls
+  (setq lsp-pyls-plugins-rope-completion-enabled nil)
   ;; Stop printing your output to *Warnings*
   (setq lsp-print-io 1)
   (use-package lsp-mode
