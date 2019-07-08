@@ -106,6 +106,7 @@ This function should only modify configuration layer settings."
                                       solaire-mode
                                       treemacs-magit
                                       treemacs-icons-dired
+                                      magit-todos
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -549,6 +550,8 @@ dump."
   (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
   ;; Show treemacs icons in dired
   (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+  ;; add todos mode to magit
+  (add-hook 'magit-mode-hook 'magit-todos-mode)
   )
 
 (defun custom/spacemacs-improvements ()
@@ -658,6 +661,13 @@ dump."
   "Changes specific to sql-mode"
   ;; Add connection to saved sql
   (spacemacs/set-leader-keys-for-major-mode 'sql-mode (kbd "x") 'sql-connect)
+  )
+(defun custom/magit-specific ()
+  "Specific changes to magit and its subpackages"
+  (with-eval-after-load 'magit-todos
+    ;; Disable magit-todos map as it is garbage and is bound to `j`
+    (setq magit-todos-section-map nil)
+    )
   )
 
 (defun custom/org-specific ()
@@ -769,6 +779,22 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
    '(lsp-ui-peek-line-number ((t nil)))
    '(lsp-ui-peek-list ((t (:background "#031A25"))))
    )
+  '(hl-todo-keyword-faces
+    '(("TODO" . "#dc752f")
+      ("NEXT" . "#dc752f")
+      ("THEM" . "#2d9574")
+      ("PROG" . "#4f97d7")
+      ("OKAY" . "#4f97d7")
+      ("DONT" . "#f2241f")
+      ("FAIL" . "#f2241f")
+      ("DONE" . "#86dc2f")
+      ("NOTE" . "#b1951d")
+      ("KLUDGE" . "#b1951d")
+      ("HACK" . "#b1951d")
+      ("TEMP" . "#b1951d")
+      ("FIXME" . "#dc752f")
+      ("XXX" . "#dc752f")
+      ("XXXX" . "#dc752f")))
   )
 
 (defun dotspacemacs/user-config ()
@@ -791,6 +817,7 @@ you should place your code here."
   (custom/python-specific)
   (custom/elixir-specific)
   (custom/sql-specific)
+  (custom/magit-specific)
 
   (custom/org-specific)
   (custom/markdown-specific)
