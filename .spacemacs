@@ -231,7 +231,9 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(snazzy
+   dotspacemacs-themes '(
+                         doom-peacock
+                         snazzy
                          srcery
                          doom-molokai
                          solarized-dark
@@ -818,24 +820,15 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
                        ])
   )
 
-(defun custom/faces ()
-  "Customized faces for snazzy theme"
-  ;; TODO add faces for solair mode
+(defun custom/faces-all ()
   (custom-set-faces
+   ;; all
    ;; No wavy flycheck, please
    '(flycheck-error ((t (:background "#2d2e2e" :underline "#e74c3c"))))
    '(flycheck-info ((t (:background "#2d2e2e" :underline "#b6e63e"))))
    '(flycheck-warning ((t (:background "#2d2e2e" :underline "#e2c770"))))
    '(flyspell-duplicate ((t (:underline "DarkOrange"))))
    '(flyspell-incorrect ((t (:underline "#e74c3c"))))
-   ;; Highlight yellow is used on python and elixir debugging lines, they should be readable
-   '(hi-yellow ((t (:background "#e2c770" :foreground "black"))))
-   ;; The line should be less annoying
-   '(hl-line ((t (:background "gray17"))))
-   ;; Lsp pick should be a bit prettier :3
-   '(lsp-ui-peek-highlight ((t (:background "white" :distant-foreground "black" :foreground "black" :box (:line-width -1 :color "white")))))
-   '(lsp-ui-peek-line-number ((t nil)))
-   '(lsp-ui-peek-list ((t (:background "#031A25"))))
    )
   '(hl-todo-keyword-faces
     '(("TODO" . "#dc752f")
@@ -853,6 +846,38 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
       ("FIXME" . "#dc752f")
       ("XXX" . "#dc752f")
       ("XXXX" . "#dc752f")))
+  )
+
+(defun custom/faces-snazzy ()
+  (custom-set-faces
+   ;; snazzy
+   ;; Highlight yellow is used on python and elixir debugging lines, they should be readable
+   '(hi-yellow ((t (:background "#e2c770" :foreground "black"))))
+   ;; The line should be less annoying
+   '(hl-line ((t (:background "gray17"))))
+   ;; Lsp pick should be a bit prettier :3
+   '(lsp-ui-peek-highlight ((t (:background "white" :distant-foreground "black" :foreground "black" :box (:line-width -1 :color "white")))))
+   '(lsp-ui-peek-line-number ((t nil)))
+   '(lsp-ui-peek-list ((t (:background "#031A25"))))
+   )
+  )
+
+(defun custom/faces-doom-peacock ()
+  (custom-set-faces
+   ;; Lsp pick should be a bit prettier :3
+   '(lsp-ui-peek-highlight ((t (:inherit lsp-ui-peek-header :background "#484745" :foreground "gray" :box 1))))
+   ;; type and variable definition should be a bit more visible
+   '(font-lock-type-face ((t (:foreground "#ff5d38"))))
+   '(font-lock-variable-name-face ((t (:foreground "#ff5d38"))))
+   )
+  )
+
+(defun custom/faces ()
+  "Customized faces for snazzy theme"
+  ;; TODO add faces for solair mode
+  (custom/faces-all)
+  ;; (custom/faces-snazzy)
+  (custom/faces-doom-peacock)
   )
 
 (defun dotspacemacs/user-config ()
