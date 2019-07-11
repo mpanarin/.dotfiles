@@ -106,6 +106,7 @@ This function should only modify configuration layer settings."
                                       treemacs-magit
                                       treemacs-icons-dired
                                       magit-todos
+                                      python-pytest
                                       centaur-tabs
                                       )
 
@@ -697,6 +698,7 @@ dump."
       (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b d") 'dap-breakpoint-toggle)
       )
     )
+  (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "t") 'python-pytest-popup)
   )
 
 (defun custom/elixir-specific ()
