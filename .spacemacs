@@ -106,6 +106,7 @@ This function should only modify configuration layer settings."
                                       treemacs-magit
                                       treemacs-icons-dired
                                       magit-todos
+                                      centaur-tabs
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -531,6 +532,10 @@ dump."
   ;; or not fitting other categories.
   (require 'reverse-im)
   (add-to-list 'reverse-im-input-methods "russian-computer")
+  ;; enable Jolly Cooperation everywhere
+  (require 'solaire-mode)
+  (solaire-global-mode +1)
+  (use-package all-the-icons)
   )
 
 (defun custom/add-hooks ()
@@ -603,6 +608,56 @@ dump."
 
   (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
   (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
+  )
+
+(defun custom/tabs-generic ()
+  (use-package centaur-tabs
+    :demand
+    :config
+    (centaur-tabs-mode t)
+    (setq centaur-tabs-style "bar")
+    (setq centaur-tabs-height 32)
+    (setq centaur-tabs-set-icons t)
+    (setq centaur-tabs-set-bar 'over)
+    (setq centaur-tabs-set-close-button nil)
+    (setq centaur-tabs-cycle-scope 'tabs)
+    (centaur-tabs-group-by-projectile-project)
+    (centaur-tabs-mode t)
+    (defun centaur-tabs-hide-tab (x)
+      (let ((name (format "%s" x)))
+	      (or
+         (window-dedicated-p (selected-window))
+	       (string-prefix-p "*epc" name)
+	       (string-prefix-p "*helm" name)
+	       (string-prefix-p "*Helm" name)
+	       (string-prefix-p "*spacemacs*" name)
+	       (string-prefix-p "*Messages*" name)
+	       (string-prefix-p "*Compile-Log*" name)
+	       (string-prefix-p "*which-key*" name)
+	       (string-prefix-p "*lsp" name)
+	       (string-prefix-p "magit" name)
+	       )))
+    :hook (
+     (dashboard-mode . centaur-tabs-local-mode)
+     (treemacs-mode . centaur-tabs-local-mode)
+     (spacemacs-buffer-mode . centaur-tabs-local-mode)
+     (term-mode . centaur-tabs-local-mode)
+     (calendar-mode . centaur-tabs-local-mode)
+     (org-agenda-mode . centaur-tabs-local-mode)
+     (helpful-mode . centaur-tabs-local-mode)
+     (dired-mode . centaur-tabs-local-mode)
+     (zone-mode . centaur-tabs-local-mode)
+     (helm-mode . centaur-tabs-local-mode))
+    :bind
+    ("C-<prior>" . centaur-tabs-backward)
+    ("C-<next>" . centaur-tabs-forward)
+    ("C-c t" . centaur-tabs-counsel-switch-group)
+    (:map evil-normal-state-map
+	        ("g l" . centaur-tabs-forward)
+	        ("g h" . centaur-tabs-backward)
+	        ("SPC b n" . centaur-tabs-forward)
+	        ("SPC b p" . centaur-tabs-backward))
+    )
   )
 
 (defun custom/lsp-generic ()
@@ -814,6 +869,7 @@ you should place your code here."
 
   (custom/lsp-generic)
   (custom/dap-generic)
+  (custom/tabs-generic)
 
   (custom/python-specific)
   (custom/elixir-specific)
