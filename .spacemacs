@@ -45,7 +45,6 @@ This function should only modify configuration layer settings."
      yaml
      markdown
      docker
-     semantic
      helm
      ranger
      prodigy
