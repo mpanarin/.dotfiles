@@ -611,6 +611,16 @@ dump."
 
   (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
   (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
+
+  (define-minor-mode custom-python-debug-mode
+    "Remap some keybinds, specific to python and dap"
+    :global nil
+    (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b b") 'spacemacs/python-toggle-breakpoint)
+    (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b d") 'dap-breakpoint-toggle)
+    )
+  (add-hook 'dap-mode-hook (lambda ()
+                             (if (eq major-mode 'python-mode)
+                                 (custom-python-debug-mode t))))
   )
 
 (defun custom/tabs-generic ()
@@ -694,12 +704,8 @@ dump."
 
 (defun custom/python-specific ()
   "Changes specific to python-mode"
-  (with-eval-after-load 'python
-    (with-eval-after-load 'dap-mode
-      (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b b") 'spacemacs/python-toggle-breakpoint)
-      (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b d") 'dap-breakpoint-toggle)
-      )
-    )
+  ;; add pytest keybinds
+  ;; FIXME: this pytest package requires some fixing
   (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "t") 'python-pytest-popup)
   )
 
