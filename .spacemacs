@@ -716,9 +716,8 @@ dump."
 
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
-  ;; Add connection to saved sql
-  (spacemacs/set-leader-keys-for-major-mode 'sql-mode (kbd "x") 'sql-connect)
   )
+
 (defun custom/magit-specific ()
   "Specific changes to magit and its subpackages"
   (with-eval-after-load 'magit-todos
