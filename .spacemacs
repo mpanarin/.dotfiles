@@ -635,19 +635,11 @@ dump."
     (setq centaur-tabs-set-close-button nil)
     (setq centaur-tabs-cycle-scope 'tabs)
     (centaur-tabs-group-by-projectile-project)
-    (centaur-tabs-mode t)
     (defun centaur-tabs-hide-tab (x)
       (let ((name (format "%s" x)))
 	      (or
          (window-dedicated-p (selected-window))
-	       (string-prefix-p "*epc" name)
-	       (string-prefix-p "*helm" name)
-	       (string-prefix-p "*Helm" name)
-	       (string-prefix-p "*spacemacs*" name)
-	       (string-prefix-p "*Messages*" name)
-	       (string-prefix-p "*Compile-Log*" name)
-	       (string-prefix-p "*which-key*" name)
-	       (string-prefix-p "*lsp" name)
+	       (string-prefix-p "*" name)
 	       (string-prefix-p "magit" name)
 	       )))
     :hook (
@@ -668,8 +660,7 @@ dump."
     (:map evil-normal-state-map
 	        ("g l" . centaur-tabs-forward)
 	        ("g h" . centaur-tabs-backward)
-	        ("SPC b n" . centaur-tabs-forward)
-	        ("SPC b p" . centaur-tabs-backward))
+		)
     )
   )
 
@@ -902,7 +893,7 @@ you should place your code here."
 
   (custom/lsp-generic)
   (custom/dap-generic)
-  (custom/tabs-generic)
+  ;; (custom/tabs-generic)
 
   (custom/python-specific)
   (custom/elixir-specific)
