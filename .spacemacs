@@ -86,6 +86,7 @@ This function should only modify configuration layer settings."
      games
      selectric
      xclipboard
+     systemd
      )
 
    ;; List of additional packages that will be installed without being
@@ -521,6 +522,12 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  ;; For some reason spacemacs font and transparency is not loaded properly on emacsclient startup
+  ;; https://github.com/syl20bnr/spacemacs/issues/10894
+  (mapc
+   (lambda (item) (add-to-list 'default-frame-alist item)) '(
+                                                             (font . "-CTDB-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+                                                             (alpha . (95 . 90))))
   )
 
 (defun dotspacemacs/user-load ()
@@ -530,7 +537,7 @@ This function is called only while dumping Spacemacs configuration. You can
 dump."
   )
 
-(defun custom/generic_improvements ()
+(defun custom/generic-improvements ()
   ;; Generic improvements and packages that are either too small
   ;; or not fitting other categories.
   (require 'reverse-im)
@@ -563,6 +570,9 @@ dump."
 
 (defun custom/spacemacs-improvements ()
   "Several fixes from spacemacs issues"
+  ;; do not kill emacs daemon on exit
+  (evil-leader/set-key "q q" 'spacemacs/frame-killer)
+  (evil-leader/set-key "q Q" 'spacemacs/prompt-kill-emacs)
   ;; Don't remember what it was fixing :\
   (ido-mode -1)
   ;; Disable useless parts of spaceline
@@ -884,7 +894,8 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (custom/generic_improvements)
+
+  (custom/generic-improvements)
 
   (custom/add-hooks)
 

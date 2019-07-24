@@ -108,6 +108,12 @@ git clone https://github.com/gusaiani/elixir-oh-my-zsh.git ~/.oh-my-zsh/custom/p
 # set-up vim Vundle
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
+# add emacs daemon service
+mkdir -p ~/.config/systemd/user
+ln -fs ~/.dotfiles/emacs.service ~/.config/systemd/user/emacs.service
+systemctl start --user emacs.service
+systemctl enable --user emacs.service
+
 # symlink remaining files
 ln -fs ~/.dotfiles/.gitconfig ~/.gitconfig
 ln -fs ~/.dotfiles/.gitignore_global ~/.gitignore_global
