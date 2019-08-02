@@ -899,6 +899,8 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
    '(font-lock-type-face ((t (:foreground "#ff5d38"))))
    '(font-lock-variable-name-face ((t (:foreground "#ff5d38"))))
    '(hi-yellow ((t (:background "dark orange" :foreground "black" :weight bold))))
+   ;; The line should be a bit more visible
+   '(hl-line ((t (:background "gray19"))))
    )
   )
 
