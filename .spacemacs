@@ -762,6 +762,9 @@ dump."
   (with-eval-after-load 'org
     ;; Autohide markup elements
     (setq org-hide-emphasis-markers t)
+    (setq org-agenda-files (append
+                            (directory-files-recursively "~/Desktop/python_course_program" "**.org")
+                            (file-expand-wildcards "~/org/*.org")))
     )
   )
 
