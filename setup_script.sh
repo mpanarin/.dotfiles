@@ -37,7 +37,8 @@ sudo pacman -S --noconfirm python2-pip \
 	xsel \
 	flameshot \
   otf-fira-code \
-  brave
+  brave \
+  yapf
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
@@ -113,6 +114,10 @@ mkdir -p ~/.config/systemd/user
 ln -fs ~/.dotfiles/emacs.service ~/.config/systemd/user/emacs.service
 systemctl start --user emacs.service
 systemctl enable --user emacs.service
+
+# add yapf configuration
+mkdir -p ~/.config/yapf
+ln -sf ~/.dotfiles/style ~/.config/yapf/style
 
 # symlink remaining files
 ln -fs ~/.dotfiles/.gitconfig ~/.gitconfig
