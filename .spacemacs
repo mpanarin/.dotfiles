@@ -637,7 +637,7 @@ dump."
     (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b b") 'spacemacs/python-toggle-breakpoint)
     (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b d") 'dap-breakpoint-toggle)
     )
-  (add-hook 'dap-mode-hook (lambda ()
+  (add-hook 'lsp-mode-hook (lambda ()
                              (if (eq major-mode 'python-mode)
                                  (custom-python-debug-mode t))))
   )
