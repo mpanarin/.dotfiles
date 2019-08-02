@@ -87,6 +87,7 @@ This function should only modify configuration layer settings."
      selectric
      xclipboard
      systemd
+     restclient
      )
 
    ;; List of additional packages that will be installed without being
