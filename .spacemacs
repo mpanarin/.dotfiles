@@ -753,6 +753,7 @@ dump."
   (with-eval-after-load 'magit-todos
     ;; Disable magit-todos map as it is garbage and is bound to `j`
     (setq magit-todos-section-map nil)
+    (setq magit-todos-keywords 'hl-todo-keyword-faces)
     )
   )
 
@@ -856,7 +857,7 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
    '(flyspell-duplicate ((t (:underline "DarkOrange"))))
    '(flyspell-incorrect ((t (:underline "#e74c3c"))))
    )
-  '(hl-todo-keyword-faces
+  (setq hl-todo-keyword-faces
     '(("TODO" . "#dc752f")
       ("NEXT" . "#dc752f")
       ("THEM" . "#2d9574")
@@ -869,7 +870,9 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
       ("KLUDGE" . "#b1951d")
       ("HACK" . "#b1951d")
       ("TEMP" . "#b1951d")
-      ("FIXME" . "#dc752f")
+      ("FIXME" . "#f2241f")
+      ("DEPRECATE" . "#f2241f")
+      ("DEBUG" . "#dc752f")
       ("XXX" . "#dc752f")
       ("XXXX" . "#dc752f")))
   )
