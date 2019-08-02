@@ -685,12 +685,6 @@ dump."
 
 (defun custom/lsp-generic ()
   "Generic LSP changes"
-  ;; Stop with your stupid warning lsp
-  (setq lsp-message-project-root-warning t)
-  ;; disable garbage rope completion in pyls
-  (setq lsp-pyls-plugins-rope-completion-enabled nil)
-  ;; Stop printing your output to *Warnings*
-  (setq lsp-print-io 1)
   (use-package lsp-mode
     :commands lsp
     :ensure t
@@ -700,7 +694,25 @@ dump."
     :init
     (add-to-list 'exec-path "/home/m-panarin/elixir-ls/release"))
   (with-eval-after-load 'lsp-ui-doc
+    ;; use webkit if available
     (setq lsp-ui-doc-use-webkit t)
+    ;; add function signature to the buffer
+    (setq lsp-ui-doc-include-signature t)
+    ;; (setq lsp-ui-doc-use-childframe nil)
+    )
+  (with-eval-after-load 'lsp-ui-sideline
+    ;; do not show hover info, I have lsp-ui-doc for that
+    (setq lsp-ui-sideline-show-hover nil)
+    )
+  (with-eval-after-load 'lsp-mode
+    ;; do not show hover info in eldoc, I have lsp-ui-doc for that
+    (setq lsp-eldoc-enable-hover nil)
+    ;; Stop with your stupid warning lsp
+    (setq lsp-message-project-root-warning t)
+    ;; disable garbage rope completion in pyls
+    (setq lsp-pyls-plugins-rope-completion-enabled nil)
+    ;; Stop printing your output to *Warnings*
+    (setq lsp-print-io 1)
     )
   (with-eval-after-load 'lsp-ui-peek
     ;; always use fontify, otherwise highlight is broken in the left half
@@ -727,11 +739,10 @@ dump."
       (kbd "t b") 'exunit-verify-all
       (kbd "t a") 'exunit-verify
       (kbd "t k") 'exunit-rerun
-      (kbd "t t") 'exunit-verify-single)
-    (require 'dap-elixir)
-    (dap-ui-mode)
-    (dap-mode))
-  )
+      (kbd "t t") 'exunit-verify-single))
+  (require 'dap-elixir)
+  (dap-ui-mode)
+  (dap-mode))
 
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
@@ -890,7 +901,7 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
 
 (defun custom/faces ()
   "Customized faces for snazzy theme"
-  ;; TODO add faces for solair mode
+  ;; TODO: add faces for solair mode
   (custom/faces-all)
   ;; (custom/faces-snazzy)
   (custom/faces-doom-peacock)
@@ -929,7 +940,6 @@ you should place your code here."
 
   (custom/faces)
  )
-
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
