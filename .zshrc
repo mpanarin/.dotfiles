@@ -85,6 +85,11 @@ export PYTHONSTARTUP="$(python -m jedi repl)"
 # Aliases
 alias gdt='git difftool'
 
+alias estat='systemctl status --user emacs.service'
+alias estart='systemctl start --user emacs.service'
+alias estop='systemctl stop --user emacs.service'
+alias elog='journalctl -u emacs.service --since today'
+
 alias doco=docker-compose
 alias doco_rebuild='doco down -v && doco up --build'
 alias doco_log='docker-compose logs'
