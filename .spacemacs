@@ -110,6 +110,7 @@ This function should only modify configuration layer settings."
                                       magit-todos
                                       python-pytest
                                       centaur-tabs
+                                      company-box
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -547,6 +548,13 @@ dump."
   (require 'solaire-mode)
   (solaire-global-mode +1)
   (use-package all-the-icons)
+  (use-package company-box
+    :demand
+    :custom
+    (company-box-icons-alist 'company-box-icons-all-the-icons)
+    (company-box-show-single-candidate t)
+    :hook (company-mode . company-box-mode)
+    )
   )
 
 (defun custom/add-hooks ()
