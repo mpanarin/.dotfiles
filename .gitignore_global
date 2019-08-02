@@ -7,3 +7,4 @@ __pycache__/
 .venv
 .git-credentials
 .elixir_ls/
+.dir-locals.el
