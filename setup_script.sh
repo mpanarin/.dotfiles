@@ -38,7 +38,8 @@ sudo pacman -S --noconfirm python2-pip \
 	flameshot \
   otf-fira-code \
   brave \
-  yapf
+  yapf \
+  xclip
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
