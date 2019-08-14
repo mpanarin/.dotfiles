@@ -556,6 +556,10 @@ dump."
 	        ("C-j" . nov-next-document)
 	        ("C-k" . nov-previous-document)
 	        ("C-l" . nov-goto-toc)))
+  ;; configurate writeroom
+  (use-package writeroom-mode
+    :custom
+    (writeroom-width 125))
   ;; enable Jolly Cooperation everywhere
   (require 'solaire-mode)
   (solaire-global-mode +1)
