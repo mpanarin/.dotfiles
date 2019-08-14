@@ -111,6 +111,7 @@ This function should only modify configuration layer settings."
                                       python-pytest
                                       centaur-tabs
                                       company-box
+                                      nov
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -544,6 +545,17 @@ dump."
   ;; or not fitting other categories.
   (require 'reverse-im)
   (add-to-list 'reverse-im-input-methods "russian-computer")
+  ;; associate epub file with nov-mode
+  (use-package nov
+    :init
+    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+    :custom
+    (nov-text-width 120)
+    :bind
+    (:map nov-mode-map
+	        ("C-j" . nov-next-document)
+	        ("C-k" . nov-previous-document)
+	        ("C-l" . nov-goto-toc)))
   ;; enable Jolly Cooperation everywhere
   (require 'solaire-mode)
   (solaire-global-mode +1)
