@@ -45,7 +45,7 @@ sudo pacman -S --noconfirm python2-pip \
 sudo pacman -R yakuake --noconfirm
 
 # Additional packages from AUR
-yay -S emacs-git telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git
+yay -S emacs-git telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git gotop
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
