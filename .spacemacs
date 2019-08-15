@@ -64,7 +64,6 @@ This function should only modify configuration layer settings."
      sql
      javascript
      rust
-     markdown
      themes-megapack
      org
      (shell :variables
@@ -543,12 +542,13 @@ dump."
 (defun custom/generic-improvements ()
   ;; Generic improvements and packages that are either too small
   ;; or not fitting other categories.
-  (require 'reverse-im)
-  (add-to-list 'reverse-im-input-methods "russian-computer")
+  (use-package reverse-im
+    :demand
+    :config
+    (add-to-list 'reverse-im-input-methods "russian-computer"))
   ;; associate epub file with nov-mode
   (use-package nov
-    :init
-    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+    :mode ("\\.epub\\'" . nov-mode)
     :custom
     (nov-text-width 120)
     :bind
@@ -560,10 +560,15 @@ dump."
   (use-package writeroom-mode
     :custom
     (writeroom-width 125))
+
   ;; enable Jolly Cooperation everywhere
-  (require 'solaire-mode)
-  (solaire-global-mode +1)
+  (use-package solaire-mode
+    :demand
+    :init
+    (solaire-global-mode +1))
+
   (use-package all-the-icons)
+
   (use-package company-box
     :demand
     :custom
@@ -708,36 +713,37 @@ dump."
     :hook
     (elixir-mode . lsp)
     :init
-    (add-to-list 'exec-path "/home/m-panarin/elixir-ls/release"))
-  (with-eval-after-load 'lsp-ui-doc
-    ;; use webkit if available
-    (setq lsp-ui-doc-use-webkit t)
-    ;; add function signature to the buffer
-    (setq lsp-ui-doc-include-signature t)
-    ;; (setq lsp-ui-doc-use-childframe nil)
-    )
-  (with-eval-after-load 'lsp-ui-sideline
-    ;; do not show hover info, I have lsp-ui-doc for that
-    (setq lsp-ui-sideline-show-hover nil)
-    )
-  (with-eval-after-load 'lsp-mode
+    (add-to-list 'exec-path "/home/m-panarin/elixir-ls/release")
+    :custom
     ;; do not show hover info in eldoc, I have lsp-ui-doc for that
-    (setq lsp-eldoc-enable-hover nil)
+    (lsp-eldoc-enable-hover nil)
     ;; Stop with your stupid warning lsp
-    (setq lsp-message-project-root-warning t)
+    (lsp-message-project-root-warning t)
     ;; disable garbage rope completion in pyls
-    (setq lsp-pyls-plugins-rope-completion-enabled nil)
+    (lsp-pyls-plugins-rope-completion-enabled nil)
     ;; Stop printing your output to *Warnings*
-    (setq lsp-print-io 1)
-    )
-  (with-eval-after-load 'lsp-ui-peek
+    (lsp-print-io t))
+  (use-package lsp-ui
+    :config
+      ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
+      (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g d") 'lsp-ui-peek-find-definitions)
+      (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
+      (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
+    :custom
+    ;; LSP-UI-DOC
+    ;; use webkit if available
+    (lsp-ui-doc-use-webkit t)
+    ;; add function signature to the buffer
+    (lsp-ui-doc-include-signature t)
+    ;; (lsp-ui-doc-use-childframe nil)
+
+    ;; LSP-UI-SIDELINE
+    ;; do not show hover info, I have lsp-ui-doc for that
+    (lsp-ui-sideline-show-hover nil)
+
+    ;; LSP-UI-PEEK
     ;; always use fontify, otherwise highlight is broken in the left half
-    (setq lsp-ui-peek-fontify 'always)
-    ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
-    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g d") 'lsp-ui-peek-find-definitions)
-    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
-    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
-    )
+    (lsp-ui-peek-fontify 'always))
   )
 
 (defun custom/python-specific ()
@@ -749,16 +755,17 @@ dump."
 
 (defun custom/elixir-specific ()
   "Changes specific to elixir-mode"
-  (with-eval-after-load 'elixir-mode
+  (use-package elixir-mode
+    :config
     (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m t") "tests" "testing related functionality")
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
       (kbd "t b") 'exunit-verify-all
       (kbd "t a") 'exunit-verify
       (kbd "t k") 'exunit-rerun
-      (kbd "t t") 'exunit-verify-single))
-  (require 'dap-elixir)
-  (dap-ui-mode)
-  (dap-mode))
+      (kbd "t t") 'exunit-verify-single)
+    (require 'dap-elixir)
+    (dap-ui-mode)
+    (dap-mode)))
 
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
@@ -766,37 +773,43 @@ dump."
 
 (defun custom/magit-specific ()
   "Specific changes to magit and its subpackages"
-  (with-eval-after-load 'magit-todos
+  (use-package magit-todos
+    :custom
     ;; Disable magit-todos map as it is garbage and is bound to `j`
-    (setq magit-todos-section-map nil)
-    (setq magit-todos-keywords 'hl-todo-keyword-faces)
-    )
+    (magit-todos-section-map nil)
+    :config
+    ;; set magit todos faces
+    (setq magit-todos-keywords 'hl-todo-keyword-faces))
   )
 
 (defun custom/org-specific ()
   "Changes specific to org-mode"
-  (with-eval-after-load 'org
+  (use-package org
+    :custom
     ;; Autohide markup elements
-    (setq org-hide-emphasis-markers t)
-    (setq org-agenda-files (append
+    (org-hide-emphasis-markers t)
+    ;; add agenda files
+    (org-agenda-files (append
                             (directory-files-recursively "~/Desktop/python_course_program" "**.org")
-                            (file-expand-wildcards "~/org/*.org")))
-    )
+                            (file-expand-wildcards "~/org/*.org"))))
   )
 
 (defun custom/markdown-specific ()
   "Changes specific to markdown-mode"
-  ;; Always hide markup in markdown-mode
-  (setq markdown-hide-markup 1)
+  (use-package markdown-mode
+    :custom
+    ;; Always hide markup in markdown-mode
+    (markdown-hide-markup t)
+    ;; Hide and shorten URLs in markdown
+    (markdown-hide-urls t))
   )
 
 (defun custom/treemacs-specific ()
   "Changes specific to treemacs-mode"
-  (with-eval-after-load 'treemacs
+  (use-package treemacs
+    :config
     ;; Treemacs use deferred git-mode
     (treemacs-git-mode 'deferred)
-    ;; keep the width locked
-    (setq treemacs-lock-width 1)
     ;; Hide dotfiles by default
     (treemacs-toggle-show-dotfiles)
     ;; Ignore *.pyc files
@@ -805,28 +818,39 @@ dump."
                    (string-match-p "\.pyc$" filename)))
     ;; autohide files ignored by git please
     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
-    ;; Swap treemacs horizontal/vertical ace
-    (define-key treemacs-mode-map (kbd "o a h") 'treemacs-visit-node-ace-vertical-split)
-    (define-key treemacs-mode-map (kbd "o a v") 'treemacs-visit-node-ace-horizontal-split)
-    )
+    :custom
+    ;; keep the width locked
+    (treemacs-lock-width 1)
+    :bind
+    (:map treemacs-mode-map
+          ;; Swap treemacs horizontal/vertical ace
+          ("o a h" . treemacs-visit-node-ace-vertical-split)
+          ("o a v" . treemacs-visit-node-ace-horizontal-split)))
   )
 
 (defun custom/helm-specific ()
   "Changes specific to helm-mode"
-  (require 'helm)
+  (use-package helm
+    :demand
+    :bind
+    (:map helm-map
+          ;; Helm please. Allow me to move cursor normally
+          ("<left>" . backward-char)
+          ("<right>" . forward-char)))
+  (use-package helm-ag
+    :demand
+    :bind
+    (:map helm-ag-map
+          ;; Helm-ag please. Allow me to move cursor normally
+          ("<left>" . backward-char)
+          ("<right>" . forward-char)))
+
   ;; Fix for the window splits
   (defun helm-persistent-action-display-window (&optional split-onewindow)
     "Return the window that will be used for persistent action.
 If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
     (with-helm-window
       (setq helm-persistent-action-display-window (get-mru-window))))
-  ;; Helm please. Allow me to move cursor normally
-  (define-key helm-map (kbd "<left>") 'backward-char)
-  (define-key helm-map (kbd "<right>") 'forward-char)
-  (require 'helm-ag)
-  ;; Helm-ag please. Allow me to move cursor normally
-  (define-key helm-ag-map (kbd "<left>") 'backward-char)
-  (define-key helm-ag-map (kbd "<right>") 'forward-char)
   )
 
 (defun custom/generic-define-keys ()
@@ -845,25 +869,27 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
 
 (defun custom/zoning ()
   "Changes specific to zoning"
-  (require 'zone)
-  (zone-when-idle 240)
-  (setq zone-programs [
-                       zone-pgm-jitter
-                       zone-pgm-putz-with-case
-                       zone-pgm-dissolve
-                       zone-pgm-explode
-                       zone-pgm-whack-chars
-                       zone-pgm-rotate-LR-variable
-                       zone-pgm-rotate-RL-variable
-                       zone-pgm-drip
-                       zone-pgm-five-oclock-swan-dive
-                       zone-pgm-martini-swan-dive
-                       zone-pgm-rat-race
-                       zone-pgm-paragraph-spaz
-                       zone-pgm-stress
-                       zone-pgm-stress-destress
-                       zone-pgm-random-life
-                       ])
+  (use-package zone
+    :demand
+    :config
+    (zone-when-idle 240)
+    :custom
+    (zone-programs [zone-pgm-jitter
+                    zone-pgm-putz-with-case
+                    zone-pgm-dissolve
+                    zone-pgm-explode
+                    zone-pgm-whack-chars
+                    zone-pgm-rotate-LR-variable
+                    zone-pgm-rotate-RL-variable
+                    zone-pgm-drip
+                    zone-pgm-five-oclock-swan-dive
+                    zone-pgm-martini-swan-dive
+                    zone-pgm-rat-race
+                    zone-pgm-paragraph-spaz
+                    zone-pgm-stress
+                    zone-pgm-stress-destress
+                    zone-pgm-random-life
+                    ]))
   )
 
 (defun custom/faces-all ()
