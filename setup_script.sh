@@ -120,6 +120,10 @@ systemctl enable --user emacs.service
 mkdir -p ~/.config/yapf
 ln -sf ~/.dotfiles/style ~/.config/yapf/style
 
+# setup asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
+asdf plugin-add erlang elixir
+
 # symlink remaining files
 ln -fs ~/.dotfiles/.gitconfig ~/.gitconfig
 ln -fs ~/.dotfiles/.gitignore_global ~/.gitignore_global

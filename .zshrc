@@ -82,6 +82,10 @@ export PATH="$PATH:/home/$USER/.poetry/bin"
 # Python startup
 export PYTHONSTARTUP="$(python -m jedi repl)"
 
+# asdf-vm configs
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
 # Aliases
 alias gdt='git difftool'
 
