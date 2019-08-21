@@ -97,20 +97,20 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
-                                      reverse-im
-                                      srcery-theme
-                                      snazzy-theme
-                                      dap-mode
-                                      exunit
-                                      autopair
-                                      solaire-mode
-                                      treemacs-magit
-                                      treemacs-icons-dired
-                                      magit-todos
-                                      python-pytest
-                                      centaur-tabs
-                                      company-box
-                                      nov
+                                      reverse-im                ;; allows usage shortcuts on russian keyboard
+                                      srcery-theme              ;; theme
+                                      snazzy-theme              ;; theme, TODO: I think it was added to themes-megapack. As well as there is doom version, so should be removed
+                                      dap-mode                  ;; FIXME: it is added by dap layer, so should be removed?
+                                      exunit                    ;; elixir test runner
+                                      autopair                  ;; autopairs quotes and brackets, used for snippets. TODO: should be considered to change to spartparens
+                                      solaire-mode              ;; highlights test buffers with slightly brighter colors
+                                      treemacs-magit            ;; magit integration
+                                      treemacs-icons-dired      ;; use treemacs icons in dired
+                                      magit-todos               ;; add TODOs and other keywords to the magit buffer
+                                      python-pytest             ;; pytest runner, TODO: requires some fixing
+                                      centaur-tabs              ;; beautiful tabs for emacs, TODO: requires further fixing with spaceline flickering.
+                                      company-box               ;; great package for company completions look and feel
+                                      nov                       ;; awesome epub mode
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -219,7 +219,7 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
+   dotspacemacs-startup-lists '((agenda . nil)
                                 (projects . 3))
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
@@ -488,7 +488,7 @@ It should only modify the values of Spacemacs settings."
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%I@%S"
+   dotspacemacs-frame-title-format "%I@%f"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
