@@ -111,6 +111,8 @@ This function should only modify configuration layer settings."
                                       centaur-tabs              ;; beautiful tabs for emacs, TODO: requires further fixing with spaceline flickering.
                                       company-box               ;; great package for company completions look and feel
                                       nov                       ;; awesome epub mode
+                                      calfw                     ;; great emacs calendar
+                                      calfw-org                 ;; integration of calendar with org
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -792,6 +794,15 @@ dump."
     (org-agenda-files (append
                             (directory-files-recursively "~/Desktop/python_course_program" "**.org")
                             (file-expand-wildcards "~/org/*.org"))))
+  (use-package calfw-org
+    :demand
+    :config
+    (define-key evil-normal-state-local-map (kbd "SPC a o a") 'cfw:open-org-calendar)
+    :bind
+    (:map cfw:calendar-mode-map
+          (("C-j" . cfw:navi-next-item-command)
+           ("C-k" . cfw:navi-prev-item-command)))
+    )
   )
 
 (defun custom/markdown-specific ()
