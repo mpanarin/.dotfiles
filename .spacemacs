@@ -726,6 +726,8 @@ dump."
     (lsp-message-project-root-warning t)
     ;; disable garbage rope completion in pyls
     (lsp-pyls-plugins-rope-completion-enabled nil)
+    ;; disable params in jedi completion as they are pretty much useless and annoying
+    (lsp-pyls-plugins-jedi-completion-include-params nil)
     ;; Stop printing your output to *Warnings*
     (lsp-print-io t))
   (use-package lsp-ui
