@@ -544,6 +544,9 @@ dump."
 (defun custom/generic-improvements ()
   ;; Generic improvements and packages that are either too small
   ;; or not fitting other categories.
+  (use-package restclient
+    :config
+    (spacemacs/set-leader-keys-for-major-mode 'restclient-mode (kbd ",") 'restclient-http-send-current))
   (use-package reverse-im
     :demand
     :config
