@@ -581,6 +581,8 @@ dump."
     (company-box-show-single-candidate t)
     :hook (company-mode . company-box-mode)
     )
+  ;; fix the python annotate shit, now pdb is always annotated
+  (global-hi-lock-mode t)
   )
 
 (defun custom/add-hooks ()
