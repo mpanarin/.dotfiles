@@ -58,7 +58,8 @@ This function should only modify configuration layer settings."
              python-indent-offset 4
              python-backend 'lsp)
      django
-     elixir
+     (elixir :variables
+             elixir-backend 'lsp)
      phoenix
      erlang
      sql
@@ -119,8 +120,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(alchemist
-                                    lsp-python-ms)
+   dotspacemacs-excluded-packages '(lsp-python-ms)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -717,10 +717,6 @@ dump."
     :commands lsp
     :ensure t
     :diminish lsp-mode
-    :hook
-    (elixir-mode . lsp)
-    :init
-    (add-to-list 'exec-path "/home/m-panarin/elixir-ls/release")
     :custom
     ;; do not show hover info in eldoc, I have lsp-ui-doc for that
     (lsp-eldoc-enable-hover nil)
@@ -771,10 +767,7 @@ dump."
       (kbd "t b") 'exunit-verify-all
       (kbd "t a") 'exunit-verify
       (kbd "t k") 'exunit-rerun
-      (kbd "t t") 'exunit-verify-single)
-    (require 'dap-elixir)
-    (dap-ui-mode)
-    (dap-mode)))
+      (kbd "t t") 'exunit-verify-single)))
 
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
