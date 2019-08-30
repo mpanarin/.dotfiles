@@ -114,6 +114,8 @@ This function should only modify configuration layer settings."
                                       nov                       ;; awesome epub mode
                                       calfw                     ;; great emacs calendar
                                       calfw-org                 ;; integration of calendar with org
+                                      highlight-function-calls  ;; highlights function calls
+                                      highlight-blocks          ;; highlights block, where cursor is
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -769,6 +771,28 @@ dump."
       (kbd "t k") 'exunit-rerun
       (kbd "t t") 'exunit-verify-single)))
 
+(defun custom/elisp-specific ()
+  "Changes specific to emacs-lisp-mode"
+
+  ;; handy key to insert page-breaks
+  (defun insert-page-break ()
+    (interactive)
+    (evil-beginning-of-line)
+    (insert "\C-l\n")
+    )
+  (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'insert-page-break)
+
+  ;; functions highlighter
+  (use-package highlight-function-calls
+    :hook (emacs-lisp-mode . highlight-function-calls-mode))
+
+  (use-package highlight-blocks
+    :custom
+    (highlight-blocks-max-innermost-block-count 1)
+    :hook (emacs-lisp-mode . highlight-blocks-mode)
+    )
+  )
+
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
   )
@@ -996,6 +1020,7 @@ you should place your code here."
 
   (custom/python-specific)
   (custom/elixir-specific)
+  (custom/elisp-specific)
   (custom/sql-specific)
   (custom/magit-specific)
 
