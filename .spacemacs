@@ -544,15 +544,18 @@ dump."
   )
 
 (defun custom/generic-improvements ()
-  ;; Generic improvements and packages that are either too small
-  ;; or not fitting other categories.
+  "Generic improvements and packages that are either too small, or not fitting other categories."
+  ;; Add restclient package
   (use-package restclient
     :config
     (spacemacs/set-leader-keys-for-major-mode 'restclient-mode (kbd ",") 'restclient-http-send-current))
+
+  ;; allow usage of russian keyboard
   (use-package reverse-im
     :demand
     :config
-    (add-to-list 'reverse-im-input-methods "russian-computer"))
+    (reverse-im-activate "russian-computer"))
+
   ;; associate epub file with nov-mode
   (use-package nov
     :mode ("\\.epub\\'" . nov-mode)
@@ -563,8 +566,11 @@ dump."
 	        ("C-j" . nov-next-document)
 	        ("C-k" . nov-previous-document)
 	        ("C-l" . nov-goto-toc)))
+
   ;; configurate writeroom
   (use-package writeroom-mode
+    :hook ((nov-mode . writeroom-mode)
+           (pdf-view-mode . writeroom-mode))
     :custom
     (writeroom-width 125))
 
@@ -574,8 +580,10 @@ dump."
     :init
     (solaire-global-mode +1))
 
+  ;; is reaquired by company-box
   (use-package all-the-icons)
 
+  ;; a fancier company interface
   (use-package company-box
     :demand
     :custom
@@ -583,6 +591,31 @@ dump."
     (company-box-show-single-candidate t)
     :hook (company-mode . company-box-mode)
     )
+
+  ;; configure webmode
+  (use-package web-mode
+    :custom
+    (web-mode-markup-indent-offset 2))
+  ;; Make csv open always aligned with delimiters
+  (use-package csv-mode
+    :hook (csv-mode . (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))  ;; TODO: this probably can be done better
+    )
+
+  ;; autopair stuff in snippets and org
+  (use-package smartparens
+    :hook (org-mode . smartparens-mode)
+    )
+
+  (use-package yasnippet
+    :config
+    (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
+    (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
+    )
+
+  ;; Show treemacs icons in dired
+  (use-package treemacs-icons-dired
+    :hook (dired-mode . treemacs-icons-dired-mode))
+
   ;; fix the python annotate shit, now pdb is always annotated
   (global-hi-lock-mode t)
   )
@@ -590,21 +623,21 @@ dump."
 (defun custom/add-hooks ()
   "This is all the hooks I use"
   ;; Add a line on 80 symbols
-  (add-hook 'python-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
-  (add-hook 'elixir-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  (add-hook 'python-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))
+  (add-hook 'elixir-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))
   ;; Use 2 spaces to indent web-mode
-  (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
+  ;; (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
   ;; Make csv open always aligned with delimiters
-  (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
+  ;; (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
   ;; use "russian compuhter in org-mode"
-  (add-hook 'org-mode-hook 'reverse-im-mode)
+  ;; (add-hook 'org-mode-hook 'reverse-im-mode)
   ;; autopair stuff in snippets plz
-  (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
-  (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
+  ;; (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
+  ;; (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
   ;; Show treemacs icons in dired
-  (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+  ;; (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
   ;; add todos mode to magit
-  (add-hook 'magit-mode-hook 'magit-todos-mode)
+  ;; (add-hook 'magit-mode-hook 'magit-todos-mode)
   )
 
 (defun custom/spacemacs-improvements ()
@@ -757,7 +790,13 @@ dump."
   "Changes specific to python-mode"
   ;; add pytest keybinds
   ;; FIXME: this pytest package requires some fixing
-  (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "t") 'python-pytest-popup)
+  (use-package python-pytest
+    :custom
+    (python-pytest-arguments '("--color" "--cov"))
+    :config
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "t") 'python-pytest-popup)
+    (magit-define-popup-switch 'python-pytest-popup ?C "Converage" "--cov")
+    )
   )
 
 (defun custom/elixir-specific ()
@@ -800,6 +839,7 @@ dump."
 (defun custom/magit-specific ()
   "Specific changes to magit and its subpackages"
   (use-package magit-todos
+    :hook (magit-mode . magit-todos-mode)
     :custom
     ;; Disable magit-todos map as it is garbage and is bound to `j`
     (magit-todos-section-map nil)
