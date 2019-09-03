@@ -616,9 +616,6 @@ dump."
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-mode))
 
-  ;; fix the python annotate shit, now pdb is always annotated
-  (global-hi-lock-mode t)
-
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
   )
