@@ -618,6 +618,9 @@ dump."
 
   ;; fix the python annotate shit, now pdb is always annotated
   (global-hi-lock-mode t)
+
+  (setq enable-local-variables :all)
+  (setq enable-local-eval t)
   )
 
 (defun custom/add-hooks ()
