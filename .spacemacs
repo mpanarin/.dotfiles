@@ -869,7 +869,8 @@ dump."
     :bind
     (:map cfw:calendar-mode-map
           (("C-j" . cfw:navi-next-item-command)
-           ("C-k" . cfw:navi-prev-item-command)))
+           ("C-k" . cfw:navi-prev-item-command)
+           ("A" . org-agenda-list)))
     )
   )
 
