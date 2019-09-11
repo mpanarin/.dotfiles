@@ -64,6 +64,8 @@ This function should only modify configuration layer settings."
      erlang
      sql
      javascript
+     (typescript :variables
+                 typescript-backend 'lsp)
      rust
      themes-megapack
      org
