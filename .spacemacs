@@ -755,6 +755,8 @@ dump."
     :ensure t
     :diminish lsp-mode
     :custom
+    ;; always filewatch
+    (lsp-file-watch-threshold nil)
     ;; do not show hover info in eldoc, I have lsp-ui-doc for that
     (lsp-eldoc-enable-hover nil)
     ;; Stop with your stupid warning lsp
