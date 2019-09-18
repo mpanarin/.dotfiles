@@ -548,7 +548,7 @@ dump."
 
 ;; helpful small custom functions
 
-(defun kill-all-persp ()
+(defun custom/kill-all-persp ()
   "Kills all perspectives with their buffers, except `Default'"
   (interactive)
   (let ((persps (seq-filter (lambda (persp) (not (equal persp "Default")))
@@ -952,6 +952,8 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
   ;; Bind copy whole buffer to lowercase y (whatafaqerino)
   (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
+  ;; Bind kill-all-persp
+  (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)
   )
 
 (defun custom/zoning ()
