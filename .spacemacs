@@ -545,6 +545,52 @@ This function is called only while dumping Spacemacs configuration. You can
 dump."
   )
 
+
+;; helpful small custom functions
+
+(defun kill-all-persp ()
+  "Kills all perspectives with their buffers, except `Default'"
+  (interactive)
+  (let ((persps (seq-filter (lambda (persp) (not (equal persp "Default")))
+                            (persp-names)))
+        (persp-autokill-buffer-on-remove t))
+    (if persps (persp-kill persps)))
+  (spacemacs-buffer/refresh)
+  (delete-other-windows))
+
+(defun custom/window-visible (b-name)
+  "Return whether B-NAME is visible."
+  (-> (-compose 'buffer-name 'window-buffer)
+      (-map (window-list))
+      (-contains? b-name)))
+
+(defun custom/show-debug-windows (session)
+  "Show debug windows."
+  (let ((lsp--cur-workspace (dap--debug-session-workspace session)))
+    (save-excursion
+      ;; display locals
+      (unless (custom/window-visible dap-ui--locals-buffer)
+        (dap-ui-locals))
+      ;; display sessions
+      (unless (custom/window-visible dap-ui--sessions-buffer)
+        (dap-ui-sessions)))))
+
+(defun custom/hide-debug-windows (session)
+  "Hide debug windows when all debug sessions are dead."
+  (unless (-filter 'dap--session-running (dap--get-sessions))
+    (and (get-buffer dap-ui--sessions-buffer)
+         (kill-buffer dap-ui--sessions-buffer))
+    (and (get-buffer dap-ui--locals-buffer)
+         (kill-buffer dap-ui--locals-buffer))))
+
+(defun insert-page-break ()
+  (interactive)
+  (evil-beginning-of-line)
+  (insert "\C-l\n"))
+
+
+;; Custom functions for spacemacs and modes customizations
+
 (defun custom/generic-improvements ()
   "Generic improvements and packages that are either too small, or not fitting other categories."
   ;; This 2 hooks fix a shitton of issues with emacs-server and recentf bitch
@@ -631,19 +677,6 @@ dump."
   ;; Add a line on 80 symbols
   (add-hook 'python-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))
   (add-hook 'elixir-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))
-  ;; Use 2 spaces to indent web-mode
-  ;; (add-hook 'web-mode-hook (lambda () (setq web-mode-markup-indent-offset 2)))
-  ;; Make csv open always aligned with delimiters
-  ;; (add-hook 'csv-mode-hook (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))
-  ;; use "russian compuhter in org-mode"
-  ;; (add-hook 'org-mode-hook 'reverse-im-mode)
-  ;; autopair stuff in snippets plz
-  ;; (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
-  ;; (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
-  ;; Show treemacs icons in dired
-  ;; (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
-  ;; add todos mode to magit
-  ;; (add-hook 'magit-mode-hook 'magit-todos-mode)
   )
 
 (defun custom/spacemacs-improvements ()
@@ -671,31 +704,6 @@ dump."
 
 (defun custom/dap-generic ()
   "Generic LSP dap changes"
-
-  (defun custom/window-visible (b-name)
-    "Return whether B-NAME is visible."
-    (-> (-compose 'buffer-name 'window-buffer)
-        (-map (window-list))
-        (-contains? b-name)))
-
-  (defun custom/show-debug-windows (session)
-    "Show debug windows."
-    (let ((lsp--cur-workspace (dap--debug-session-workspace session)))
-      (save-excursion
-        ;; display locals
-        (unless (custom/window-visible dap-ui--locals-buffer)
-          (dap-ui-locals))
-        ;; display sessions
-        (unless (custom/window-visible dap-ui--sessions-buffer)
-          (dap-ui-sessions)))))
-
-  (defun custom/hide-debug-windows (session)
-    "Hide debug windows when all debug sessions are dead."
-    (unless (-filter 'dap--session-running (dap--get-sessions))
-      (and (get-buffer dap-ui--sessions-buffer)
-           (kill-buffer dap-ui--sessions-buffer))
-      (and (get-buffer dap-ui--locals-buffer)
-           (kill-buffer dap-ui--locals-buffer))))
 
   (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
   (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
@@ -822,11 +830,6 @@ dump."
   "Changes specific to emacs-lisp-mode"
 
   ;; handy key to insert page-breaks
-  (defun insert-page-break ()
-    (interactive)
-    (evil-beginning-of-line)
-    (insert "\C-l\n")
-    )
   (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'insert-page-break)
 
   ;; functions highlighter
@@ -1047,6 +1050,7 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
   ;; (custom/faces-snazzy)
   (custom/faces-doom-peacock)
   )
+
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -1082,6 +1086,7 @@ you should place your code here."
 
   (custom/faces)
  )
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
