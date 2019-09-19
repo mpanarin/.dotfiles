@@ -118,6 +118,7 @@ This function should only modify configuration layer settings."
                                       calfw-org                 ;; integration of calendar with org
                                       highlight-function-calls  ;; highlights function calls
                                       highlight-blocks          ;; highlights block, where cursor is
+                                      symex                     ;; symex-mode for structural editing of lisp
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -831,6 +832,11 @@ dump."
 
   ;; handy key to insert page-breaks
   (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'insert-page-break)
+
+  ;;add and enable smyx mode
+  (use-package symex
+    :hook (emacs-lisp-mode . symex-mode)
+    :bind (:map spacemacs-emacs-lisp-mode-map (("," . symex-mode-interface))))
 
   ;; functions highlighter
   (use-package highlight-function-calls
