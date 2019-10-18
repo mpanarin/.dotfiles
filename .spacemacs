@@ -873,8 +873,13 @@ dump."
     (org-hide-emphasis-markers t)
     ;; add agenda files
     (org-agenda-files (append
-                            (directory-files-recursively "~/Desktop/python_course_program" "**.org")
-                            (file-expand-wildcards "~/org/*.org"))))
+                       (file-expand-wildcards "~/projects/EVO/evo.org")
+                       (directory-files-recursively "~/Desktop/python_course_program" "**.org")
+                       (file-expand-wildcards "~/org/*.org")))
+    :bind
+    (:map org-mode-map
+          ("RET" . newline-and-indent)))
+
   (use-package calfw-org
     :demand
     :config
