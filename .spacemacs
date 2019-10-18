@@ -1110,6 +1110,8 @@ you should place your code here."
   (custom/zoning)
 
   (custom/faces)
+
+  (load "~/.dotfiles/prodigy_services.el")
  )
 
 ;; Do not write anything past this comment. This is where Emacs will
