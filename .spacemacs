@@ -808,6 +808,9 @@ dump."
     ;; LSP-UI-PEEK
     ;; always use fontify, otherwise highlight is broken in the left half
     (lsp-ui-peek-fontify 'always))
+  (use-package company-lsp
+    :custom
+    (company-lsp-cache-candidates 'auto))
   )
 
 (defun custom/python-specific ()
