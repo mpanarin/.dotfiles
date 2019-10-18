@@ -896,6 +896,7 @@ dump."
     (:map cfw:calendar-mode-map
           (("C-j" . cfw:navi-next-item-command)
            ("C-k" . cfw:navi-prev-item-command)
+           ("RET" . cfw:org-open-agenda-day)
            ("A" . org-agenda-list)))
     )
   )
