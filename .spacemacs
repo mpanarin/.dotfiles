@@ -956,9 +956,12 @@ dump."
           ("<right>" . forward-char)))
 
   ;; Fix for the window splits
-  (defun helm-persistent-action-display-window (&optional split-onewindow)
+  (defun helm-persistent-action-display-window (&key split)
     "Return the window that will be used for persistent action.
-If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
+If SPLIT is `t' window is split in persistent action, if it has the
+special symbol `never' don't split, if it is `nil' normally don't
+split but this may happen in case of dedicated-windows or unsuitable
+window to display persistent action buffer."
     (with-helm-window
       (setq helm-persistent-action-display-window (get-mru-window))))
   )
