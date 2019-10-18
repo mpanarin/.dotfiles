@@ -99,6 +99,7 @@ ForegroundVisited=145,61,136
 BrowserApplication[$e]=brave.desktop
 ColorScheme=Breath Dark
 Name=Breath Dark
+TerminalApplication[$e]=kitty
 XftAntialias=true
 XftHintStyle=hintnone
 XftSubPixel=
