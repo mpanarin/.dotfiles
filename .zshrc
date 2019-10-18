@@ -86,6 +86,9 @@ export PYTHONSTARTUP="$(python -m jedi repl)"
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
 
+# disable automatic cd in zsh
+unsetopt AUTO_CD
+
 # Aliases
 alias gdt='git difftool'
 
