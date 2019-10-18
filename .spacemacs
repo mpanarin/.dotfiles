@@ -602,6 +602,9 @@ dump."
   (add-hook 'delete-terminal-functions (lambda (terminal) (recentf-save-list)))
   (add-hook 'kill-emacs-hook 'recentf-save-list)
 
+  ;; no messages on autosaving please (27.1)
+  (setq auto-save-no-message t)
+
   ;; Add restclient package
   (use-package restclient
     :config
