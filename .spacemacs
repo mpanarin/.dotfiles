@@ -833,7 +833,10 @@ dump."
       (kbd "t b") 'exunit-verify-all
       (kbd "t a") 'exunit-verify
       (kbd "t k") 'exunit-rerun
-      (kbd "t t") 'exunit-verify-single)))
+      (kbd "t t") 'exunit-verify-single))
+  ;; (flycheck-add-next-checker 'lsp-ui
+  ;;                            '(t . elixir-credo))
+  (setq flycheck-elixir-credo-strict t))
 
 (defun custom/elisp-specific ()
   "Changes specific to emacs-lisp-mode"
@@ -1067,7 +1070,7 @@ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
 
 (defun custom/faces ()
   "Customized faces for snazzy theme"
-  ;; TODO: add faces for solair mode
+  ;; TODO: add faces for solair mode, no need for doom themes
   (custom/faces-all)
   ;; (custom/faces-snazzy)
   (custom/faces-doom-peacock)
