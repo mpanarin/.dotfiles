@@ -63,7 +63,11 @@ This function should only modify configuration layer settings."
      phoenix
      erlang
      sql
-     javascript
+     tern
+     (javascript :variables
+                 javascript-backend 'lsp
+                 javascript-fmt-tool 'web-beautify)
+     react
      (typescript :variables
                  typescript-backend 'lsp)
      rust
