@@ -106,10 +106,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       reverse-im                ;; allows usage shortcuts on russian keyboard
                                       srcery-theme              ;; theme
-                                      snazzy-theme              ;; theme, TODO: I think it was added to themes-megapack. As well as there is doom version, so should be removed
-                                      dap-mode                  ;; FIXME: it is added by dap layer, so should be removed?
                                       exunit                    ;; elixir test runner
-                                      autopair                  ;; autopairs quotes and brackets, used for snippets. TODO: should be considered to change to spartparens
+                                      autopair                  ;; autopairs quotes and brackets, used for snippets. TODO: should be considered to change to smartparens
                                       solaire-mode              ;; highlights test buffers with slightly brighter colors
                                       treemacs-magit            ;; magit integration
                                       treemacs-icons-dired      ;; use treemacs icons in dired
