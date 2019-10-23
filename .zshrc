@@ -7,7 +7,7 @@ ZSH_THEME="spaceship"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git python vi-mode django docker extract lol mix pip elixir poetry)
+plugins=(git python vi-mode django docker extract lol mix pip elixir poetry kubectl)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -154,5 +154,7 @@ alias xat='exa -lTh --git'
 
 alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
 alias tkill='tmux kill-session -t'
+
+alias kub='kubectl'
 
 source /home/m-panarin/.local/share/dephell/_dephell_zsh_autocomplete
