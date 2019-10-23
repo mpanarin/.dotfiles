@@ -81,6 +81,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      (auto-completion :variables
+                      auto-completion-use-company-box t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t)
      (treemacs :variables
@@ -114,7 +115,6 @@ This function should only modify configuration layer settings."
                                       magit-todos               ;; add TODOs and other keywords to the magit buffer
                                       python-pytest             ;; pytest runner, TODO: requires some fixing
                                       centaur-tabs              ;; beautiful tabs for emacs, TODO: requires further fixing with spaceline flickering.
-                                      company-box               ;; great package for company completions look and feel
                                       nov                       ;; awesome epub mode
                                       calfw                     ;; great emacs calendar
                                       calfw-org                 ;; integration of calendar with org
@@ -641,14 +641,15 @@ dump."
   ;; is reaquired by company-box
   (use-package all-the-icons)
 
+  ;; TODO: up for removal after update to completion layer
   ;; a fancier company interface
-  (use-package company-box
-    :demand
-    :custom
-    (company-box-icons-alist 'company-box-icons-all-the-icons)
-    (company-box-show-single-candidate t)
-    :hook (company-mode . company-box-mode)
-    )
+  ;; (use-package company-box
+  ;;   :demand
+  ;;   :custom
+  ;;   (company-box-icons-alist 'company-box-icons-all-the-icons)
+  ;;   (company-box-show-single-candidate t)
+  ;;   :hook (company-mode . company-box-mode)
+  ;;   )
 
   ;; configure webmode
   (use-package web-mode
