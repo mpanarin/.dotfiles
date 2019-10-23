@@ -863,6 +863,11 @@ dump."
 
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
+  (use-package sql
+    :config
+    ;; load file with sql connections
+    (load "~/.dotfiles/sql_connections.el")
+    )
   )
 
 (defun custom/magit-specific ()
