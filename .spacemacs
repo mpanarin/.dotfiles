@@ -54,7 +54,7 @@ This function should only modify configuration layer settings."
      lsp
      dap
      (python :variables
-             python-fill-column 120
+             python-fill-column 80
              python-indent-offset 4
              python-backend 'lsp)
      django
