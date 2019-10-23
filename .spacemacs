@@ -1023,17 +1023,21 @@ window to display persistent action buffer."
 
 (defun custom/faces-set-extend-27 ()
   "Add extend param to faces, as it is nil by default in emacs 27"
-  (set-face-attribute 'highlight-blocks-depth-1-face
-                      nil
-                      :extend t)
-  (set-face-attribute 'region
-                      nil
-                      :extend t)
-  (set-face-attribute 'company-box-selection
-                      nil
-                      :extend t)
-  (custom/extend-face-group 'helm-faces)
-  (custom/extend-face-group 'magit-faces)
+  (with-demoted-errors "Error in faces: %s"
+    (set-face-attribute 'region nil :extend t)
+    (set-face-attribute 'highlight nil :extend t)
+    (set-face-attribute 'hl-line nil :extend t)
+
+    (custom/extend-face-group 'helm-faces)
+    (custom/extend-face-group 'helm-swoop)
+    (custom/extend-face-group 'magit-faces)
+    (custom/extend-face-group 'org-faces)
+    (custom/extend-face-group 'markdown-faces)
+    (custom/extend-face-group 'rst-faces)
+    (custom/extend-face-group 'company-box)
+    (with-eval-after-load 'highlight-blocks
+      (custom/extend-face-group 'highlight-blocks-faces))
+    )
   )
 
 (defun custom/faces-all ()
@@ -1103,10 +1107,11 @@ window to display persistent action buffer."
 (defun custom/faces ()
   "Customized faces for snazzy theme"
   ;; TODO: add faces for solair mode, no need for doom themes
-  (custom/faces-set-extend-27)
   (custom/faces-all)
   ;; (custom/faces-snazzy)
   (custom/faces-doom-peacock)
+  ;; FIXME: this is ignored in emacsclient for some reason. Probably the same issue as with font configuration
+  (custom/faces-set-extend-27)
   )
 
 
