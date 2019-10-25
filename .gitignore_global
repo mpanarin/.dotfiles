@@ -8,3 +8,4 @@ __pycache__/
 .git-credentials
 .elixir_ls/
 .dir-locals.el
+.log/
