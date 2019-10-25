@@ -14,11 +14,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='nano'
- else
-   export EDITOR='nvim'
- fi
+if [[ -z $SSH_CONNECTION ]]; then
+  export EDITOR='nano'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -26,11 +26,14 @@ source $ZSH/oh-my-zsh.sh
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# TMUX startup
-source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
-ZSH_TMUX_AUTOSTART=false
-eval $(~/tmux_get_startup_command)
-powerline-config tmux setup
+# Do not start tmux if we are inside Emacs
+if [[ -z $INSIDE_EMACS ]]; then
+  # TMUX startup
+  source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
+  ZSH_TMUX_AUTOSTART=false
+  eval $(~/tmux_get_startup_command)
+  powerline-config tmux setup
+fi
 
 # Spaceship theme customization
 SPACESHIP_USER_SHOW=false
