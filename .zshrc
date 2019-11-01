@@ -15,9 +15,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -z $SSH_CONNECTION ]]; then
-  export EDITOR='nano'
-else
   export EDITOR='nvim'
+else
+  export EDITOR='vi'
 fi
 
 # Compilation flags
