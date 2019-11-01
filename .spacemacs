@@ -121,6 +121,9 @@ This function should only modify configuration layer settings."
                                       highlight-function-calls  ;; highlights function calls
                                       highlight-blocks          ;; highlights block, where cursor is
                                       symex                     ;; symex-mode for structural editing of lisp
+                                      protobuf-mode             ;; mode for editing .proto protobuffers files
+                                      coffee-mode               ;; mode for editing coffee-script files
+                                      daemons                   ;; emacs UI for managing services from systemd and alike
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -674,6 +677,8 @@ dump."
   ;; Show treemacs icons in dired
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-mode))
+
+  (use-package protobuf-mode)
 
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
