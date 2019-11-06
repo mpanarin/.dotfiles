@@ -711,8 +711,7 @@ dump."
   ;; Always follow symlinks pls
   (setq vc-follow-symlinks t)
   ;; Please use transparency
-  (spacemacs/enable-transparency)
-  )
+  (spacemacs/enable-transparency))
 
 (defun custom/dap-generic ()
   "Generic LSP dap changes"
@@ -893,6 +892,8 @@ dump."
     :custom
     ;; Autohide markup elements
     (org-hide-emphasis-markers t)
+    ;; log state changes to drawer
+    (org-log-into-drawer t)
     ;; add agenda files
     (org-agenda-files (append
                        (file-expand-wildcards "~/projects/EVO/evo.org")
@@ -901,6 +902,10 @@ dump."
     :bind
     (:map org-mode-map
           ("RET" . newline-and-indent)))
+
+  (use-package helm-org-rifle
+    :config
+    (define-key evil-normal-state-local-map (kbd "SPC a o R") 'helm-org-rifle-agenda-files))
 
   (use-package calfw-org
     :demand
