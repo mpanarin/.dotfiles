@@ -648,8 +648,10 @@ dump."
 
   ;; configure webmode
   (use-package web-mode
+    :mode "\\.mako\\'"
     :custom
     (web-mode-markup-indent-offset 2))
+
   ;; Make csv open always aligned with delimiters
   (use-package csv-mode
     :hook (csv-mode . (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))  ;; TODO: this probably can be done better
