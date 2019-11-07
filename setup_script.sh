@@ -56,7 +56,10 @@ sudo usermod -a -G docker $USER
 sudo pip install --upgrade pip
 sudo pip2 install --upgrade pip
 
-# install poetry 
+# install some python packages
+pip install --user ical2orgpy
+
+# install poetry
 curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
 
 # install spacemacs
@@ -89,9 +92,6 @@ rm install.sh
 # install spaceship zsh theme
 git clone https://github.com/denysdovhan/spaceship-prompt.git ~/.oh-my-zsh/custom/themes/spaceship-prompt
 ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
-
-# install poetry
-curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
 
 # symlink zshrc
 ln -fs ~/.dotfiles/.zshrc ~/.zshrc
@@ -142,3 +142,4 @@ ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 ln -fs ~/.dotfiles/kitty.conf ~/.config/kitty/kitty.conf
 ln -fs ~/.dotfiles/snazzy.conf ~/.config/kitty/snazzy.conf
 ln -fs ~/.dotfiles/tmux_get_startup_command ~/tmux_get_startup_command
+ln -fs ~/.dotfiles/cal2org_sync.zsh ~/cal2org_sync.zsh
