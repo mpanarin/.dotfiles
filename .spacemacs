@@ -672,7 +672,8 @@ dump."
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-mode))
 
-  (use-package protobuf-mode)
+  (use-package protobuf-mode
+    :mode "\\.proto\\'")
 
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
