@@ -621,8 +621,7 @@ dump."
 
   ;; configurate writeroom
   (use-package writeroom-mode
-    :hook ((nov-mode . writeroom-mode)
-           (pdf-view-mode . writeroom-mode))
+    :hook (nov-mode . writeroom-mode)
     :custom
     (writeroom-width 125))
 
