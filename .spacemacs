@@ -771,8 +771,9 @@ dump."
     (lsp-pyls-plugins-rope-completion-enabled nil)
     ;; disable params in jedi completion as they are pretty much useless and annoying
     (lsp-pyls-plugins-jedi-completion-include-params nil)
-    ;; Stop printing your output to *Warnings*
-    (lsp-print-io t))
+    ;; no logs, they make js lag like a little bitch
+    (lsp-print-io nil)
+    )
   (use-package lsp-ui
     :config
       ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
