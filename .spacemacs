@@ -663,6 +663,10 @@ dump."
   (use-package protobuf-mode
     :mode "\\.proto\\'")
 
+  (use-package pdf-tools
+    :custom
+    (pdf-view-display-size 'fit-height))
+
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
   )
