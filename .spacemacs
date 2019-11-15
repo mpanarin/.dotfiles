@@ -672,6 +672,16 @@ dump."
     :custom
     (sgml-basic-offset 4))
 
+  (use-package vterm
+    :config
+    (defun vterm-send-ctrl-d ()
+      "Sends `C-d' to the libvterm."
+      (interactive)
+      (vterm-send-key "d" nil nil t))
+    :bind
+    (:map vterm-mode-map
+          ("C-c C-d" . vterm-send-ctrl-d)))
+
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
   )
