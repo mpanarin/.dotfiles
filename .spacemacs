@@ -667,6 +667,11 @@ dump."
     :custom
     (pdf-view-display-size 'fit-height))
 
+  ;; used in rjsx for editing of jsx bits.
+  (use-package sgml-mode
+    :custom
+    (sgml-basic-offset 4))
+
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
   )
