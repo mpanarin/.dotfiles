@@ -7,7 +7,7 @@ ZSH_THEME="spaceship"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git python vi-mode django docker extract lol mix pip elixir poetry kubectl)
+plugins=(git python vi-mode django docker extract lol mix pip elixir poetry kubectl asdf)
 
 source $ZSH/oh-my-zsh.sh
 
