@@ -5,41 +5,42 @@ sudo pacman -Syu --noconfirm
 
 # install all needed packages
 sudo pacman -S --noconfirm python2-pip \
-	zsh \
-	ruby \
-	curl \
-	vim \
-	flake8 \
-	the_silver_searcher \
-	exa \
-	fzf \
-	base-devel \
-	yay \
-	tmux \
-	npm \
-	python-virtualenvwrapper \
-	powerline-fonts \
-	powerline \
-	powerline-vim \
-	ruby-rdoc \
-	unzip \
-	docker \
-	docker-compose \
-	zsh-autosuggestions \
-	zsh-syntax-highlighting \
-	kitty \
-	glu \
-	mesa \
-	wxgtk2 \
-	libpng \
-	erlang \
-	elixir \
-	xsel \
-	flameshot \
-  otf-fira-code \
-  brave \
-  yapf \
-  xclip
+     zsh \
+     ruby \
+     curl \
+     vim \
+     flake8 \
+     the_silver_searcher \
+     exa \
+     fzf \
+     base-devel \
+     yay \
+     tmux \
+     npm \
+     python-virtualenvwrapper \
+     powerline-fonts \
+     powerline \
+     powerline-vim \
+     ruby-rdoc \
+     unzip \
+     docker \
+     docker-compose \
+     zsh-autosuggestions \
+     zsh-syntax-highlighting \
+     kitty \
+     glu \
+     mesa \
+     wxgtk2 \
+     libpng \
+     erlang \
+     elixir \
+     xsel \
+     flameshot \
+     otf-fira-code \
+     brave \
+     yapf \
+     xclip \
+     bat
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
