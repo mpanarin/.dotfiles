@@ -544,6 +544,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
                                                              (font . "-CTDB-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
                                                              (alpha . (95 . 90))))
   (spacemacs-buffer/toggle-note nil)
+  (add-hook 'server-after-make-frame-hook 'custom/faces)
   )
 
 (defun dotspacemacs/user-load ()
