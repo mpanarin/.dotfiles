@@ -104,6 +104,8 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
+
+;; General additional packages
                                       reverse-im                ;; allows usage shortcuts on russian keyboard
                                       srcery-theme              ;; theme
                                       exunit                    ;; elixir test runner
@@ -125,6 +127,14 @@ This function should only modify configuration layer settings."
                                       daemons                   ;; emacs UI for managing services from systemd and alike
                                       alert                     ;; make OS alerts from emacs
                                       org-wild-notifier         ;; make alerts about org events
+
+;; packages needed for dev with Cask
+                                      f
+                                      ecukes
+                                      shut-up
+                                      el-mock
+                                      ert-async
+                                      ert-runner
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -1145,6 +1155,15 @@ window to display persistent action buffer."
   ;; FIXME: this is ignored in emacsclient for some reason. Probably the same issue as with font configuration
   (custom/faces-set-extend-27)
   )
+
+(defun custom/load-dev ()
+  "Load packages that I am developing"
+  (interactive)
+  ;; (load "~/projects/personal/elisp/pendulum.el/pendulum.el")
+  ;; (load "~/projects/personal/elisp/lsp-mode/lsp-mode.el")
+  ;; (load "~/projects/personal/elisp/lsp-mode/lsp-pyls.el")
+  ;; (load "~/projects/personal/elisp/lsp-mode/lsp-clients.el")
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -1180,6 +1199,8 @@ you should place your code here."
   (custom/zoning)
 
   (custom/faces)
+
+  (custom/load-dev)
 
   (load "~/.dotfiles/prodigy_services.el")
  )
