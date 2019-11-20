@@ -795,6 +795,8 @@ dump."
     (lsp-pyls-plugins-rope-completion-enabled nil)
     ;; disable params in jedi completion as they are pretty much useless and annoying
     (lsp-pyls-plugins-jedi-completion-include-params nil)
+    ;; enable pylint by deafult
+    (lsp-pyls-plugins-pylint-enabled t)
     ;; no logs, they make js lag like a little bitch
     (lsp-print-io nil)
     )
