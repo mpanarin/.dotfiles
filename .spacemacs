@@ -533,6 +533,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    (lambda (item) (add-to-list 'default-frame-alist item)) '(
                                                              (font . "-CTDB-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
                                                              (alpha . (95 . 90))))
+  (spacemacs-buffer/toggle-note nil)
   )
 
 (defun dotspacemacs/user-load ()
