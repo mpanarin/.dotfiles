@@ -683,6 +683,10 @@ dump."
     (:map vterm-mode-map
           ("C-c C-d" . vterm-send-ctrl-d)))
 
+  (use-package flycheck
+    :custom
+    (flycheck-display-errors-delay 0.3))
+
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
   )
