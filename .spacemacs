@@ -908,6 +908,14 @@ if INDEX out of range - do nothing."
     (interactive)
     (custom-tab-line-select-by-num 9))
 
+  (defun custom-tab-line-close-other ()
+    "Close all other tabs."
+    ;; TODO: Allow passing optional buffer to keep.
+    (interactive)
+    (let ((buffers (funcall tab-line-tabs-function)))
+      (mapc (lambda (buffer) (unless (equal buffer (current-buffer)) (kill-buffer buffer))) buffers))
+    )
+
   (defun custom-tab-line--unicode-number (str)
     "Return a nice unicode representation of a single-digit number STR."
     (cond
@@ -936,6 +944,7 @@ if INDEX out of range - do nothing."
   ;; define prefix and keys
   (spacemacs/declare-prefix "wt" "tabs")
   (evil-leader/set-key
+    "wtD" 'custom-tab-line-close-other
     "wth" 'custom-tab-line-switch-left
     "wtl" 'custom-tab-line-switch-right
     "wt1" 'custom-tab-line-select-1
