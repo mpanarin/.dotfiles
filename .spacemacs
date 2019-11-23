@@ -789,32 +789,41 @@ dump."
     )
   )
 
+(defun company-box--edges nil
+  "Override of original to fix for company-box to properly include the height of tab-line"
+  ;; FIXME: This is a harsh fix, As the original package is poorly maintained, I will probably fork it and use my own version with a few patches.
+  (or company-box--edges
+      (let ((edges (window-edges nil t nil t)))
+        (setq company-box--edges
+              (replace edges (list (+ (nth 1 edges) (window-tab-line-height))) :start1 1)))))
+
 (defun custom/tab-line-mode ()
   ;; TODO: create a layer out of this
+  ;; TODO: tabs should never jump. I should probably cache their position.
   (global-tab-line-mode t)
 
   ;; `tab-line-tabs-function' should return projectile buffers `projectile-project-buffers' except some regexes
-  (setq custom-tab-line-exclude-buffer-show-regexp '("magit" "helm" "^\*"))
-  (defun custom-tab-line-exclude-buffer-show-f ()
+  (setq custom-tab-line--exclude-buffer-show-regexp '("magit" "helm" "^\*")) ;; which buffers to never show in the tab-line.
+  (defun custom-tab-line--exclude-buffer-show-f ()
     (let ((buffers (projectile-project-buffers)))
       (-filter
        (lambda (buffer)
          (not (-first
                (lambda (regex) (string-match-p regex (buffer-name buffer)))
-               custom-tab-line-exclude-buffer-show-regexp)))
+               custom-tab-line--exclude-buffer-show-regexp)))
        buffers)
       ))
-  (setq tab-line-tabs-function 'custom-tab-line-exclude-buffer-show-f)
+  (setq tab-line-tabs-function 'custom-tab-line--exclude-buffer-show-f)
 
   ;; `tab-line-exclude-modes' should exclude helm, help, etc.
-  (setq custom-tab-line-exclude-buffer-regexp '("^magit"
+  (setq custom-tab-line-exclude-buffer-regexp '("^magit"  ; regex for modes in which tab-line should not be showed.
                                                 "^COMMIT"
                                                 "^\*"
                                                 "^\ \*"))
   (mapc (lambda (mode) (push mode tab-line-exclude-modes)) '(helm-mode help-mode magit-mode))
   (defun tab-line-mode--turn-on ()
     "Turn on `tab-line-mode'.
-redefined to introduce proper regexps"
+redefined to introduce regexps"
     (unless (or (minibufferp)
                 (string-match-p "\\` " (buffer-name))
                 (-filter (lambda (name) (string-match-p name (buffer-name))) custom-tab-line-exclude-buffer-regexp)
@@ -898,6 +907,27 @@ if INDEX out of range - do nothing."
     "Select tab by index 9 with `custom-tab-line-select-by-num'"
     (interactive)
     (custom-tab-line-select-by-num 9))
+
+  (defun custom-tab-line--unicode-number (str)
+    "Return a nice unicode representation of a single-digit number STR."
+    (cond
+     ((string= "1" str) "➊")
+     ((string= "2" str) "➋")
+     ((string= "3" str) "➌")
+     ((string= "4" str) "➍")
+     ((string= "5" str) "➎")
+     ((string= "6" str) "➏")
+     ((string= "7" str) "➐")
+     ((string= "8" str) "➑")
+     ((string= "9" str) "➒")
+     ((string= "10" str) "➓")
+     (t (format "(%s)" str))))
+
+  (defun custom-tab-line-numbered-names (buffer buffers)
+    (let* ((index (+ (-elem-index buffer buffers) 1))
+           (name (buffer-name buffer))
+           (str_repr (custom-tab-line--unicode-number (int-to-string index))))
+      (format "%s %s" str_repr name)))
 
   ;; binds
   ;; move window dedication to T
@@ -932,6 +962,8 @@ if INDEX out of range - do nothing."
   (setq tab-line-close-button-show nil)
   ;; don't show new tab button
   (setq tab-line-new-tab-choice nil)
+  ;; change naming function
+  (setq tab-line-tab-name-function 'custom-tab-line-numbered-names)
   )
 
 (defun custom/lsp-generic ()
