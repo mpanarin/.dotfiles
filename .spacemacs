@@ -38,12 +38,14 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     helpful
      csv
      debug
      html
      yaml
      markdown
-     docker
+     (docker :variables
+             docker-dockerfile-backend 'lsp)
      helm
      ranger
      prodigy
