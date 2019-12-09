@@ -1052,7 +1052,6 @@ window to display persistent action buffer."
                     zone-pgm-five-oclock-swan-dive
                     zone-pgm-martini-swan-dive
                     zone-pgm-rat-race
-                    zone-pgm-paragraph-spaz
                     zone-pgm-stress
                     zone-pgm-stress-destress
                     zone-pgm-random-life
