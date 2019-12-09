@@ -698,6 +698,16 @@ dump."
     :custom
     (flycheck-display-errors-delay 0.3))
 
+  (use-package ibuffer
+    :config
+    (defun custom-ibuffer-close-on-select (&rest args)
+      (kill-buffer "*Ibuffer*"))
+    (advice-add 'ibuffer-visit-buffer :after #'custom-ibuffer-close-on-select)
+    :bind
+    (:map evil-normal-state-local-map
+          ("SPC b b" . ibuffer))
+    )
+
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
   )
@@ -1023,8 +1033,6 @@ window to display persistent action buffer."
    or mode I rarely use."
   ;; Unbind annoying sticky M-x on <menu>
   (define-key global-map (kbd "<menu>") nil)
-  ;; Bind Ibuffer to SPC-b-B
-  (define-key evil-normal-state-local-map (kbd "SPC b b") 'ibuffer)
   ;; Swap safe revert buffer and persp remove buffer
   (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
