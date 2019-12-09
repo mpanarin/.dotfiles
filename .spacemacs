@@ -940,19 +940,20 @@ dump."
           ("RET" . newline-and-indent)))
 
   (use-package helm-org-rifle
-    :config
-    (define-key evil-normal-state-local-map (kbd "SPC a o R") 'helm-org-rifle-agenda-files))
+    :bind
+    (:map evil-normal-state-local-map
+          ("SPC a o R" . helm-org-rifle-agenda-files)))
 
   (use-package calfw-org
     :demand
-    :config
-    (define-key evil-normal-state-local-map (kbd "SPC a o a") 'cfw:open-org-calendar)
     :bind
     (:map cfw:calendar-mode-map
           (("C-j" . cfw:navi-next-item-command)
            ("C-k" . cfw:navi-prev-item-command)
            ("RET" . cfw:org-open-agenda-day)
-           ("A" . org-agenda-list)))
+           ("A" . org-agenda-list))
+     :map evil-normal-state-local-map
+          ("SPC a o a" . cfw:open-org-calendar))
     )
 
   (use-package alert
