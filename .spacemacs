@@ -607,6 +607,7 @@ dump."
   ;; This 2 hooks fix a shitton of issues with emacs-server and recentf bitch
   (add-hook 'delete-terminal-functions (lambda (terminal) (recentf-save-list)))
   (add-hook 'kill-emacs-hook 'recentf-save-list)
+  (add-hook 'focus-out-hook #'garbage-collect)
 
   ;; no messages on autosaving please (27.1)
   (setq auto-save-no-message t)
