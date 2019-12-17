@@ -805,7 +805,7 @@ dump."
 
 
 (defun custom/tab-line-mode ()
-  (load "~/.dotfiles/tab-line-custom.el"))
+  (load "~/.dotfiles/tab-line-custom"))
 
 (defun custom/lsp-generic ()
   "Generic LSP changes"
@@ -909,7 +909,7 @@ dump."
   (use-package sql
     :config
     ;; load file with sql connections
-    (load "~/.dotfiles/sql_connections.el")
+    (load "~/.dotfiles/sql_connections")
     )
   )
 
@@ -1220,7 +1220,7 @@ you should place your code here."
 
   (custom/load-dev)
 
-  (load "~/.dotfiles/prodigy_services.el")
+  (load "~/.dotfiles/prodigy_services")
  )
 
 ;; Do not write anything past this comment. This is where Emacs will
