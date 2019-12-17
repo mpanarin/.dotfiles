@@ -5,9 +5,9 @@
     "Override of original to fix for company-box to properly include the height of tab-line"
     ;; FIXME: This is a harsh fix, As the original package is poorly maintained, I will probably fork it and use my own version with a few patches.
     (or company-box--edges
-        (let ((edges (window-edges nil t nil t)))
-          (setq company-box--edges
-                (replace edges (list (+ (nth 1 edges) (window-tab-line-height))) :start1 1))))))
+        (let* ((edges (window-edges nil t nil t))
+               (value (replace edges (list (+ (nth 1 edges) (window-tab-line-height))) :start1 1)))
+          (setq company-box--edges value)))))
 
 
 ;; TODO: create a layer out of this
