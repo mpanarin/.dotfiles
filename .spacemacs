@@ -707,8 +707,11 @@ dump."
     (advice-add 'ibuffer-visit-buffer :after #'custom-ibuffer-close-on-select)
     :bind
     (:map evil-normal-state-local-map
-          ("SPC b b" . ibuffer))
-    )
+          ("SPC b b" . ibuffer)))
+
+  (use-package calendar
+    :custom
+    (calendar-week-start-day 1))
 
   (setq enable-local-variables :all)
   (setq enable-local-eval t)
@@ -966,7 +969,6 @@ dump."
     :demand
     :config
     (org-wild-notifier-mode))
-
   )
 
 (defun custom/markdown-specific ()
