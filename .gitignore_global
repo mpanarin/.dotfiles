@@ -1,6 +1,7 @@
 # PyCharm
 .idea/
 *.pyc
+*.elc
 __pycache__/
 .ropeproject/
 .mypy_cache/
@@ -9,3 +10,4 @@ __pycache__/
 .elixir_ls/
 .dir-locals.el
 .log/
+tsconfig.json
