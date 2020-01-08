@@ -704,6 +704,10 @@ dump."
     :custom
     (flycheck-display-errors-delay 0.3))
 
+  (use-package evil-surround
+    :config
+    (advice-add 'evil-surround-region :after (lambda () (execute-kbd-macro "gv"))))
+
   (use-package ibuffer
     :config
     (defun custom-ibuffer-close-on-select (&rest args)
