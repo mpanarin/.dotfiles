@@ -726,12 +726,20 @@ dump."
   ;; TODO: check what the hell is this issue with helm
   ;; almost certainly he drops into infinite recursion as
   ;; CPU usage increases to 100%
+  ;; TODO: something breaks eval-expression buffer
+  ;; I should find a way that will disable ligatures in minibuffers altogether
   (add-hook 'helm-major-mode-hook
             (lambda ()
               (setq auto-composition-mode nil)))
   (add-hook 'ediff-mode-hook
             (lambda ()
               (setq auto-composition-mode nil)))
+  (add-hook 'minibuffer-setup-hook
+            (lambda ()
+              (setq auto-composition-mode nil)))
+  (add-hook 'eldoc-mode-hook
+            (lambda ()
+              (if (minibufferp) (setq auto-composition-mode nil))))
   (let ((alist '(
                  (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")  ;; breaks ediff
                  (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")  ;; breaks helm
