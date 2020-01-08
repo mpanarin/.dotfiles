@@ -976,11 +976,17 @@ dump."
   (use-package magit-todos
     :hook (magit-mode . magit-todos-mode)
     :custom
-    ;; Disable magit-todos map as it is garbage and is bound to `j`
-    (magit-todos-section-map nil)
+    (magit-todos-update 60)
     :config
     ;; set magit todos faces
-    (setq magit-todos-keywords 'hl-todo-keyword-faces))
+    (setq magit-todos-keywords 'hl-todo-keyword-faces)
+    :bind
+    (:map magit-todos-section-map
+          (("j" . evil-next-visual-line)
+           ("l" . evil-previous-visual-line))
+     :map magit-todos-item-section-map
+          (("j" . evil-next-visual-line)
+           ("l" . evil-previous-visual-line))))
   )
 
 (defun custom/org-specific ()
