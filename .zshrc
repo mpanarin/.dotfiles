@@ -163,4 +163,7 @@ alias tkill='tmux kill-session -t'
 
 alias kub='kubectl'
 
+alias v='vagga'
+alias vrun='vagga run'
+
 source /home/m-panarin/.local/share/dephell/_dephell_zsh_autocomplete
