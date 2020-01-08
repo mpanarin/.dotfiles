@@ -1021,9 +1021,19 @@ dump."
            ("C-k" . cfw:navi-prev-item-command)
            ("RET" . cfw:org-open-agenda-day)
            ("A" . org-agenda-list))
-     :map evil-normal-state-local-map
-          ("SPC a o a" . cfw:open-org-calendar))
-    )
+    :map evil-normal-state-local-map
+          ("SPC a o a" . cfw:open-org-calendar)))
+
+  (use-package org-present
+    :config
+    (add-hook 'org-present-mode-hook (lambda ()
+                                       (setq-local global-hl-line-mode nil)
+                                       (setq display-line-numbers nil)
+                                       (writeroom--enable)))
+    (add-hook 'org-present-mode-quit-hook (lambda ()
+                                            (setq-local global-hl-line-mode t)
+                                            (setq display-line-numbers t)
+                                            (writeroom--disable))))
 
   (use-package alert
     :demand
