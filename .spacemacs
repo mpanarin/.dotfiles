@@ -995,6 +995,8 @@ dump."
     :custom
     ;; Autohide markup elements
     (org-hide-emphasis-markers t)
+    ;; add pretty entities
+    (org-pretty-entities t)
     ;; log state changes to drawer
     (org-log-into-drawer t)
     ;; add agenda files
