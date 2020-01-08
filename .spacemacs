@@ -612,6 +612,9 @@ dump."
   ;; no messages on autosaving please (27.1)
   (setq auto-save-no-message t)
 
+  ;; increase the amount of data emacs can read from a sub-process in one go (27.1)
+  (setq read-process-output-max (* 1024 1024))
+
   ;; Add restclient package
   (use-package restclient
     :config
