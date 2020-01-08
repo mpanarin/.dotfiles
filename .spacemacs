@@ -883,6 +883,8 @@ dump."
     (lsp-pyls-plugins-pylint-enabled t)
     ;; no logs, they make js lag like a little bitch
     (lsp-print-io nil)
+    ;; do not include docs in signature
+    (lsp-signature-render-documentation nil)
     )
   (use-package lsp-ui
     :config
@@ -892,6 +894,7 @@ dump."
       (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
     :custom
     ;; LSP-UI-DOC
+    (lsp-ui-doc-position 'top)
     ;; use webkit if available
     (lsp-ui-doc-use-webkit t)
     ;; add function signature to the buffer
