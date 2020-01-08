@@ -129,6 +129,7 @@ This function should only modify configuration layer settings."
                                       daemons                   ;; emacs UI for managing services from systemd and alike
                                       alert                     ;; make OS alerts from emacs
                                       org-wild-notifier         ;; make alerts about org events
+                                      ox-reveal                 ;; add export to reveal.js from org
 
 ;; packages needed for dev with Cask
                                       f
@@ -1034,6 +1035,8 @@ dump."
                                             (setq-local global-hl-line-mode t)
                                             (setq display-line-numbers t)
                                             (writeroom--disable))))
+
+  (use-package ox-reveal)
 
   (use-package alert
     :demand
