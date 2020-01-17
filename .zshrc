@@ -7,7 +7,17 @@ ZSH_THEME="spaceship"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git python vi-mode django docker extract lol mix pip elixir poetry kubectl asdf)
+# if not Emacs - use vi-mode and start tmux
+if [[ -z $INSIDE_EMACS ]]; then
+    # TMUX startup
+    source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
+    ZSH_TMUX_AUTOSTART=false
+    eval $(~/tmux_get_startup_command)
+    powerline-config tmux setup
+    plugins=(git python vi-mode django docker extract lol mix pip elixir poetry kubectl asdf)
+else
+    plugins=(git python django docker extract lol mix pip elixir poetry kubectl asdf)
+fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -25,15 +35,6 @@ fi
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Do not start tmux if we are inside Emacs
-if [[ -z $INSIDE_EMACS ]]; then
-  # TMUX startup
-  source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
-  ZSH_TMUX_AUTOSTART=false
-  eval $(~/tmux_get_startup_command)
-  powerline-config tmux setup
-fi
 
 # Spaceship theme customization
 SPACESHIP_USER_SHOW=false
