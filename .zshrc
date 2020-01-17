@@ -10,7 +10,7 @@ COMPLETION_WAITING_DOTS="true"
 # if not Emacs - use vi-mode and start tmux
 if [[ -z $INSIDE_EMACS ]]; then
     # TMUX startup
-    source ~/.gem/ruby/2.6.0/gems/tmuxinator-0.15.0/completion/tmuxinator.zsh
+    source ~/.gem/ruby/2.6.0/gems/tmuxinator-1.1.4/completion/tmuxinator.zsh
     ZSH_TMUX_AUTOSTART=false
     eval $(~/tmux_get_startup_command)
     powerline-config tmux setup
