@@ -969,6 +969,8 @@ dump."
 
 (defun custom/sql-specific ()
   "Changes specific to sql-mode"
+  (spacemacs/set-leader-keys-for-major-mode 'sql-interactive-mode (kbd "la") 'sql-list-all)
+  (spacemacs/set-leader-keys-for-major-mode 'sql-interactive-mode (kbd "lt") 'sql-list-table)
   (use-package sql
     :config
     ;; load file with sql connections
