@@ -1080,6 +1080,8 @@ dump."
                    (string-match-p "\.pyc$" filename)))
     ;; autohide files ignored by git please
     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
+    ;; set project map to 'p' as binding maps to maps is not working in :bind :\
+    (define-key treemacs-mode-map (kbd "p") treemacs-project-map)
     :custom
     ;; keep the width locked
     (treemacs-lock-width 1)
@@ -1087,8 +1089,7 @@ dump."
     (:map treemacs-mode-map
           ;; Swap treemacs horizontal/vertical ace
           ("o a h" . treemacs-visit-node-ace-vertical-split)
-          ("o a v" . treemacs-visit-node-ace-horizontal-split)))
-  )
+          ("o a v" . treemacs-visit-node-ace-horizontal-split))))
 
 (defun custom/helm-specific ()
   "Changes specific to helm-mode"
