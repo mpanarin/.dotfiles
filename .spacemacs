@@ -130,6 +130,7 @@ This function should only modify configuration layer settings."
                                       alert                     ;; make OS alerts from emacs
                                       org-wild-notifier         ;; make alerts about org events
                                       ox-reveal                 ;; add export to reveal.js from org
+                                      org-fancy-priorities      ;; fancy priorities in org mode
 
 ;; packages needed for dev with Cask
                                       f
@@ -1050,10 +1051,21 @@ dump."
     (alert-default-style 'libnotify))
 
   ;; notify me of my org agenda items
+  ;; FIXME: this seems to be hella broken
   (use-package org-wild-notifier
     :demand
     :config
     (org-wild-notifier-mode))
+
+  ;; fancy org priorities
+  (use-package org-fancy-priorities
+    :ensure t
+    :hook
+    (org-mode . org-fancy-priorities-mode)
+    :config
+    (setq org-fancy-priorities-list '((?A . "❗")
+                                      (?B . "⬆")
+                                      (?C . "⬇"))))
   )
 
 (defun custom/markdown-specific ()
