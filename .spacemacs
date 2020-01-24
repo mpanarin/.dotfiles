@@ -547,7 +547,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    (lambda (item) (add-to-list 'default-frame-alist item)) '(
                                                              (font . "-CTDB-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
                                                              (alpha . (95 . 90))))
-  (spacemacs-buffer/toggle-note nil)
   (add-hook 'server-after-make-frame-hook 'custom/faces)
   )
 
@@ -722,9 +721,12 @@ dump."
     :custom
     (calendar-week-start-day 1))
 
+  ;; remove note from home buffer
+  (setq spacemacs-buffer--current-note-type nil)
+  ;; allow unsafe vars in dir-locals
   (setq enable-local-variables :all)
-  (setq enable-local-eval t)
-  )
+  ;; allow evals in dir-locals
+  (setq enable-local-eval t))
 
 (defun custom/ligatures ()
   "Add fira code ligatures"
