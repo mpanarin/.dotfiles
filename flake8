@@ -1,6 +1,6 @@
 [flake8]
 ignore = E702
-max-line-length = 120
+max-line-length = 80
 exclude =
     # No need to traverse our git directory
     .git,
@@ -8,4 +8,3 @@ exclude =
     __pycache__,
     # forget the __init__.py files
     __init__.py,
-

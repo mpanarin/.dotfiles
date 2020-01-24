@@ -889,6 +889,16 @@ dump."
     (lsp-pyls-plugins-jedi-completion-include-params nil)
     ;; enable pylint by deafult
     (lsp-pyls-plugins-pylint-enabled t)
+    ;; enable flake8 by default
+    (lsp-pyls-plugins-flake8-enabled t)
+    ;; set the default flake8 config
+    (lsp-pyls-plugins-flake8-filename ["~/.dotfiles/flake8"])
+    ;; disable pyflakes by default
+    (lsp-pyls-plugins-pyflakes-enabled nil)
+    ;; disable pycodestyle by default
+    (lsp-pyls-plugins-pycodestyle-enabled nil)
+    ;; disable pydocstyle by default
+    (lsp-pyls-plugins-pydocstyle-enabled nil)
     ;; no logs, they make js lag like a little bitch
     (lsp-print-io nil)
     ;; do not include docs in signature
