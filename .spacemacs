@@ -1133,6 +1133,13 @@ window to display persistent action buffer."
       (setq helm-persistent-action-display-window (get-mru-window))))
   )
 
+(defun custom/eaf ()
+  ;; add emacs application framework
+  (use-package eaf
+    :load-path "~/.emacs.d/private/local/emacs-application-framework"
+    :custom
+    (eaf-find-alternate-file-in-dired t)))
+
 (defun custom/generic-define-keys ()
   "Generic key defines I use, that are not tied to some specific mode,
    or mode I rarely use."
@@ -1314,6 +1321,7 @@ you should place your code here."
   (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
+  (custom/eaf)
 
   (custom/zoning)
 
