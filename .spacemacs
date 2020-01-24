@@ -706,7 +706,7 @@ dump."
 
   (use-package evil-surround
     :config
-    (advice-add 'evil-surround-region :after (lambda () (execute-kbd-macro "gv"))))
+    (advice-add 'evil-surround-region :after (lambda (&rest args) (execute-kbd-macro "gv") (evil-forward-char))))
 
   (use-package ibuffer
     :config
