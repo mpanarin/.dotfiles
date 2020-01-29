@@ -1106,6 +1106,8 @@ dump."
     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
     ;; set project map to 'p' as binding maps to maps is not working in :bind :\
     (define-key treemacs-mode-map (kbd "p") treemacs-project-map)
+    ;; set workspace map to 'W' as binding maps to maps is not working in :bind :\
+    (define-key treemacs-mode-map (kbd "M-w") treemacs-workspace-map)
     :custom
     ;; keep the width locked
     (treemacs-lock-width 1)
@@ -1113,7 +1115,11 @@ dump."
     (:map treemacs-mode-map
           ;; Swap treemacs horizontal/vertical ace
           ("o a h" . treemacs-visit-node-ace-vertical-split)
-          ("o a v" . treemacs-visit-node-ace-horizontal-split))))
+          ("o a v" . treemacs-visit-node-ace-horizontal-split)))
+
+  (use-package treemacs-persp
+    :config
+    (treemacs-set-scope-type 'Perspectives)))
 
 (defun custom/helm-specific ()
   "Changes specific to helm-mode"
