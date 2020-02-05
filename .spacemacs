@@ -127,8 +127,6 @@ This function should only modify configuration layer settings."
                                       protobuf-mode             ;; mode for editing .proto protobuffers files
                                       coffee-mode               ;; mode for editing coffee-script files
                                       daemons                   ;; emacs UI for managing services from systemd and alike
-                                      alert                     ;; make OS alerts from emacs
-                                      org-wild-notifier         ;; make alerts about org events
                                       ox-reveal                 ;; add export to reveal.js from org
                                       org-fancy-priorities      ;; fancy priorities in org mode
 
@@ -1056,18 +1054,6 @@ dump."
                                             (writeroom--disable))))
 
   (use-package ox-reveal)
-
-  (use-package alert
-    :demand
-    :custom
-    (alert-default-style 'libnotify))
-
-  ;; notify me of my org agenda items
-  ;; FIXME: this seems to be hella broken
-  (use-package org-wild-notifier
-    :demand
-    :config
-    (org-wild-notifier-mode))
 
   ;; fancy org priorities
   (use-package org-fancy-priorities
