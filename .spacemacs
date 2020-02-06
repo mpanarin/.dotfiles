@@ -704,7 +704,8 @@ dump."
       (vterm-send-key "d" nil nil t))
     :bind
     (:map vterm-mode-map
-          ("C-c C-d" . vterm-send-ctrl-d)))
+          ("C-c C-d" . vterm-send-ctrl-d)
+          ("C-c C-x" . vterm-send-C-x)))
 
   (use-package flycheck
     :defer t
