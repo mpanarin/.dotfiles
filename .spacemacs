@@ -1028,6 +1028,70 @@ dump."
      :map magit-todos-item-section-map
           (("j" . evil-next-visual-line)
            ("l" . evil-previous-visual-line))))
+  (use-package git-gutter+
+    :defer t
+    :config
+    (fringe-helper-define 'git-gutter-fr+-added nil
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX...")
+    (fringe-helper-define 'git-gutter-fr+-modified nil
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX...")
+    (fringe-helper-define 'git-gutter-fr+-deleted nil
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX..."
+      "..XXX...")
+    )
   )
 
 (defun custom/org-specific ()
