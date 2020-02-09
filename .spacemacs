@@ -916,6 +916,8 @@ dump."
     (lsp-pyls-plugins-flake8-filename ["~/.dotfiles/flake8"])
     ;; disable pyflakes by default
     (lsp-pyls-plugins-pyflakes-enabled nil)
+    ;; disable mccabe by default
+    (lsp-pyls-plugins-mccabe-enabled nil)
     ;; disable pycodestyle by default
     (lsp-pyls-plugins-pycodestyle-enabled nil)
     ;; disable pydocstyle by default
