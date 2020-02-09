@@ -733,6 +733,11 @@ dump."
     :custom
     (calendar-week-start-day 1))
 
+  (use-package prodigy
+    :defer t
+    :config
+    (load "~/.dotfiles/prodigy_services"))
+
   (use-package emojify
     :defer t
     :hook ((magit-mode vterm-mode) . emojify-mode))
@@ -1437,8 +1442,6 @@ you should place your code here."
   (custom/faces)
 
   (custom/load-dev)
-
-  (load "~/.dotfiles/prodigy_services")
  )
 
 ;; Do not write anything past this comment. This is where Emacs will
