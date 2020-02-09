@@ -998,14 +998,17 @@ dump."
 
   ;;add and enable smyx mode
   (use-package symex
+    :defer t
     :hook (emacs-lisp-mode . symex-mode)
     :bind (:map spacemacs-emacs-lisp-mode-map (("," . symex-mode-interface))))
 
   ;; functions highlighter
   (use-package highlight-function-calls
+    :defer t
     :hook (emacs-lisp-mode . highlight-function-calls-mode))
 
   (use-package highlight-blocks
+    :defer t
     :custom
     (highlight-blocks-max-innermost-block-count 1)
     :hook (emacs-lisp-mode . highlight-blocks-mode)
@@ -1017,6 +1020,7 @@ dump."
   (spacemacs/set-leader-keys-for-major-mode 'sql-interactive-mode (kbd "la") 'sql-list-all)
   (spacemacs/set-leader-keys-for-major-mode 'sql-interactive-mode (kbd "lt") 'sql-list-table)
   (use-package sql
+    :defer t
     :config
     ;; load file with sql connections
     (load "~/.dotfiles/sql_connections")
@@ -1174,6 +1178,7 @@ dump."
 (defun custom/markdown-specific ()
   "Changes specific to markdown-mode"
   (use-package markdown-mode
+    :defer t
     :custom
     ;; Always hide markup in markdown-mode
     (markdown-hide-markup t)
@@ -1271,7 +1276,7 @@ window to display persistent action buffer."
 (defun custom/zoning ()
   "Changes specific to zoning"
   (use-package zone
-    :demand
+    :defer t
     :config
     (zone-when-idle 240)
     :custom
