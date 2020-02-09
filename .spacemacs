@@ -129,6 +129,7 @@ This function should only modify configuration layer settings."
                                       daemons                   ;; emacs UI for managing services from systemd and alike
                                       ox-reveal                 ;; add export to reveal.js from org
                                       org-fancy-priorities      ;; fancy priorities in org mode
+                                      emojify                   ;; because dank
 
 ;; packages needed for dev with Cask
                                       f
@@ -731,6 +732,10 @@ dump."
     :defer t
     :custom
     (calendar-week-start-day 1))
+
+  (use-package emojify
+    :defer t
+    :hook ((magit-mode vterm-mode) . emojify-mode))
 
   ;; remove note from home buffer
   (setq spacemacs-buffer--current-note-type nil)
