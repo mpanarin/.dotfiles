@@ -82,7 +82,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      (auto-completion :variables
-                      auto-completion-use-company-box t
+                      ;; auto-completion-use-company-box t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t)
      (treemacs :variables
@@ -1340,7 +1340,7 @@ window to display persistent action buffer."
     (custom/extend-face-group 'org-faces)
     (custom/extend-face-group 'markdown-faces)
     (custom/extend-face-group 'rst-faces)
-    (custom/extend-face-group 'company-box)
+    ;; (custom/extend-face-group 'company-box)
     (with-eval-after-load 'highlight-blocks
       (custom/extend-face-group 'highlight-blocks-faces))
     )
