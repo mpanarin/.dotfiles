@@ -599,6 +599,17 @@ dump."
   (evil-beginning-of-line)
   (insert "\C-l\n"))
 
+(defun custom/toggle-breakpoint (trace)
+  "Add a breakpoint and highlight it. TRACE is a string that should be pasted."
+  (interactive)
+  (let ((line (thing-at-point 'line)))
+    (if (and line (string= trace line))
+        (kill-whole-line)
+      (progn
+        (back-to-indentation)
+        (insert trace)
+        (newline-and-indent)))))
+
 
 ;; Custom functions for spacemacs and modes customizations
 
@@ -839,16 +850,27 @@ dump."
     :custom
     (dap-python-terminal "xterm -e "))
 
-  (define-minor-mode custom-python-debug-mode
+
+  (define-minor-mode custom-debug-mode
     "Remap some keybinds, specific to python and dap"
     :global nil
-    (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b b") 'spacemacs/python-toggle-breakpoint)
-    (spacemacs/set-leader-keys-for-minor-mode 'dap-mode (kbd "d b d") 'dap-breakpoint-toggle)
+
+    (defun bind-debug-func (func)
+      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b d") 'dap-breakpoint-toggle)
+      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") func))
+
+    (pcase major-mode
+      ('python-mode (bind-debug-func #'spacemacs/python-toggle-breakpoint))
+      ('elixir-mode (bind-debug-func (lambda ()
+                                       (interactive)
+                                       (custom/toggle-breakpoint "require IEx; IEx.pry"))))
+      ('rjsx-mode (bind-debug-func (lambda ()
+                                     (interactive)
+                                     (custom/toggle-breakpoint "debugger;"))))
+      )
+
     )
-  (add-hook 'lsp-mode-hook (lambda ()
-                             (if (eq major-mode 'python-mode)
-                                 (custom-python-debug-mode t))))
-  )
+  (add-hook 'lsp-mode-hook (lambda () (custom-debug-mode t))))
 
 (defun custom/tabs-generic ()
   (use-package centaur-tabs
