@@ -611,6 +611,15 @@ dump."
         (insert trace)
         (newline-and-indent)))))
 
+(defun custom/helm-open-agenda-file ()
+  (interactive)
+  (helm
+   :buffer "*Helm Open Agenda File*"
+   :sources (helm-build-in-buffer-source "Agenda files:" ;; TODO: this is probably super-wrong source, read up on it
+              :data (org-agenda-files)
+              :fuzzy-match t
+              :action '(("Visit file" . (lambda (candidate) (find-file candidate)))))))
+
 
 ;; Custom functions for spacemacs and modes customizations
 
@@ -1299,6 +1308,8 @@ window to display persistent action buffer."
   (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
   ;; Bind kill-all-persp
   (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)
+  ;; Bind open agenda file
+  (define-key evil-normal-state-local-map (kbd "SPC a o f") 'custom/helm-open-agenda-file)
   )
 
 (defun custom/zoning ()
