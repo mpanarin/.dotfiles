@@ -754,6 +754,11 @@ dump."
     :defer t
     :hook ((magit-mode vterm-mode) . emojify-mode))
 
+  (use-package persp-mode
+    :defer t
+    :custom
+    (persp-autokill-buffer-on-remove t))
+
   ;; remove note from home buffer
   (setq spacemacs-buffer--current-note-type nil)
   ;; allow unsafe vars in dir-locals
