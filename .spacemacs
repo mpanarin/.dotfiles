@@ -75,6 +75,7 @@ This function should only modify configuration layer settings."
      themes-megapack
      org
      (shell :variables
+            shell-pop-autocd-to-working-dir nil
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'vterm)
