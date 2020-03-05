@@ -620,6 +620,29 @@ dump."
               :fuzzy-match t
               :action '(("Visit file" . (lambda (candidate) (find-file candidate)))))))
 
+(defun custom/expand-region (start end &optional separator) ;; FIXME: need some more fixing. Indentation is a bit wrong
+  "Expand the region. Ex:
+(a, b, c)
+will turn into
+(
+  a,
+  b,
+  c,
+)"
+  (interactive "r")
+  (save-excursion
+    (let ((separator (or separator ","))
+          (text (s-replace "  " " " (s-replace "\n" " " (buffer-substring-no-properties start end)))))
+      (delete-region start end)
+      (let ((elems (s-split (concat separator " ") text t)))
+        (mapc (lambda (elem)
+                (newline-and-indent)
+                (insert (concat elem separator)))
+              elems)
+        (newline-and-indent)
+        ))))
+
+;; (a, b, c)
 
 ;; Custom functions for spacemacs and modes customizations
 
@@ -662,6 +685,7 @@ dump."
 
   ;; configurate writeroom
   (use-package writeroom-mode
+    :commands (writeroom-mode writeroom--enable writeroom--disable)
     :defer t
     :custom
     (writeroom-width 125))
@@ -673,8 +697,8 @@ dump."
     (solaire-global-mode +1))
 
   ;; is required by company-box
-  (use-package all-the-icons
-    :defer t)
+  ;; (use-package all-the-icons
+  ;;   :defer t)
 
   ;; configure webmode
   (use-package web-mode
@@ -858,6 +882,7 @@ dump."
 (defun custom/dap-generic ()
   "Generic LSP dap changes"
 
+  ;; FIXME: this should be fixed
   ;; (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
   ;; (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
   (use-package dap-mode
@@ -968,6 +993,8 @@ dump."
     (lsp-print-io nil)
     ;; do not include docs in signature
     (lsp-signature-render-documentation nil)
+    ;; try capf integration
+    (lsp-prefer-capf t)
     )
   (use-package lsp-ui
     :defer t
@@ -1004,6 +1031,7 @@ dump."
   ;; FIXME: this pytest package requires some fixing
   (use-package python-pytest
     :defer t
+    :after python
     :custom
     (python-pytest-arguments '("--color" "--cov"))
     :config
@@ -1023,9 +1051,21 @@ dump."
       (kbd "t a") 'exunit-verify
       (kbd "t k") 'exunit-rerun
       (kbd "t t") 'exunit-verify-single))
-  ;; (flycheck-add-next-checker 'lsp-ui
-  ;;                            '(t . elixir-credo))
-  (setq flycheck-elixir-credo-strict t))
+
+  (use-package flycheck-credo
+    :defer t
+    :init (add-hook 'flycheck-mode-hook #'flycheck-credo-setup)
+    :custom
+    (flycheck-elixir-credo-strict t)
+    :config
+    (flycheck-add-next-checker 'lsp
+                               '(t . elixir-credo)))
+
+  ;; TODO: this works but breaks lsp checker completely
+  ;; (add-hook 'lsp-mode-hook  (lambda ()
+  ;;                            (if (eq major-mode 'elixir-mode)
+  ;;                                (setq-local lsp-flycheck-live-reporting nil))))
+  )
 
 (defun custom/elisp-specific ()
   "Changes specific to emacs-lisp-mode"
@@ -1197,13 +1237,12 @@ dump."
                                             (writeroom--disable))))
 
   (use-package ox-reveal
-    :defer t
-    )
+    :after org
+    :demand t)
 
   ;; fancy org priorities
   (use-package org-fancy-priorities
     :defer t
-    :ensure t
     :hook
     (org-mode . org-fancy-priorities-mode)
     :config
@@ -1310,6 +1349,8 @@ window to display persistent action buffer."
   (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)
   ;; Bind open agenda file
   (define-key evil-normal-state-local-map (kbd "SPC a o f") 'custom/helm-open-agenda-file)
+  ;; Bind expand-region
+  (define-key evil-normal-state-local-map (kbd "SPC x x") 'custom/expand-region)
   )
 
 (defun custom/zoning ()
@@ -1319,20 +1360,21 @@ window to display persistent action buffer."
     :config
     (zone-when-idle 240)
     :custom
-    (zone-programs [zone-pgm-jitter
+    (zone-programs [
+                    ;; zone-pgm-jitter
                     zone-pgm-putz-with-case
-                    zone-pgm-dissolve
-                    zone-pgm-explode
+                    ;; zone-pgm-dissolve
+                    ;; zone-pgm-explode
                     zone-pgm-whack-chars
-                    zone-pgm-rotate-LR-variable
-                    zone-pgm-rotate-RL-variable
+                    ;; zone-pgm-rotate-LR-variable
+                    ;; zone-pgm-rotate-RL-variable
                     zone-pgm-drip
-                    zone-pgm-five-oclock-swan-dive
-                    zone-pgm-martini-swan-dive
-                    zone-pgm-rat-race
-                    zone-pgm-stress
-                    zone-pgm-stress-destress
-                    zone-pgm-random-life
+                    ;; zone-pgm-five-oclock-swan-dive
+                    ;; zone-pgm-martini-swan-dive
+                    ;; zone-pgm-rat-race
+                    ;; zone-pgm-stress
+                    ;; zone-pgm-stress-destress
+                    ;; zone-pgm-random-life
                     ]))
   )
 
@@ -1479,7 +1521,7 @@ you should place your code here."
   (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
-  (custom/eaf)
+  ;; (custom/eaf)
 
   (custom/zoning)
 
