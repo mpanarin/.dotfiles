@@ -46,7 +46,7 @@ sudo pacman -S --noconfirm python2-pip \
 sudo pacman -R yakuake --noconfirm
 
 # Additional packages from AUR
-yay -S emacs-git telegram-desktop rocketchat-desktop gpmdp peco slack-desktop fpp-git gotop vagga-bin cask
+yay -S emacs-git telegram-desktop gpmdp peco slack-desktop fpp-git gotop vagga-bin cask
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
@@ -62,6 +62,10 @@ pip install --user ical2orgpy
 
 # install poetry
 curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
+
+# setup asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.7
+asdf plugin-add erlang elixir
 
 # install spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d -b develop
@@ -79,15 +83,12 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ln -fs ~/.dotfiles/.tmux.conf ~/.tmux.conf
 
 # install tmuxinator
-gem install tmuxinator -v 0.12.0
-sudo ln -s ~/.gem/ruby/2.5.0/bin/tmuxinator /usr/bin/tmuxinator
-
-# make zsh default shell
-chsh -s $(which zsh)
+gem install tmuxinator -v 1.1.4
+sudo ln -s ~/.gem/ruby/2.7.0/bin/tmuxinator /usr/bin/tmuxinator
 
 # install oh-my-zsh
-curl -fsSL https://raw.githubusercontent.com/PanarinM/oh-my-zsh/install-silent/tools/install_silent.sh > install.sh
-sh install.sh
+curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh > install.sh
+sh install.sh --unattended
 rm install.sh
 
 # install spaceship zsh theme
@@ -96,6 +97,9 @@ ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-z
 
 # symlink zshrc
 ln -fs ~/.dotfiles/.zshrc ~/.zshrc
+
+# make zsh default shell
+chsh -s $(which zsh)
 
 # add solarized theme for vim
 mkdir -p ~/.vim/pack/themes/opt
@@ -120,9 +124,6 @@ systemctl enable --user emacs.service
 mkdir -p ~/.config/yapf
 ln -sf ~/.dotfiles/style ~/.config/yapf/style
 
-# setup asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
-asdf plugin-add erlang elixir
 
 # symlink remaining files
 ln -fs ~/.dotfiles/.gitconfig ~/.gitconfig
