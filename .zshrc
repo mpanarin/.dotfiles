@@ -10,6 +10,7 @@ COMPLETION_WAITING_DOTS="true"
 # if not Emacs - use vi-mode and start tmux
 if [[ -z $INSIDE_EMACS ]]; then
     # TMUX startup
+    export PATH="$PATH:/home/$USER/.gem/ruby/2.7.0/bin"
     source ~/.gem/ruby/2.7.0/gems/tmuxinator-1.1.4/completion/tmuxinator.zsh
     ZSH_TMUX_AUTOSTART=false
     eval $(~/tmux_get_startup_command)
@@ -163,5 +164,3 @@ alias kub='kubectl'
 
 alias v='vagga'
 alias vrun='vagga run'
-
-source /home/m-panarin/.local/share/dephell/_dephell_zsh_autocomplete
