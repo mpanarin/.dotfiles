@@ -261,10 +261,11 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
                          doom-peacock
-                         doom-snazzy
-                         srcery
-                         doom-molokai
-                         solarized-dark
+                         ;; solarized-light-high-contrast
+                         ;; doom-snazzy
+                         ;; srcery
+                         ;; doom-molokai
+                         ;; solarized-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -274,14 +275,14 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.1)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.0)
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Fira Code"
-                               :size 14
+                               :size 26
                                :weight normal
                                :width normal)
 
@@ -545,7 +546,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; https://github.com/syl20bnr/spacemacs/issues/10894
   (mapc
    (lambda (item) (add-to-list 'default-frame-alist item)) '(
-                                                             (font . "-CTDB-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+                                                             (font . "-CTDB-Fira Code-normal-normal-normal-*-26-*-*-*-m-0-iso10646-1")
                                                              (alpha . (95 . 90))))
   (add-hook 'server-after-make-frame-hook 'custom/faces)
   )
@@ -642,7 +643,6 @@ will turn into
         (newline-and-indent)
         ))))
 
-;; (a, b, c)
 
 ;; Custom functions for spacemacs and modes customizations
 
@@ -652,6 +652,9 @@ will turn into
   (add-hook 'delete-terminal-functions (lambda (terminal) (recentf-save-list)))
   (add-hook 'kill-emacs-hook 'recentf-save-list)
   (add-hook 'focus-out-hook #'garbage-collect)
+
+  ;; increase the left fringe width
+  (fringe-mode '(16 . 8))
 
   ;; no messages on autosaving please (27.1)
   (setq auto-save-no-message t)
@@ -756,7 +759,27 @@ will turn into
   (use-package flycheck
     :defer t
     :custom
-    (flycheck-display-errors-delay 0.3))
+    (flycheck-display-errors-delay 0.3)
+    :config
+    (define-fringe-bitmap 'my-flycheck-fringe-indicator
+      (vector #b0000000000000000
+              #b0000000000000000
+              #b0000011111100000
+              #b0000111111110000
+              #b0001111111111000
+              #b0011111111111100
+              #b0011111111111100
+              #b0011111111111100
+              #b0011111111111100
+              #b0011111111111100
+              #b0011111111111100
+              #b0001111111111000
+              #b0000111111110000
+              #b0000011111100000
+              #b0000000000000000
+              #b0000000000000000)
+      nil 16
+      ))
 
   (use-package evil-surround
     :defer t
@@ -1125,65 +1148,116 @@ will turn into
     :defer t
     :config
     (fringe-helper-define 'git-gutter-fr+-added nil
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX...")
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX.")
     (fringe-helper-define 'git-gutter-fr+-modified nil
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX...")
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX.")
     (fringe-helper-define 'git-gutter-fr+-deleted nil
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX..."
-      "..XXX...")
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX."
+      "..XXXXX.")
     )
   )
 
