@@ -1,5 +1,5 @@
 ;; TODO: commit a8f2ee424ce895caff15f1ff973e241b8a946aba in master broke the shit. Check whatsup
-(load "~/Desktop/tab-line/tab-line-orig.el")
+(load "~/projects/personal/elisp/tab-line/tab-line-orig.el")
 (with-eval-after-load 'company-box
   (defun company-box--edges nil
     "Override of original to fix for company-box to properly include the height of tab-line"
