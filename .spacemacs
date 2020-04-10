@@ -83,7 +83,6 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      (auto-completion :variables
-                      ;; auto-completion-use-company-box t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t)
      (treemacs :variables
@@ -716,9 +715,19 @@ will turn into
     :init
     (solaire-global-mode +1))
 
-  ;; is required by company-box
-  ;; (use-package all-the-icons
-  ;;   :defer t)
+
+  (use-package company-box
+    ;; using the yyoncho fork on github
+    :load-path "~/.emacs.d/private/local/company-box"
+    :after company
+    :hook (company-mode . company-box-mode)
+    :custom
+    (company-box-icons-alist 'company-box-icons-images)
+    (company-box-show-single-candidate t)
+    :config
+    (company-box-icons-resize 38 company-box-icons-images)
+    )
+
 
   ;; configure webmode
   (use-package web-mode
