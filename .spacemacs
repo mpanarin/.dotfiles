@@ -662,6 +662,23 @@ will turn into
   ;; increase the amount of data emacs can read from a sub-process in one go (27.1)
   (setq read-process-output-max (* 1024 1024))
 
+  (use-package org-pomodoro
+    :defer t
+    ;; restart pomodoro timer on the same task when break is finished
+    :hook (org-pomodoro-break-finished . (lambda ()
+                                         (point-to-register 1)
+                                         (org-clock-goto)
+                                         (org-pomodoro)
+                                         (register-to-point 1)))
+    :custom
+    ;; use VLC as a player
+    (org-pomodoro-audio-player "/usr/bin/cvlc --play-and-exit")
+    ;; Set the best sound
+    (org-pomodoro-long-break-sound "/home/m-panarin/Downloads/bruh.mp3")
+    (org-pomodoro-short-break-sound "/home/m-panarin/Downloads/bruh.mp3")
+    (org-pomodoro-finished-sound "/home/m-panarin/Downloads/bruh.mp3")
+    )
+
   ;; Add restclient package
   (use-package restclient
     :defer t
