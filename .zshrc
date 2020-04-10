@@ -164,3 +164,4 @@ alias kub='kubectl'
 
 alias v='vagga'
 alias vrun='vagga run'
+alias serv='sudo systemctl'
