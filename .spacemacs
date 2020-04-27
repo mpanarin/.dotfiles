@@ -620,6 +620,16 @@ dump."
               :fuzzy-match t
               :action '(("Visit file" . (lambda (candidate) (find-file candidate)))))))
 
+(defun custom/re-seq (regexp string)
+  "Get a list of all regexp matches in a string"
+  (save-match-data
+    (let ((pos 0)
+          matches)
+      (while (string-match regexp string pos)
+        (push (match-string 0 string) matches)
+        (setq pos (match-end 0)))
+      (reverse matches))))
+
 (defun custom/expand-region (start end &optional separator) ;; FIXME: need some more fixing. Indentation is a bit wrong
   "Expand the region. Ex:
 (a, b, c)
@@ -632,15 +642,14 @@ will turn into
   (interactive "r")
   (save-excursion
     (let ((separator (or separator ","))
-          (text (s-replace "  " " " (s-replace "\n" " " (buffer-substring-no-properties start end)))))
+          (text (buffer-substring-no-properties start end)))
       (delete-region start end)
-      (let ((elems (s-split (concat separator " ") text t)))
+      (let ((elems (custom/re-seq "[[:word:]\-._]+" text)))
         (mapc (lambda (elem)
                 (newline-and-indent)
                 (insert (concat elem separator)))
               elems)
-        (newline-and-indent)
-        ))))
+        (newline-and-indent)))))
 
 
 ;; Custom functions for spacemacs and modes customizations
