@@ -656,6 +656,20 @@ will turn into
 
 ;; Custom functions for spacemacs and modes customizations
 
+(defun custom/evil-motions ()
+  (evil-define-motion evil-last-non-blank (count)
+    "Move the cursor to the last non-blank character
+on the current line. If COUNT is given, move COUNT - 1
+lines downward first."
+    :type inclusive
+    (evil-end-of-line count)
+    (re-search-backward "^\\|[^[:space:]]")
+    (setq evil-this-type (if (eolp) 'exclusive 'inclusive)))
+
+  (define-key evil-motion-state-map "g$" 'evil-end-of-line)
+  (define-key evil-motion-state-map "$" 'evil-last-non-blank)
+  )
+
 (defun custom/generic-improvements ()
   "Generic improvements and packages that are either too small, or not fitting other categories."
   ;; This 2 hooks fix a shitton of issues with emacs-server and recentf bitch
@@ -1605,6 +1619,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (custom/evil-motions)
   (custom/generic-improvements)
   (custom/ligatures)
 
