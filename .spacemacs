@@ -87,7 +87,8 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t)
      (treemacs :variables
                treemacs-use-follow-mode t
-               treemacs-use-filewatch-mode t)
+               treemacs-use-filewatch-mode t
+               treemacs-use-scope-type 'Perspectives)
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      pdf
