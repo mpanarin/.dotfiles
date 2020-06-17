@@ -959,31 +959,26 @@ lines downward first."
   ;; FIXME: this should be fixed
   ;; (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
   ;; (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
-  (use-package dap-mode
-    :defer t
-    :custom
-    (dap-python-terminal "xterm -e "))
-
+  ;; (use-package dap-mode
+  ;;   :defer t
+  ;;   :custom
+  ;;   (dap-python-terminal "xterm -e "))
 
   (define-minor-mode custom-debug-mode
     "Remap some keybinds, specific to python and dap"
     :global nil
 
-    (defun bind-debug-func (func)
-      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b d") 'dap-breakpoint-toggle)
-      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") func))
 
-    (pcase major-mode
-      ('python-mode (bind-debug-func #'spacemacs/python-toggle-breakpoint))
-      ('elixir-mode (bind-debug-func (lambda ()
-                                       (interactive)
-                                       (custom/toggle-breakpoint "require IEx; IEx.pry"))))
-      ('rjsx-mode (bind-debug-func (lambda ()
-                                     (interactive)
-                                     (custom/toggle-breakpoint "debugger;"))))
+    (defun custom/toggle-breakpoint-generic ()
+      (interactive)
+      (pcase major-mode
+        ('python-mode (spacemacs/python-toggle-breakpoint))
+        ('elixir-mode (custom/toggle-breakpoint "require IEx; IEx.pry"))
+        ('rjsx-mode (custom/toggle-breakpoint "debugger;")))
       )
 
-    )
+      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b d") 'dap-breakpoint-toggle)
+      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") 'custom/toggle-breakpoint-generic))
   (add-hook 'lsp-mode-hook (lambda () (custom-debug-mode t))))
 
 (defun custom/tabs-generic ()
