@@ -1039,12 +1039,11 @@ lines downward first."
     (lsp-file-watch-threshold nil)
     ;; do not show hover info in eldoc, I have lsp-ui-doc for that
     (lsp-eldoc-enable-hover nil)
-    ;; Stop with your stupid warning lsp
-    (lsp-message-project-root-warning t)
     ;; disable garbage rope completion in pyls
     (lsp-pyls-plugins-rope-completion-enabled nil)
     ;; disable params in jedi completion as they are pretty much useless and annoying
-    (lsp-pyls-plugins-jedi-completion-include-params nil)
+    ;; (lsp-pyls-plugins-jedi-completion-include-params nil)
+    (lsp-pyls-plugins-jedi-completion-include-params t)
     ;; enable pylint by deafult
     (lsp-pyls-plugins-pylint-enabled t)
     ;; enable flake8 by default
@@ -1065,6 +1064,10 @@ lines downward first."
     (lsp-signature-render-documentation nil)
     ;; try capf integration
     (lsp-prefer-capf t)
+    ;; fuzzy off
+    (lsp-pyls-plugins-jedi-completion-fuzzy nil)
+    ;; rename to rope
+    (lsp-pyls-rename-backend 'rope)
     )
   (use-package lsp-ui
     :defer t
@@ -1098,10 +1101,10 @@ lines downward first."
   (use-package python-pytest
     :defer t
     :after python
+    :bind (:map spacemacs-python-mode-map (("t" . python-pytest-popup)))
     :custom
     (python-pytest-arguments '("--color" "--cov"))
     :config
-    (spacemacs/set-leader-keys-for-major-mode 'python-mode (kbd "t") 'python-pytest-popup)
     (magit-define-popup-switch 'python-pytest-popup ?C "Converage" "--cov")
     )
   )
@@ -1118,14 +1121,14 @@ lines downward first."
       (kbd "t k") 'exunit-rerun
       (kbd "t t") 'exunit-verify-single))
 
-  (use-package flycheck-credo
-    :defer t
-    :init (add-hook 'flycheck-mode-hook #'flycheck-credo-setup)
-    :custom
-    (flycheck-elixir-credo-strict t)
-    :config
-    (flycheck-add-next-checker 'lsp
-                               '(t . elixir-credo)))
+  ;; (use-package flycheck-credo
+  ;;   :defer t
+  ;;   :init (add-hook 'flycheck-mode-hook #'flycheck-credo-setup)
+  ;;   :custom
+  ;;   (flycheck-elixir-credo-strict t)
+  ;;   :config
+  ;;   (flycheck-add-next-checker 'lsp
+  ;;                              '(t . elixir-credo)))
 
   ;; TODO: this works but breaks lsp checker completely
   ;; (add-hook 'lsp-mode-hook  (lambda ()
