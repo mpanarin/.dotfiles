@@ -97,6 +97,7 @@ This function should only modify configuration layer settings."
      xclipboard
      systemd
      restclient
+     ansible
      )
 
    ;; List of additional packages that will be installed without being
@@ -128,7 +129,7 @@ This function should only modify configuration layer settings."
                                       protobuf-mode             ;; mode for editing .proto protobuffers files
                                       coffee-mode               ;; mode for editing coffee-script files
                                       daemons                   ;; emacs UI for managing services from systemd and alike
-                                      ox-reveal                 ;; add export to reveal.js from org
+                                      org-re-reveal             ;; add export to reveal.js from org
                                       org-fancy-priorities      ;; fancy priorities in org mode
                                       emojify                   ;; because dank
 
@@ -596,7 +597,7 @@ dump."
     (and (get-buffer dap-ui--locals-buffer)
          (kill-buffer dap-ui--locals-buffer))))
 
-(defun insert-page-break ()
+(defun custom/insert-page-break ()
   (interactive)
   (evil-beginning-of-line)
   (insert "\C-l\n"))
@@ -817,7 +818,7 @@ will turn into
       nil 16
       ))
 
-  (use-package evil-surround
+  (use-package evil-surround            ;; FIXME: this interferes with "c s" surrounding
     :defer t
     :config
     (advice-add 'evil-surround-region :after (lambda (&rest args) (execute-kbd-macro "gv") (evil-forward-char))))
@@ -1019,6 +1020,7 @@ will turn into
 (defun custom/lsp-generic ()
   "Generic LSP changes"
   (use-package lsp-mode
+    ;; :load-path "/home/m-panarin/projects/personal/elisp/lsp-mode/"
     :defer t
     :commands lsp
     :ensure t
@@ -1126,7 +1128,7 @@ will turn into
   "Changes specific to emacs-lisp-mode"
 
   ;; handy key to insert page-breaks
-  (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'insert-page-break)
+  (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'custom/insert-page-break)
 
   ;;add and enable smyx mode
   (use-package symex
@@ -1342,9 +1344,9 @@ will turn into
                                             (setq display-line-numbers t)
                                             (writeroom--disable))))
 
-  (use-package ox-reveal
-    :after org
-    :demand t)
+  ;; (use-package org-re-reveal
+  ;;   :after org
+  ;;   :demand t)
 
   ;; fancy org priorities
   (use-package org-fancy-priorities
@@ -1396,10 +1398,10 @@ will turn into
           ("o a h" . treemacs-visit-node-ace-vertical-split)
           ("o a v" . treemacs-visit-node-ace-horizontal-split)))
 
-  (use-package treemacs-persp
-    :defer t
-    :config
-    (treemacs-set-scope-type 'Perspectives))
+  ;; (use-package treemacs-persp
+  ;;   :defer t
+  ;;   :config
+  ;;   (treemacs-set-scope-type 'Perspectives))
 
   ;; Show treemacs icons in dired
   (use-package treemacs-icons-dired
@@ -1632,6 +1634,9 @@ you should place your code here."
   (custom/zoning)
 
   (custom/faces)
+
+  ;; (with-eval-after-load 'dap-mode
+  ;;   (load "~/.dotfiles/dap-debuggers.el"))
 
   (custom/load-dev)
  )
