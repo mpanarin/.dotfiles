@@ -5,12 +5,14 @@ sudo pacman -Syu --noconfirm
 
 # install all needed packages
 sudo pacman -S --noconfirm python2-pip \
+     ranger \
      zsh \
      ruby \
      curl \
      vim \
      flake8 \
      the_silver_searcher \
+     ripgrep \
      exa \
      fzf \
      base-devel \
@@ -46,7 +48,7 @@ sudo pacman -S --noconfirm python2-pip \
 sudo pacman -R yakuake --noconfirm
 
 # Additional packages from AUR
-yay -S emacs-git telegram-desktop gpmdp peco slack-desktop fpp-git gotop vagga-bin cask
+yay -S emacs-git telegram-desktop spotify-dev peco slack-desktop fpp-git lets-git
 
 # add user to docker group and enable the service
 sudo systemctl enable docker
@@ -58,7 +60,7 @@ sudo pip install --upgrade pip
 sudo pip2 install --upgrade pip
 
 # install some python packages
-pip install --user ical2orgpy
+# TODO: finish this pip install --user ical2orgpy
 
 # install poetry
 curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
@@ -138,4 +140,4 @@ ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 ln -fs ~/.dotfiles/kitty.conf ~/.config/kitty/kitty.conf
 ln -fs ~/.dotfiles/snazzy.conf ~/.config/kitty/snazzy.conf
 ln -fs ~/.dotfiles/tmux_get_startup_command ~/tmux_get_startup_command
-ln -fs ~/.dotfiles/cal2org_sync.zsh ~/cal2org_sync.zsh
+# TODO: finish this ln -fs ~/.dotfiles/cal2org_sync.zsh ~/cal2org_sync.zsh
