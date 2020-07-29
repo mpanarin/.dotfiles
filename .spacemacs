@@ -276,14 +276,14 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.0)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.4)
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Fira Code"
-                               :size 26
+                               :size 15
                                :weight normal
                                :width normal)
 
@@ -547,7 +547,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; https://github.com/syl20bnr/spacemacs/issues/10894
   (mapc
    (lambda (item) (add-to-list 'default-frame-alist item)) '(
-                                                             (font . "-CTDB-Fira Code-normal-normal-normal-*-26-*-*-*-m-0-iso10646-1")
+                                                             (font . "-CTDB-Fira Code-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1")
                                                              (alpha . (95 . 90))))
   (add-hook 'server-after-make-frame-hook 'custom/faces)
   )
@@ -617,7 +617,7 @@ dump."
   (interactive)
   (helm
    :buffer "*Helm Open Agenda File*"
-   :sources (helm-build-in-buffer-source "Agenda files:" ;; TODO: this is probably super-wrong source, read up on it
+   :sources (helm-build-in-buffer-source "Agenda files:"
               :data (org-agenda-files)
               :fuzzy-match t
               :action '(("Visit file" . (lambda (candidate) (find-file candidate)))))))
@@ -748,10 +748,7 @@ lines downward first."
     :hook (company-mode . company-box-mode)
     :custom
     (company-box-icons-alist 'company-box-icons-images)
-    (company-box-show-single-candidate t)
-    :config
-    (company-box-icons-resize 38 company-box-icons-images)
-    )
+    (company-box-show-single-candidate t))
 
 
   ;; configure webmode
@@ -810,27 +807,7 @@ lines downward first."
   (use-package flycheck
     :defer t
     :custom
-    (flycheck-display-errors-delay 0.3)
-    :config
-    (define-fringe-bitmap 'my-flycheck-fringe-indicator
-      (vector #b0000000000000000
-              #b0000000000000000
-              #b0000011111100000
-              #b0000111111110000
-              #b0001111111111000
-              #b0011111111111100
-              #b0011111111111100
-              #b0011111111111100
-              #b0011111111111100
-              #b0011111111111100
-              #b0011111111111100
-              #b0001111111111000
-              #b0000111111110000
-              #b0000011111100000
-              #b0000000000000000
-              #b0000000000000000)
-      nil 16
-      ))
+    (flycheck-display-errors-delay 0.3))
 
   (use-package evil-surround            ;; FIXME: this interferes with "c s" surrounding
     :defer t
@@ -1029,45 +1006,34 @@ lines downward first."
 (defun custom/lsp-generic ()
   "Generic LSP changes"
   (use-package lsp-mode
-    ;; :load-path "/home/m-panarin/projects/personal/elisp/lsp-mode/"
+    ;; :load-path "/home/m-panarin/projects/personal/elisp/lsp-mode/"  ;; when custom load is needed
     :defer t
     :commands lsp
     :ensure t
     :diminish lsp-mode
     :custom
-    ;; always filewatch
-    (lsp-file-watch-threshold nil)
-    ;; do not show hover info in eldoc, I have lsp-ui-doc for that
-    (lsp-eldoc-enable-hover nil)
-    ;; disable garbage rope completion in pyls
-    (lsp-pyls-plugins-rope-completion-enabled nil)
-    ;; disable params in jedi completion as they are pretty much useless and annoying
-    ;; (lsp-pyls-plugins-jedi-completion-include-params nil)
-    (lsp-pyls-plugins-jedi-completion-include-params t)
-    ;; enable pylint by deafult
-    (lsp-pyls-plugins-pylint-enabled t)
-    ;; enable flake8 by default
-    (lsp-pyls-plugins-flake8-enabled t)
-    ;; set the default flake8 config
-    (lsp-pyls-plugins-flake8-filename ["~/.dotfiles/flake8"])
-    ;; disable pyflakes by default
-    (lsp-pyls-plugins-pyflakes-enabled nil)
-    ;; disable mccabe by default
-    (lsp-pyls-plugins-mccabe-enabled nil)
-    ;; disable pycodestyle by default
-    (lsp-pyls-plugins-pycodestyle-enabled nil)
-    ;; disable pydocstyle by default
-    (lsp-pyls-plugins-pydocstyle-enabled nil)
-    ;; no logs, they make js lag like a little bitch
-    (lsp-print-io nil)
-    ;; do not include docs in signature
-    (lsp-signature-render-documentation nil)
-    ;; try capf integration
-    (lsp-prefer-capf t)
-    ;; fuzzy off
-    (lsp-pyls-plugins-jedi-completion-fuzzy nil)
-    ;; rename to rope
-    (lsp-pyls-rename-backend 'rope)
+    ;; --------- General
+    (lsp-file-watch-threshold nil)  ;; always filewatch
+    (lsp-eldoc-enable-hover nil)  ;; do not show hover info in eldoc, I have lsp-ui-doc for that
+    (lsp-print-io nil)  ;; no logs, they make js lag like a little bitch
+    (lsp-prefer-capf t)  ;; try capf integration
+    (lsp-signature-render-documentation nil)  ;; do not include docs in signature
+    (lsp-modeline-diagnostics-enable nil)     ;; disable diagnostics in modeline, they are already present in spacemacs
+    (lsp-modeline-code-actions-enable nil)    ;; disable code actions in modeline, they are already present in spacemacs
+    ;; --------- PYLS configs
+    (lsp-pyls-plugins-rope-completion-enabled nil)  ;; disable garbage rope completion in pyls
+    (lsp-pyls-plugins-jedi-completion-include-params nil) ;; disable params in jedi completion, they are mediocre
+    (lsp-pyls-plugins-pylint-enabled t)  ;; enable pylint by deafult
+    (lsp-pyls-plugins-flake8-enabled t)  ;; enable flake8 by default
+    (lsp-pyls-plugins-flake8-filename ["~/.dotfiles/flake8"])  ;; set the default flake8 config
+    (lsp-pyls-plugins-pyflakes-enabled nil)  ;; disable pyflakes by default
+    (lsp-pyls-plugins-mccabe-enabled nil)  ;; disable mccabe by default
+    (lsp-pyls-plugins-pycodestyle-enabled nil)  ;; disable pycodestyle by default
+    (lsp-pyls-plugins-pydocstyle-enabled nil)  ;; disable pydocstyle by default
+    (lsp-pyls-plugins-jedi-completion-fuzzy nil)  ;; fuzzy off
+    (lsp-pyls-rename-backend 'rope)  ;; rename to rope
+    ;; --------- SQLS configs
+    (lsp-sqls-server "~/go/bin/sqls")
     )
   (use-package lsp-ui
     :defer t
@@ -1088,6 +1054,8 @@ lines downward first."
     ;; LSP-UI-SIDELINE
     ;; do not show hover info, I have lsp-ui-doc for that
     (lsp-ui-sideline-show-hover nil)
+    ;; disable code actions as they are pretty lame
+    (lsp-ui-sideline-show-code-actions nil)
 
     ;; LSP-UI-PEEK
     ;; always use fontify, otherwise highlight is broken in the left half
@@ -1652,6 +1620,9 @@ you should place your code here."
   ;;   (load "~/.dotfiles/dap-debuggers.el"))
 
   (custom/load-dev)
+
+  (load "~/projects/personal/elisp/lets-mode/lets-mode")
+  (require 'lets-mode)
  )
 
 ;; Do not write anything past this comment. This is where Emacs will
