@@ -638,8 +638,8 @@ dump."
         (setq pos (match-end 0)))
       (reverse matches))))
 
-(defun custom/expand-region (start end &optional separator) ;; FIXME: need some more fixing. Indentation is a bit wrong
-  "Expand the region. Ex:
+(defun custom/expand-region (start end separator)
+  "Expand the region using certain SEPARATOR. Ex:
 (a, b, c)
 will turn into
 (
@@ -647,15 +647,21 @@ will turn into
   b,
   c,
 )"
-  (interactive "r")
+  (interactive
+   (let ((string (read-string "Separator: " ",")))
+     (list (region-beginning) (region-end) string)))
+
   (save-excursion
-    (let ((separator (or separator ","))
-          (text (buffer-substring-no-properties start end)))
+    (let ((text (buffer-substring-no-properties start end)))
       (delete-region start end)
-      (let ((elems (custom/re-seq "[[:word:]\-._]+" text)))
+      (let ((elems (mapcar #'string-trim (split-string text separator t))))
         (mapc (lambda (elem)
-                (newline-and-indent)
-                (insert (concat elem separator)))
+                (let ((elem (concat elem separator)))
+                  (newline)
+                  (insert  elem)
+                  (back-to-indentation)
+                  (indent-according-to-mode)
+                  (right-char (length elem))))
               elems)
         (newline-and-indent)))))
 
