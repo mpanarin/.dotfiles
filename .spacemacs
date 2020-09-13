@@ -137,6 +137,7 @@ This function should only modify configuration layer settings."
                                       org-re-reveal             ;; add export to reveal.js from org
                                       org-fancy-priorities      ;; fancy priorities in org mode
                                       emojify                   ;; because dank
+                                      mix                       ;; minor mode for mix files
 
 ;; packages needed for dev with Cask
                                       f
