@@ -64,8 +64,12 @@ This function should only modify configuration layer settings."
              elixir-backend 'lsp)
      phoenix
      erlang
-     sql
-     tern
+     (sql :variables
+          sql-capitalize-keywords t
+          sql-capitalize-keywords-disable-interactive t
+          sql-backend 'lsp
+          sql-lsp-sqls-workspace-config-path 'root)
+     ;; tern
      (javascript :variables
                  javascript-backend 'lsp
                  javascript-fmt-tool 'web-beautify)
