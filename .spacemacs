@@ -123,7 +123,7 @@ This function should only modify configuration layer settings."
                                       treemacs-magit            ;; magit integration
                                       treemacs-icons-dired      ;; use treemacs icons in dired
                                       magit-todos               ;; add TODOs and other keywords to the magit buffer
-                                      python-pytest             ;; pytest runner, TODO: requires some fixing
+                                      python-pytest             ;; pytest runner
                                       centaur-tabs              ;; beautiful tabs for emacs, TODO: requires further fixing with spaceline flickering.
                                       nov                       ;; awesome epub mode
                                       calfw                     ;; great emacs calendar
