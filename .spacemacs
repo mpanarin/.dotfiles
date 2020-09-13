@@ -684,9 +684,7 @@ lines downward first."
 
 (defun custom/generic-improvements ()
   "Generic improvements and packages that are either too small, or not fitting other categories."
-  ;; This 2 hooks fix a shitton of issues with emacs-server and recentf bitch
-  (add-hook 'delete-terminal-functions (lambda (terminal) (recentf-save-list)))
-  (add-hook 'kill-emacs-hook 'recentf-save-list)
+  ;; garbage-collect on focus out. Increases snappiness
   (add-hook 'focus-out-hook #'garbage-collect)
 
   ;; increase the left fringe width
