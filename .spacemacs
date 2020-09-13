@@ -42,7 +42,8 @@ This function should only modify configuration layer settings."
      csv
      debug
      html
-     yaml
+     (yaml :variables
+           yaml-enable-lsp t)
      markdown
      (docker :variables
              docker-dockerfile-backend 'lsp)
