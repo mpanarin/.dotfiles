@@ -949,6 +949,30 @@ lines downward first."
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring])))))
 
+(defun custom/unbind-useless-shit()
+  (let ((keys '(
+
+                ;;general
+                "SPC \""                ;; Remove strange call to terminal here
+                "SPC *"                 ;; Remove search in project, I use `SPC s p`
+                "SPC /"                 ;; Remove search in project, I use `SPC s P`
+                "SPC ;"                 ;; Remove this commenting, I use `g c` in visual
+                "SPC ?"                 ;; useless help
+                "SPC ²"                 ;; useless select of window
+                "SPC `"                 ;; useless select of window
+                "SPC u"                 ;; doubt that I have ever used this universal arg
+                "SPC <f1>"              ;; what is even helm apropos?
+
+                ;; applications
+                "SPC a '"               ;; I use `SPC '` no need for this
+                "SPC a k"               ;; Don't know what paradox is, don't care
+                "SPC a u"               ;; Undo-tree-visualize is not even working
+                "SPC a P"               ;; I don't use `proced`
+                "SPC a Y"               ;; I don't use easy pg
+                )))
+    (mapc (lambda (key) (unbind-key key 'evil-normal-state-local-map)) keys))
+  )
+
 (defun custom/add-hooks ()
   "This is all the hooks I use"
   ;; Add a line on 80 symbols
@@ -1624,6 +1648,8 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (custom/unbind-useless-shit)
 
   (custom/evil-motions)
   (custom/generic-improvements)
