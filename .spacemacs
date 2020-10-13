@@ -298,7 +298,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.4)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.7)
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
@@ -872,10 +872,14 @@ lines downward first."
     :custom
     (calendar-week-start-day 1))
 
-  (use-package prodigy
+  ;; (use-package prodigy
+  ;;   :defer t
+  ;;   :config
+  ;;   (load "~/.dotfiles/prodigy_services"))
+
+  (use-package mmm-mode
     :defer t
-    :config
-    (load "~/.dotfiles/prodigy_services"))
+    :init (remove-hook 'markdown-mode-hook 'spacemacs/activate-mmm-mode)) ;; please, no. see https://github.com/syl20bnr/spacemacs/issues/11790
 
   (use-package emojify
     :defer t
@@ -1057,6 +1061,8 @@ lines downward first."
     :custom
     ;; --------- General
     (lsp-file-watch-threshold nil)  ;; always filewatch
+    (lsp-headerline-breadcrumb-enable t) ;; show breadcrumbs
+    (lsp-modeline-code-actions-enable t) ;; show if codeactions available
     (lsp-eldoc-enable-hover nil)  ;; do not show hover info in eldoc, I have lsp-ui-doc for that
     (lsp-print-io nil)  ;; no logs, they make js lag like a little bitch
     (lsp-prefer-capf t)  ;; try capf integration
@@ -1132,16 +1138,8 @@ lines downward first."
       (kbd "t k") 'exunit-rerun
       (kbd "t t") 'exunit-verify-single))
 
-  ;; (use-package flycheck-credo
-  ;;   :defer t
-  ;;   :init (add-hook 'flycheck-mode-hook #'flycheck-credo-setup)
-  ;;   :custom
-  ;;   (flycheck-elixir-credo-strict t)
-  ;;   :config
-  ;;   (flycheck-add-next-checker 'lsp
-  ;;                              '(t . elixir-credo)))
-
   ;; TODO: this works but breaks lsp checker completely
+  ;; see https://github.com/flycheck/flycheck/issues/1762
   ;; (add-hook 'lsp-mode-hook  (lambda ()
   ;;                            (if (eq major-mode 'elixir-mode)
   ;;                                (setq-local lsp-flycheck-live-reporting nil))))
@@ -1152,12 +1150,6 @@ lines downward first."
 
   ;; handy key to insert page-breaks
   (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'custom/insert-page-break)
-
-  ;;add and enable smyx mode
-  (use-package symex
-    :defer t
-    :hook (emacs-lisp-mode . symex-mode)
-    :bind (:map spacemacs-emacs-lisp-mode-map (("," . symex-mode-interface))))
 
   ;; functions highlighter
   (use-package highlight-function-calls
@@ -1191,6 +1183,7 @@ lines downward first."
     :hook (magit-mode . magit-todos-mode)
     :custom
     (magit-todos-update 60)
+    (magit-todos-group-by '(magit-todos-item-filename magit-todos-item-keyword))
     :config
     ;; set magit todos faces
     (setq magit-todos-keywords 'hl-todo-keyword-faces)
@@ -1601,11 +1594,15 @@ window to display persistent action buffer."
   )
 
 (defun custom/faces ()
-  "Customized faces for snazzy theme"
+  "Customized faces for different themes"
   ;; TODO: add faces for solair mode, no need for doom themes
   (custom/faces-all)
-  ;; (custom/faces-snazzy)
-  (custom/faces-doom-peacock)
+
+  (if (string= spacemacs--cur-theme "doom-snazzy")
+      (custom/faces-snazzy))
+
+  (if (string= spacemacs--cur-theme "doom-peacock")
+      (custom/faces-doom-peacock))
   ;; FIXME: this is ignored in emacsclient for some reason. Probably the same issue as with font configuration
   (custom/faces-set-extend-27)
   )
