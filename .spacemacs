@@ -1204,6 +1204,15 @@ lines downward first."
 
 (defun custom/magit-specific ()
   "Specific changes to magit and its subpackages"
+  (defun custom/bury-and-close (&optional ARG)
+    "Buries the current buffer and closes the window"
+    (bury-buffer (current-buffer))
+    (spacemacs/delete-window))
+
+  (use-package magit
+    :custom
+    (magit-bury-buffer-function 'custom/bury-and-close))
+
   (use-package magit-todos
     :defer t
     :hook (magit-mode . magit-todos-mode)
