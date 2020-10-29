@@ -716,6 +716,8 @@ lines downward first."
 
   (define-key evil-motion-state-map "g$" 'evil-end-of-line)
   (define-key evil-motion-state-map "$" 'evil-last-non-blank)
+  ;; Bind `evil-jump-backward' to "g b"
+  (define-key evil-motion-state-map "gb" 'evil-jump-backward)
   )
 
 (defun custom/generic-improvements ()
