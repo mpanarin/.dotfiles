@@ -96,6 +96,9 @@ export PATH="/home/m-panarin/.local/bin:$PATH"
 # Poetry
 export PATH="$PATH:/home/$USER/.poetry/bin"
 
+# Doom Emacs
+# export PATH="$PATH:/home/$USER/.emacs.d/bin"
+
 # Python startup
 export PYTHONSTARTUP="$(python -m jedi repl)"
 
