@@ -1,15 +1,3 @@
-;; ;; TODO: commit a8f2ee424ce895caff15f1ff973e241b8a946aba in master broke the shit. Check whatsup
-;; (load "~/projects/personal/elisp/tab-line/tab-line-orig.el")
-(with-eval-after-load 'company-box
-  (defun company-box--edges nil
-    "Override of original to fix for company-box to properly include the height of tab-line"
-    ;; FIXME: This is a harsh fix, As the original package is poorly maintained, I will probably fork it and use my own version with a few patches.
-    (or company-box--edges
-        (let* ((edges (window-edges nil t nil t))
-               (value (replace edges (list (+ (nth 1 edges) (window-tab-line-height))) :start1 1)))
-          (setq company-box--edges value)))))
-
-
 ;; TODO: create a layer out of this
 ;; TODO: tabs should never jump. I should probably cache their position.
 (global-tab-line-mode t)
