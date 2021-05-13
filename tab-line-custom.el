@@ -1,5 +1,10 @@
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
 ;; TODO: create a layer out of this
 ;; TODO: tabs should never jump. I should probably cache their position.
+
+;; Requires
+(require 'helm)
+
 (global-tab-line-mode t)
 (setq tab-line-tabs-buffer-list-function (lambda () (current-buffer)))
 
@@ -110,6 +115,19 @@ if INDEX out of range - do nothing."
   (interactive)
   (custom-tab-line--select-by-num 9))
 
+(defun custom-tab-line--helm-select-tab ()
+  "Select a tab to open with helm"
+  (interactive)
+  (helm
+   :buffer "*Helm Open Tab*"
+   :sources (helm-build-sync-source "Tabs:"
+              :candidates (lambda () (let ((buffers (funcall tab-line-tabs-function)))
+                                       (mapcar #'buffer-name buffers)
+                                       ))
+              :action '(("Open tab" . (lambda (candidate) (switch-to-buffer candidate t t))))
+              ))
+  )
+
 (defun custom-tab-line--close-other ()
   "Close all other tabs."
   ;; TODO: Allow passing optional buffer to keep.
@@ -163,6 +181,7 @@ if INDEX out of range - do nothing."
 ;; define prefix and keys
 (spacemacs/declare-prefix "wt" "tabs")
 (evil-leader/set-key
+  "wtt" 'custom-tab-line--helm-select-tab
   "wtD" 'custom-tab-line--close-other
   "wtV" 'custom-tab-line--close-non-visible
   "wth" 'custom-tab-line--switch-left
