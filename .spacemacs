@@ -52,7 +52,8 @@ This function should only modify configuration layer settings."
      prodigy
      better-defaults
      emacs-lisp
-     git
+     (git :variables
+          git-enable-magit-todos-plugin t)
      lsp
      dap
      (python :variables
@@ -99,11 +100,8 @@ This function should only modify configuration layer settings."
      games
      selectric
      systemd
-     restclient
-     ansible
      graphql
-     ;; tabs
-     ;; eaf
+     osx
      )
 
    ;; List of additional packages that will be installed without being
@@ -131,7 +129,6 @@ This function should only modify configuration layer settings."
                                       calfw-org                 ;; integration of calendar with org
                                       highlight-function-calls  ;; highlights function calls
                                       highlight-blocks          ;; highlights block, where cursor is
-                                      protobuf-mode             ;; mode for editing .proto protobuffers files
                                       coffee-mode               ;; mode for editing coffee-script files
                                       daemons                   ;; emacs UI for managing services from systemd and alike
                                       ox-reveal                 ;; add export to reveal.js from org
@@ -142,6 +139,8 @@ This function should only modify configuration layer settings."
                                       pkgbuild-mode             ;; editing major mode for PKGBUILD files
                                       dash-functional
                                       frame-local
+                                      exec-path-from-shell
+                                      direnv
 
 ;; packages needed for dev with Cask
                                       ;; f
@@ -305,14 +304,14 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.7)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.3)
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Fira Code"
-                               :size 15
+                               :size 13
                                :weight normal
                                :width normal)
 
@@ -425,16 +424,16 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
-   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-fullscreen-use-non-native t
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -507,7 +506,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server t
+   dotspacemacs-enable-server nil
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -596,13 +595,6 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; For some reason spacemacs font and transparency is not loaded properly on emacsclient startup
-  ;; https://github.com/syl20bnr/spacemacs/issues/10894
-  ;; (mapc
-  ;;  (lambda (item) (add-to-list 'default-frame-alist item)) '(
-  ;;                                                            (font . "-CTDB-Fira Code-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1")
-  ;;                                                            (alpha . (95 . 90))))
-  ;; (add-hook 'server-after-make-frame-hook 'custom/faces)
   )
 
 (defun dotspacemacs/user-load ()
@@ -624,31 +616,6 @@ dump."
     (if persps (persp-kill persps)))
   (spacemacs-buffer/refresh)
   (delete-other-windows))
-
-(defun custom/window-visible (b-name)
-  "Return whether B-NAME is visible."
-  (-> (-compose 'buffer-name 'window-buffer)
-      (-map (window-list))
-      (-contains? b-name)))
-
-(defun custom/show-debug-windows (session)
-  "Show debug windows."
-  (let ((lsp--cur-workspace (dap--debug-session-workspace session)))
-    (save-excursion
-      ;; display locals
-      (unless (custom/window-visible dap-ui--locals-buffer)
-        (dap-ui-locals))
-      ;; display sessions
-      (unless (custom/window-visible dap-ui--sessions-buffer)
-        (dap-ui-sessions)))))
-
-(defun custom/hide-debug-windows (session)
-  "Hide debug windows when all debug sessions are dead."
-  (unless (-filter 'dap--session-running (dap--get-sessions))
-    (and (get-buffer dap-ui--sessions-buffer)
-         (kill-buffer dap-ui--sessions-buffer))
-    (and (get-buffer dap-ui--locals-buffer)
-         (kill-buffer dap-ui--locals-buffer))))
 
 (defun custom/insert-page-break ()
   (interactive)
@@ -712,6 +679,12 @@ will turn into
               elems)
         (newline-and-indent)))))
 
+(defun custom/format-on-save ()
+  "On buffer save function triggering formatting for specific modes."
+  (pcase major-mode
+      ('elixir-mode (lsp-format-buffer))
+    ))
+
 
 ;; Custom functions for spacemacs and modes customizations
 
@@ -727,60 +700,24 @@ lines downward first."
 
   (define-key evil-motion-state-map "g$" 'evil-end-of-line)
   (define-key evil-motion-state-map "$" 'evil-last-non-blank)
-  ;; Bind `evil-jump-backward' to "g b"
   (define-key evil-motion-state-map "gb" 'evil-jump-backward)
-  ;;---------
-;;   (defun evil-collection-vterm-escape-stay ()
-;;     "Go back to normal state but don't move
-;; cursor backwards. Moving cursor backwards is the default vim behavior but it is
-;; not appropriate in some cases like terminals."
-;;     (setq-local evil-move-cursor-back nil))
-
-  ;; (add-hook 'vterm-mode-hook (lambda () (setq-local evil-move-cursor-back nil)))
   )
 
 (defun custom/generic-improvements ()
   "Generic improvements and packages that are either too small, or not fitting other categories."
-  ;; garbage-collect on focus out. Increases snappiness
-  (add-hook 'focus-out-hook #'garbage-collect)
+  (add-hook 'focus-out-hook #'garbage-collect)   ;; garbage-collect on focus out. Increases snappiness
+  (fringe-mode '(16 . 8))                        ;; increase the left fringe width
+  (setq auto-save-no-message t                   ;; no messages on autosaving please (27.1)
+        spacemacs-buffer--current-note-type nil  ;; remove note from home buffer
+        enable-local-variables :all              ;; allow unsafe vars in dir-locals
+        enable-local-eval t                      ;; allow evals in dir-locals
+        )
 
-  ;; increase the left fringe width
-  (fringe-mode '(16 . 8))
-
-  ;; no messages on autosaving please (27.1)
-  (setq auto-save-no-message t)
-
-  (use-package org-pomodoro
-    :defer t
-    ;; restart pomodoro timer on the same task when break is finished
-    :hook (org-pomodoro-break-finished . (lambda ()
-                                         (point-to-register 1)
-                                         (org-clock-goto)
-                                         (org-pomodoro)
-                                         (register-to-point 1)))
-    :custom
-    ;; use VLC as a player
-    (org-pomodoro-audio-player "/usr/bin/cvlc --play-and-exit")
-    ;; Set the best sound
-    (org-pomodoro-long-break-sound "/home/m-panarin/Downloads/bruh.mp3")
-    (org-pomodoro-short-break-sound "/home/m-panarin/Downloads/bruh.mp3")
-    (org-pomodoro-finished-sound "/home/m-panarin/Downloads/bruh.mp3")
-    )
-
-  ;; Add restclient package
-  (use-package restclient
-    :defer t
-    :config
-    (spacemacs/set-leader-keys-for-major-mode 'restclient-mode (kbd ",") 'restclient-http-send-current))
-
-  ;; allow usage of russian keyboard
-  (use-package reverse-im
+  (use-package reverse-im  ;; allow usage of russian keyboard
     :demand
     :config
     (reverse-im-activate "russian-computer"))
-
-  ;; associate epub file with nov-mode
-  (use-package nov
+  (use-package nov  ;; associate epub file with nov-mode
     :defer t
     :mode ("\\.epub\\'" . nov-mode)
     :custom
@@ -790,65 +727,42 @@ lines downward first."
 	        ("C-j" . nov-next-document)
 	        ("C-k" . nov-previous-document)
 	        ("C-l" . nov-goto-toc)))
-
-  ;; configurate writeroom
-  (use-package writeroom-mode
+  (use-package writeroom-mode  ;; configurate writeroom
     :commands (writeroom-mode writeroom--enable writeroom--disable)
     :defer t
     :custom
     (writeroom-width 125))
-
-  ;; enable Jolly Cooperation everywhere
-  (use-package solaire-mode
+  (use-package solaire-mode  ;; enable Jolly Cooperation everywhere
     :demand
     :init
     (solaire-global-mode +1))
-
-  (use-package company
-    :hook (lsp-mode . (lambda () (setq-local company-format-margin-function #'company-vscode-dark-icons-margin))))
-
-
-  ;; configure webmode
-  (use-package web-mode
+  (use-package web-mode  ;; configure webmode
     :defer t
     :mode "\\.mako\\'"
     :custom
     (web-mode-markup-indent-offset 2))
-
-  ;; Make csv open always aligned with delimiters
-  (use-package csv-mode
+  (use-package csv-mode  ;; Make csv open always aligned with delimiters
     :defer t
     :hook (csv-mode . (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))  ;; TODO: this probably can be done better
     )
-
-  ;; autopair stuff in snippets and org
-  (use-package smartparens
+  (use-package smartparens  ;; autopair stuff in snippets and org
     :defer t
     :hook (org-mode . smartparens-mode)
     )
-
   (use-package yasnippet
     :defer t
     :config
     (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
     (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
     )
-
-  (use-package protobuf-mode
-    :defer t
-    :mode "\\.proto\\'")
-
   (use-package pdf-tools
     :defer t
     :custom
-    (pdf-view-display-size 'fit-height))
-
-  ;; used in rjsx for editing of jsx bits.
-  (use-package sgml-mode
+    (pdf-view-display-size 'fit-page))
+  (use-package sgml-mode  ;; used in rjsx for editing of jsx bits.
     :defer t
     :custom
     (sgml-basic-offset 4))
-
   (use-package vterm
     :defer t
     :config
@@ -860,17 +774,14 @@ lines downward first."
     (:map vterm-mode-map
           ("C-c C-d" . vterm-send-ctrl-d)
           ("C-c C-x" . vterm-send-C-x)))
-
   (use-package flycheck
     :defer t
     :custom
     (flycheck-display-errors-delay 0.3))
-
-  (use-package evil-surround            ;; FIXME: this interferes with "c s" surrounding
+  (use-package evil-surround
     :defer t
     :config
-    (advice-add 'evil-surround-region :after (lambda (&rest args) (execute-kbd-macro "gv") (evil-forward-char))))
-
+    (advice-add 'evil-surround-region :after (lambda (&rest args) (execute-kbd-macro "gv") (evil-forward-char))))  ;; FIXME: this interferes with "c s" surrounding
   (use-package ibuffer
     :defer t
     :config
@@ -880,36 +791,24 @@ lines downward first."
     :bind
     (:map evil-normal-state-local-map
           ("SPC b b" . ibuffer)))
-
-  (use-package calendar
+  (use-package calendar  ;; TODO: probably should be dropped. Don't really use it anymore
     :defer t
     :custom
     (calendar-week-start-day 1))
-
-  ;; (use-package prodigy
-  ;;   :defer t
-  ;;   :config
-  ;;   (load "~/.dotfiles/prodigy_services"))
-
   (use-package mmm-mode
     :defer t
     :init (remove-hook 'markdown-mode-hook 'spacemacs/activate-mmm-mode)) ;; please, no. see https://github.com/syl20bnr/spacemacs/issues/11790
-
   (use-package emojify
     :defer t
-    :hook ((magit-mode vterm-mode) . emojify-mode))
-
+    :hook ((magit-mode) . emojify-mode))
   (use-package persp-mode
     :defer t
     :custom
     (persp-autokill-buffer-on-remove t))
-
-  ;; remove note from home buffer
-  (setq spacemacs-buffer--current-note-type nil)
-  ;; allow unsafe vars in dir-locals
-  (setq enable-local-variables :all)
-  ;; allow evals in dir-locals
-  (setq enable-local-eval t)
+  (use-package direnv
+    :config
+    (direnv-mode))
+  (use-package all-the-icons)
   )
 
 (defun custom/ligatures ()
@@ -990,49 +889,33 @@ lines downward first."
 
 (defun custom/add-hooks ()
   "This is all the hooks I use"
-  ;; Add a line on 80 symbols
-  (add-hook 'python-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))
-  (add-hook 'elixir-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))
-  ;; Make cursor fixed in vterm
-  (add-hook 'vterm-mode-hook (lambda () (setq-local evil-move-cursor-back nil)))
+  (add-hook 'python-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))  ;; Add a line on 80 symbols
+  (add-hook 'vterm-mode-hook (lambda () (setq-local evil-move-cursor-back nil)))    ;; Make cursor fixed in vterm
+  (add-hook 'before-save-hook #'custom/format-on-save)                              ;; Add auto-formatting after save
   )
 
 (defun custom/spacemacs-improvements ()
   "Several fixes from spacemacs issues"
-  ;; do not kill emacs daemon on exit
-  (evil-leader/set-key "q q" 'spacemacs/frame-killer)
-  (evil-leader/set-key "q Q" 'spacemacs/prompt-kill-emacs)
-  ;; Don't remember what it was fixing :\
-  (ido-mode -1)
-  ;; Disable useless parts of spaceline
-  (with-eval-after-load 'spaceline
+  ;; TODO: switch to use-package here
+  (with-eval-after-load 'spaceline    ;; Disable useless parts of spaceline
     (spaceline-toggle-minor-modes-off)
     (spaceline-toggle-purpose-off))
-  ;; Make auto-save more frequent and less painful
-  (setq auto-save-interval 100)
-  (setq auto-save-timeout 5)
-  ;; No lock files plz
-  (setq create-lockfiles nil)
-  ;; Always follow symlinks pls
-  (setq vc-follow-symlinks t)
-  ;; Please use transparency
-  (spacemacs/enable-transparency))
+
+  (setq auto-save-mode nil            ;; switch to a better autosave mode. at least in OSX
+        auto-save-default nil         ;; switch to a better autosave mode
+        auto-save-visited-mode t      ;; switch to a better autosave mode
+        auto-save-visited-interval 5  ;; Make auto-save more frequent and less painful
+        create-lockfiles nil          ;; No lock files plz
+        vc-follow-symlinks t          ;; Always follow symlinks pls
+        )
+  )
 
 (defun custom/dap-generic ()
   "Generic LSP dap changes"
 
-  ;; FIXME: this should be fixed
-  ;; (add-hook 'dap-stopped-hook 'custom/show-debug-windows)
-  ;; (add-hook 'dap-terminated-hook 'custom/hide-debug-windows)
-  ;; (use-package dap-mode
-  ;;   :defer t
-  ;;   :custom
-  ;;   (dap-python-terminal "xterm -e "))
-
   (define-minor-mode custom-debug-mode
     "Remap some keybinds, specific to python and dap"
     :global nil
-
 
     (defun custom/toggle-breakpoint-generic ()
       (interactive)
@@ -1046,122 +929,54 @@ lines downward first."
       (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") 'custom/toggle-breakpoint-generic))
   (add-hook 'lsp-mode-hook (lambda () (custom-debug-mode t))))
 
-(defun custom/tabs-generic ()
-  ;; (use-package centaur-tabs
-  ;;   :demand
-  ;;   :config
-  ;;   (centaur-tabs-mode t)
-  ;;   (setq centaur-tabs-style "bar")
-  ;;   (setq centaur-tabs-height 32)
-  ;;   (setq centaur-tabs-set-icons t)
-  ;;   (setq centaur-tabs-set-bar 'over)
-  ;;   (setq centaur-tabs-set-close-button nil)
-  ;;   (setq centaur-tabs-cycle-scope 'tabs)
-  ;;   (centaur-tabs-group-by-projectile-project)
-  ;;   (defun centaur-tabs-hide-tab (x)
-  ;;     (let ((name (format "%s" x)))
-	;;       (or
-  ;;        (window-dedicated-p (selected-window))
-	;;        (string-prefix-p "*" name)
-	;;        (string-prefix-p "magit" name)
-	;;        )))
-  ;;   :hook (
-  ;;    (dashboard-mode . centaur-tabs-local-mode)
-  ;;    (treemacs-mode . centaur-tabs-local-mode)
-  ;;    (spacemacs-buffer-mode . centaur-tabs-local-mode)
-  ;;    (term-mode . centaur-tabs-local-mode)
-  ;;    (calendar-mode . centaur-tabs-local-mode)
-  ;;    (org-agenda-mode . centaur-tabs-local-mode)
-  ;;    (helpful-mode . centaur-tabs-local-mode)
-  ;;    (dired-mode . centaur-tabs-local-mode)
-  ;;    (zone-mode . centaur-tabs-local-mode)
-  ;;    (helm-mode . centaur-tabs-local-mode))
-  ;;   :bind
-  ;;   ("C-<prior>" . centaur-tabs-backward)
-  ;;   ("C-<next>" . centaur-tabs-forward)
-  ;;   ("C-c t" . centaur-tabs-counsel-switch-group)
-  ;;   (:map evil-normal-state-map
-	;;         ("g l" . centaur-tabs-forward)
-	;;         ("g h" . centaur-tabs-backward)
-	;; 	)
-  ;;   )
+(defun custom/centaur-tabs ()
+  "Not currently used"
   (use-package centaur-tabs
+    :demand
     :config
-    (setq centaur-tabs-style "bar"
-      centaur-tabs-height 32
-      centaur-tabs-set-icons t
-      centaur-tabs-set-modified-marker t
-      centaur-tabs-show-navigation-buttons t
-      centaur-tabs-set-close-button nil
-      centaur-tabs-cycle-scope 'tabs
-      centaur-tabs-set-bar 'under
-      x-underline-at-descent-line t)
-    (centaur-tabs-headline-match)
-    (centaur-tabs-enable-buffer-reordering)
-    (setq centaur-tabs-adjust-buffer-order t)
-    (setq uniquify-separator "/")
-    (setq uniquify-buffer-name-style 'forward)
-    (defun centaur-tabs-buffer-groups ()
-      "`centaur-tabs-buffer-groups' control buffers' group rules.
-
-  Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-  All buffer name start with * will group to \"Emacs\".
-  Other buffer group by `centaur-tabs-get-group-name' with project name."
-      (list
-        (cond
-    ((or (string-equal "*" (substring (buffer-name) 0 1))
-        (memq major-mode '(magit-process-mode
-          magit-status-mode
-          magit-diff-mode
-          magit-log-mode
-          magit-file-mode
-          magit-blob-mode
-          magit-blame-mode
-          )))
-    "Emacs")
-    ((derived-mode-p 'prog-mode)
-    "Editing")
-    ((derived-mode-p 'dired-mode)
-    "Dired")
-    ((memq major-mode '(helpful-mode
-            help-mode))
-    "Help")
-    ((memq major-mode '(org-mode
-            org-agenda-clockreport-mode
-            org-src-mode
-            org-agenda-mode
-            org-beamer-mode
-            org-indent-mode
-            org-bullets-mode
-            org-cdlatex-mode
-            org-agenda-log-mode
-            diary-mode))
-    "OrgMode")
-    (t
-    (centaur-tabs-get-group-name (current-buffer))))))
-    :hook
-    (treemacs-mode . centaur-tabs-local-mode)
-    (spacemacs-buffer-mode . centaur-tabs-local-mode)
-    (dired-mode . centaur-tabs-local-mode)
-    (zone-mode . centaur-tabs-local-mode)
-    (helm-mode . centaur-tabs-local-mode)
-    (dashboard-mode . centaur-tabs-local-mode)
-    (term-mode . centaur-tabs-local-mode)
-    (calendar-mode . centaur-tabs-local-mode)
-    (org-agenda-mode . centaur-tabs-local-mode)
-    (helpful-mode . centaur-tabs-local-mode)
+    (centaur-tabs-mode t)
+    (setq centaur-tabs-style "bar")
+    (setq centaur-tabs-height 32)
+    (setq centaur-tabs-set-icons t)
+    (setq centaur-tabs-set-bar 'over)
+    (setq centaur-tabs-set-close-button nil)
+    (setq centaur-tabs-cycle-scope 'tabs)
+    (centaur-tabs-group-by-projectile-project)
+    (defun centaur-tabs-hide-tab (x)
+      (let ((name (format "%s" x)))
+	      (or
+         (window-dedicated-p (selected-window))
+	       (string-prefix-p "*" name)
+	       (string-prefix-p "magit" name)
+	       )))
+    :hook (
+     (dashboard-mode . centaur-tabs-local-mode)
+     (treemacs-mode . centaur-tabs-local-mode)
+     (spacemacs-buffer-mode . centaur-tabs-local-mode)
+     (term-mode . centaur-tabs-local-mode)
+     (calendar-mode . centaur-tabs-local-mode)
+     (org-agenda-mode . centaur-tabs-local-mode)
+     (helpful-mode . centaur-tabs-local-mode)
+     (dired-mode . centaur-tabs-local-mode)
+     (zone-mode . centaur-tabs-local-mode)
+     (helm-mode . centaur-tabs-local-mode))
     :bind
+    ("C-<prior>" . centaur-tabs-backward)
+    ("C-<next>" . centaur-tabs-forward)
+    ("C-c t" . centaur-tabs-counsel-switch-group)
     (:map evil-normal-state-map
-      ("g t" . centaur-tabs-forward)
-      ("g T" . centaur-tabs-backward)))
+	        ("g l" . centaur-tabs-forward)
+	        ("g h" . centaur-tabs-backward)
+		)
+    )
   )
-
 
 (defun custom/tab-line-mode ()
   (load "~/.dotfiles/tab-line-custom"))
 
 (defun custom/lsp-generic ()
   "Generic LSP changes"
+
   (use-package lsp-mode
     ;; :load-path "/home/m-panarin/projects/personal/elisp/lsp-mode/"  ;; when custom load is needed
     :defer t
@@ -1181,6 +996,7 @@ lines downward first."
     (lsp-modeline-diagnostics-enable nil)     ;; disable diagnostics in modeline, they are already present in spacemacs
     (lsp-modeline-code-actions-enable nil)    ;; disable code actions in modeline, they are already present in spacemacs
     (lsp-lens-enable t)                       ;; enable lenses if server supports them
+    (lsp-headerline-arrow "‣")                ;; change the breadcrumbs separator
 
     ;; PYLS configs
     (lsp-pyls-plugins-rope-completion-enabled nil)             ;; disable garbage rope completion in pyls
@@ -1197,6 +1013,11 @@ lines downward first."
 
     ;; SQLS configs
     (lsp-sqls-server "~/go/bin/sqls")   ;; path to language server
+
+    :config
+    ;; Hacky way to update the var
+    (mapc (lambda (val) (add-to-list 'lsp-file-watch-ignored-directories val))
+          '("[/\\\\]_build\\'" "[/\\\\]deps\\'" "[/\\\\].elixir_ls\\'"))
     )
   (use-package lsp-ui
     :defer t
@@ -1206,37 +1027,29 @@ lines downward first."
       (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
       (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
     :custom
+
     ;; LSP-UI-DOC
-    (lsp-ui-doc-position 'top)
-    ;; use webkit if available
-    (lsp-ui-doc-use-webkit t)
-    ;; add function signature to the buffer
-    (lsp-ui-doc-include-signature t)
-    ;; (lsp-ui-doc-use-childframe nil)
-
+    (lsp-ui-doc-position 'top)        ;; always keep doc at the top
+    (lsp-ui-doc-include-signature t)  ;; add function signature to the buffer
+
     ;; LSP-UI-SIDELINE
-    ;; do not show hover info, I have lsp-ui-doc for that
-    (lsp-ui-sideline-show-hover nil)
-    ;; disable code actions as they are pretty lame
-    (lsp-ui-sideline-show-code-actions nil)
-
+    (lsp-ui-sideline-show-hover nil)         ;; do not show hover info, I have lsp-ui-doc for that
+    (lsp-ui-sideline-show-code-actions nil)  ;; disable code actions as they are pretty lame
+
     ;; LSP-UI-PEEK
-    ;; always use fontify, otherwise highlight is broken in the left half
-    (lsp-ui-peek-fontify 'always))
+    (lsp-ui-peek-fontify 'always))  ;; always use fontify, otherwise highlight is broken in the left half
   )
 
 (defun custom/python-specific ()
   "Changes specific to python-mode"
-  ;; add pytest keybinds
-  ;; FIXME: this pytest package requires some fixing
   (use-package python-pytest
     :defer t
     :after python
-    :bind (:map spacemacs-python-mode-map (("t" . python-pytest-popup)))
+    :bind (:map spacemacs-python-mode-map (("t" . python-pytest-popup)))  ;; add pytest keybinds
     :custom
     (python-pytest-arguments '("--color" "--cov"))
     :config
-    (magit-define-popup-switch 'python-pytest-popup ?C "Converage" "--cov")
+    (magit-define-popup-switch 'python-pytest-popup ?C "Coverage" "--cov")
     )
   )
 
@@ -1245,6 +1058,9 @@ lines downward first."
   (use-package elixir-mode
     :defer t
     :config
+    (add-hook 'elixir-mode-hook '(lambda () (progn
+                                              (setq-local fill-column 98)
+                                              (display-fill-column-indicator-mode 1))))
     (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m t") "tests" "testing related functionality")
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
       (kbd "t b") 'exunit-verify-all
@@ -1261,15 +1077,11 @@ lines downward first."
 
 (defun custom/elisp-specific ()
   "Changes specific to emacs-lisp-mode"
+  (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'custom/insert-page-break)  ;; handy key to insert page-breaks
 
-  ;; handy key to insert page-breaks
-  (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode (kbd "l") 'custom/insert-page-break)
-
-  ;; functions highlighter
   (use-package highlight-function-calls
     :defer t
-    :hook (emacs-lisp-mode . highlight-function-calls-mode))
-
+    :hook (emacs-lisp-mode . highlight-function-calls-mode))  ;; functions highlighter in elisp mode
   (use-package highlight-blocks
     :defer t
     :custom
@@ -1287,23 +1099,17 @@ lines downward first."
     :custom
     (sql-postgres-program "psql")
     (sql-postgres-options '("-P" "pager=off"))
-    :config
-    ;; load file with sql connections
-    (load "~/.dotfiles/sql_connections")
     )
   )
 
 (defun custom/magit-specific ()
   "Specific changes to magit and its subpackages"
-  ;; (defun custom/bury-and-close (&optional ARG)
-  ;;   "Buries the current buffer and closes the window"
-  ;;   (bury-buffer (current-buffer))
-  ;;   (spacemacs/delete-window))
-
-  ;; (use-package magit
-  ;;   :custom
-  ;;   (magit-bury-buffer-function 'custom/bury-and-close))
-
+  (use-package magit
+    :defer t
+    :config
+    (define-key magit-diff-section-base-map [remap magit-visit-thing] 'magit-diff-visit-file-other-window)
+    (define-key magit-diff-section-base-map (kbd "C-RET") 'magit-diff-visit-file)
+    )
   (use-package magit-todos
     :defer t
     :hook (magit-mode . magit-todos-mode)
@@ -1311,8 +1117,7 @@ lines downward first."
     (magit-todos-update 60)
     (magit-todos-group-by '(magit-todos-item-filename magit-todos-item-keyword))
     :config
-    ;; set magit todos faces
-    (setq magit-todos-keywords 'hl-todo-keyword-faces)
+    (setq magit-todos-keywords 'hl-todo-keyword-faces)  ;; set magit todos faces
     :bind
     (:map magit-todos-section-map
           (("j" . evil-next-visual-line)
@@ -1442,29 +1247,22 @@ lines downward first."
   (use-package org
     :defer t
     :custom
-    ;; Autohide markup elements
-    (org-hide-emphasis-markers t)
-    ;; add pretty entities
-    (org-pretty-entities t)
-    ;; log state changes to drawer
-    (org-log-into-drawer t)
-    ;; add agenda files
-    (org-agenda-files (append
+    (org-hide-emphasis-markers t)  ;; Autohide markup elements
+    (org-pretty-entities t)        ;; add pretty entities
+    (org-log-into-drawer t)        ;; log state changes to drawer
+    (org-agenda-files (append      ;; add agenda files
                        (file-expand-wildcards "~/projects/EVO/evo.org")
-                       ;; (directory-files-recursively "~/Desktop/python_course_program" "**.org")  No longer needed
                        (file-expand-wildcards "~/org/*.org")))
     :bind
     (:map org-mode-map
           ("RET" . newline-and-indent))
     :init
     (require 'ox-reveal))
-
   (use-package helm-org-rifle
     :defer t
     :bind
     (:map evil-normal-state-local-map
           ("SPC a o R" . helm-org-rifle-agenda-files)))
-
   (use-package calfw-org
     :defer t
     :bind
@@ -1475,7 +1273,6 @@ lines downward first."
            ("A" . org-agenda-list))
     :map evil-normal-state-local-map
           ("SPC a o a" . cfw:open-org-calendar)))
-
   (use-package org-present
     :defer t
     :config
@@ -1487,13 +1284,11 @@ lines downward first."
                                             (setq-local global-hl-line-mode t)
                                             (setq display-line-numbers t)
                                             (writeroom--disable))))
-
+  ;; TODO: maybe it is present in some layer. Check it
   ;; (use-package org-re-reveal
   ;;   :after org
   ;;   :demand t)
-
-  ;; fancy org priorities
-  (use-package org-fancy-priorities
+  (use-package org-fancy-priorities  ;; fancy org priorities
     :defer t
     :hook
     (org-mode . org-fancy-priorities-mode)
@@ -1509,47 +1304,34 @@ lines downward first."
     :mode (("README\\.md\\'" . gfm-mode))
     :defer t
     :custom
-    ;; Always hide markup in markdown-mode
-    (markdown-hide-markup t)
-    ;; Hide and shorten URLs in markdown
-    (markdown-hide-urls t))
-  )
+    (markdown-hide-markup t)  ;; Always hide markup in markdown-mode
+    (markdown-hide-urls t)    ;; Hide and shorten URLs in markdown
+    ))
 
 (defun custom/treemacs-specific ()
   "Changes specific to treemacs-mode"
   (use-package treemacs
     :defer t
     :config
-    ;; Treemacs use deferred git-mode
-    (treemacs-git-mode 'deferred)
-    ;; Hide dotfiles by default
-    (treemacs-toggle-show-dotfiles)
-    ;; Ignore *.pyc files
-    (add-to-list 'treemacs-ignored-file-predicates
+    (treemacs-git-mode 'deferred)  ;; Treemacs use deferred git-mode
+    (treemacs-toggle-show-dotfiles)  ;; Hide dotfiles by default
+    (add-to-list 'treemacs-ignored-file-predicates  ;; Ignore *.pyc files
                  (lambda (filename filepath)
                    (string-match-p "\.pyc$" filename)))
-    ;; autohide files ignored by git please
-    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
-    ;; set project map to 'p' as binding maps to maps is not working in :bind :\
-    (define-key treemacs-mode-map (kbd "p") treemacs-project-map)
-    ;; set workspace map to 'W' as binding maps to maps is not working in :bind :\
-    (define-key treemacs-mode-map (kbd "M-w") treemacs-workspace-map)
+    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)  ;; autohide files ignored by git please
+    (define-key treemacs-mode-map (kbd "p") treemacs-project-map)  ;; set project map to 'p' as binding maps to maps is not working in :bind :\
+    (define-key treemacs-mode-map (kbd "M-w") treemacs-workspace-map)  ;; set workspace map to 'W' as binding maps to maps is not working in :bind :\
     :custom
-    ;; keep the width locked
-    (treemacs-lock-width 1)
+    (treemacs-lock-width 1)  ;; keep the width locked
     :bind
     (:map treemacs-mode-map
+          ;; Revert navigation changes
+          ("<treemacs-state> h" . treemacs-root-up)
+          ("<treemacs-state> l" . treemacs-root-down)
           ;; Swap treemacs horizontal/vertical ace
           ("o a h" . treemacs-visit-node-ace-vertical-split)
           ("o a v" . treemacs-visit-node-ace-horizontal-split)))
-
-  ;; (use-package treemacs-persp
-  ;;   :defer t
-  ;;   :config
-  ;;   (treemacs-set-scope-type 'Perspectives))
-
-  ;; Show treemacs icons in dired
-  (use-package treemacs-icons-dired
+  (use-package treemacs-icons-dired  ;; Show treemacs icons in dired
     :defer t
     :hook (dired-mode . treemacs-icons-dired-mode)))
 
@@ -1568,52 +1350,29 @@ lines downward first."
     (:map helm-ag-map
           ;; Helm-ag please. Allow me to move cursor normally
           ("<left>" . backward-char)
-          ("<right>" . forward-char)))
-
-  ;; Fix for the window splits
-  (defun helm-persistent-action-display-window (&key split)
-    "Return the window that will be used for persistent action.
-If SPLIT is `t' window is split in persistent action, if it has the
-special symbol `never' don't split, if it is `nil' normally don't
-split but this may happen in case of dedicated-windows or unsuitable
-window to display persistent action buffer."
-    (with-helm-window
-      (setq helm-persistent-action-display-window (get-mru-window))))
-  )
-
-(defun custom/eaf ()
-  ;; add emacs application framework
-  (use-package eaf
-    :defer t
-    :custom
-    (eaf-python-command "/usr/bin/python3"))
-  )
+          ("<right>" . forward-char))))
 
 (defun custom/generic-define-keys ()
   "Generic key defines I use, that are not tied to some specific mode,
    or mode I rarely use."
-  ;; Unbind annoying sticky M-x on <menu>
-  (define-key global-map (kbd "<menu>") nil)
+  (define-key global-map (kbd "<menu>") nil)                                                          ;; Unbind annoying sticky M-x on <menu>
   ;; Swap safe revert buffer and persp remove buffer
   (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
-  ;; Bind copy whole buffer to lowercase y (whatafaqerino)
-  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)
-  ;; Bind kill-all-persp
-  (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)
-  ;; Bind open agenda file
-  (define-key evil-normal-state-local-map (kbd "SPC a o f") 'custom/helm-open-agenda-file)
-  ;; Bind expand-region
-  (define-key evil-normal-state-local-map (kbd "SPC x x") 'custom/expand-region)
+  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)  ;; Bind copy whole buffer to lowercase y (whatafaqerino)
+  (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)                     ;; Bind kill-all-persp
+  (define-key evil-normal-state-local-map (kbd "SPC a o f") 'custom/helm-open-agenda-file)            ;; Bind open agenda file
+  (define-key evil-normal-state-local-map (kbd "SPC x x") 'custom/expand-region)                      ;; Bind expand-region
   )
 
 (defun custom/zoning ()
   "Changes specific to zoning"
   (use-package zone
-    ;; :defer t
+    :defer t
     :config
     (zone-when-idle 240)
     :custom
+    (zone-timer nil)
     (zone-programs [
                     zone-pgm-jitter
                     zone-pgm-putz-with-case
@@ -1653,7 +1412,6 @@ window to display persistent action buffer."
     (custom/extend-face-group 'org-faces)
     (custom/extend-face-group 'markdown-faces)
     (custom/extend-face-group 'rst-faces)
-    ;; (custom/extend-face-group 'company-box)
     (with-eval-after-load 'highlight-blocks
       (custom/extend-face-group 'highlight-blocks-faces))
     )
@@ -1733,18 +1491,10 @@ window to display persistent action buffer."
 
   (if (string= spacemacs--cur-theme "doom-peacock")
       (custom/faces-doom-peacock))
-  ;; FIXME: this is ignored in emacsclient for some reason. Probably the same issue as with font configuration
+
   (custom/faces-set-extend-27)
   )
 
-(defun custom/load-dev ()
-  "Load packages that I am developing"
-  (interactive)
-  ;; (load "~/projects/personal/elisp/pendulum.el/pendulum.el")
-  ;; (load "~/projects/personal/elisp/lsp-mode/lsp-mode.el")
-  ;; (load "~/projects/personal/elisp/lsp-mode/lsp-pyls.el")
-  ;; (load "~/projects/personal/elisp/lsp-mode/lsp-clients.el")
-  )
 
 
 (defun dotspacemacs/user-config ()
@@ -1755,6 +1505,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (exec-path-from-shell-initialize) ;; This is required in OSX as variables are not getting loaded from .zshrc
   (custom/unbind-useless-shit)
 
   (custom/evil-motions)
@@ -1769,7 +1520,7 @@ you should place your code here."
   (custom/lsp-generic)
   (custom/dap-generic)
 
-  ;; (custom/tabs-generic)
+  ;; (custom/centaur-tabs)
   (custom/tab-line-mode)
 
   (custom/python-specific)
@@ -1782,21 +1533,10 @@ you should place your code here."
   (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
-  ;; (custom/eaf)
 
   (custom/zoning)
 
   (custom/faces)
-
-  ;; (with-eval-after-load 'dap-mode
-  ;;   (load "~/.dotfiles/dap-debuggers.el"))
-
-  ;; (custom/load-dev)
-
-  ;; (load "~/projects/personal/elisp/lets-mode/lets-mode")
-  ;; (load "~/Downloads/poetic")
-  ;; (with-eval-after-load 'poetic
-  ;;   (add-to-list 'auto-mode-alist '("\\.poetic\\'" . poetic-mode)))
  )
 
 ;; Do not write anything past this comment. This is where Emacs will
