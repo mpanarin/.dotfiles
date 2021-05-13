@@ -11,13 +11,12 @@ COMPLETION_WAITING_DOTS="true"
 if [[ -z $INSIDE_EMACS ]]; then
     # TMUX startup
     export PATH="$PATH:/home/$USER/.gem/ruby/2.7.0/bin"
-    source ~/.gem/ruby/2.7.0/gems/tmuxinator-1.1.4/completion/tmuxinator.zsh
     ZSH_TMUX_AUTOSTART=false
-    eval $(~/tmux_get_startup_command)
+    eval $(python3 ~/tmux_get_startup_command)
     powerline-config tmux setup
-    plugins=(git python django docker extract lol mix pip elixir poetry kubectl asdf vi-mode)
+    plugins=(git python docker extract lol mix pip elixir asdf zsh-autosuggestions zsh-vi-mode zsh-syntax-highlighting)
 else
-    plugins=(git python django docker extract lol mix pip elixir poetry kubectl asdf)
+    plugins=(git python docker extract lol mix pip elixir asdf zsh-syntax-highlighting)
     vterm_printf(){
         if [ -n "$TMUX" ]; then
             # Tell tmux to pass the escape sequences through
@@ -32,22 +31,21 @@ else
     }
 fi
 
-source $ZSH/oh-my-zsh.sh
+# remove warning on insecure completions
+ZSH_DISABLE_COMPFIX=true
 
-# export LANG=en_US.UTF-8
+source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -z $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+  export EDITOR='vim'
 else
   export EDITOR='vi'
 fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
+# TODO: Check up on this
 # ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Spaceship theme customization
 SPACESHIP_USER_SHOW=false
@@ -72,51 +70,55 @@ SPACESHIP_BATTERY_SHOW=false
 SPACESHIP_DOCKER_SHOW=false
 
 # Enable zsh autosuggestions
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=0'
-bindkey '^ ' autosuggest-accept
+bindkey '\e ' autosuggest-accept
 
-# Enable zsh syntax highlight
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
+# TODO: probably not needed?
 # VIRTUALENV WRAPPER STUFFS
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-source /usr/bin/virtualenvwrapper.sh
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+# source /usr/bin/virtualenvwrapper.sh
 
 # Enable fzf
 export FZF_TMUX=1
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# added by pipsi (https://github.com/mitsuhiko/pipsi)
-export PATH="/home/m-panarin/.local/bin:$PATH"
-
-# Poetry
-export PATH="$PATH:/home/$USER/.poetry/bin"
-
-# Doom Emacs
-# export PATH="$PATH:/home/$USER/.emacs.d/bin"
-
-# Python startup
-export PYTHONSTARTUP="$(python -m jedi repl)"
-
 # asdf-vm configs
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+# . $HOME/.asdf/asdf.sh
+# . $HOME/.asdf/completions/asdf.bash
+export PATH="$HOME/.asdf/shims:$PATH"
+
+# potential fix for pasting
+pasteinit() {
+    OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+    zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+}
+
+pastefinish() {
+    zle -N self-insert $OLD_SELF_INSERT
+}
+zstyle :bracketed-paste-magic paste-init pasteinit
+zstyle :bracketed-paste-magic paste-finish pastefinish
+# end of potential fix for pasting
 
 # disable automatic cd in zsh
 unsetopt AUTO_CD
 
+# jenv for closure
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
 # Aliases
+alias cdr='cd $(git rev-parse --show-toplevel)'
+alias cdrs='cd $(git rev-parse --show-toplevel)/source'
+
 alias gdt='git difftool'
 
 alias mux='tmuxinator'
 
 alias doco=docker-compose
-alias doco_rebuild='doco down -v && doco up --build'
-alias doco_log='docker-compose logs'
 
 function omae_wa_mou_shindeiru() {
     echo 'NANI?!'
@@ -128,18 +130,6 @@ function omae_wa_mou_shindeiru() {
         pkill $1
     fi
 }
-
-function ranger-cd {
-    tempfile="$(mktemp -t tmp.XXXXXX)"
-    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    test -f "$tempfile" &&
-        if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-            cd -- "$(cat "$tempfile")"
-        fi
-    rm -f -- "$tempfile"
-}
-
-bindkey -s '^o' 'ranger-cd\n'
 
 function tnew() {
     if [ -z "$1" ]
@@ -161,10 +151,12 @@ function tatt() {
     tmux detach-client -t /dev/pts/1 -E "tmux attach $name"
 }
 
-alias vim='nvim'
+# needed for Zsh-vi-mode to work with autosuggest
+function zvm_after_init() {
+    zvm_bindkey viins '\e ' autosuggest-accept
+}
 
-alias gsubsi='g submodule init && g submodule sync && g submodule update'
-alias gsubi='g submodule update --init'
+alias tkill='tmux kill-session -t'
 
 alias xa='exa -lh --git'
 alias xat='exa -lTh --git'
@@ -172,11 +164,16 @@ alias xat='exa -lTh --git'
 alias b='bat'
 alias cat='bat'
 
-alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
-alias tkill='tmux kill-session -t'
+alias top='gotop'
 
-alias kub='kubectl'
+alias ezsh='vim ~/.zshrc && source ~/.zshrc'
 
-alias v='vagga'
-alias vrun='vagga run'
-alias serv='sudo systemctl'
+# Add gnubin to use make installed from homebrew
+PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+# Add elixir_ls to PATH
+PATH="/Users/admin/projects/personal/elixir/elixir-ls/release/:$PATH"
+
+eval "$(direnv hook zsh)"
+autoload -U +X bashcompinit && bashcompinit
+eval "$($HOME/.sbsub/bin/sb init -)"
