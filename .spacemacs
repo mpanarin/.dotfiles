@@ -711,6 +711,15 @@ lines downward first."
         enable-local-eval t                      ;; allow evals in dir-locals
         )
 
+  (use-package time
+    :demand
+    :custom
+    (display-time-default-load-average nil)
+    (display-time-24hr-format t)
+    :config
+    (display-time-mode 1)
+    )
+
   (use-package reverse-im  ;; allow usage of russian keyboard
     :demand
     :config
