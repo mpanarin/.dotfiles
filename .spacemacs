@@ -997,13 +997,12 @@ lines downward first."
     (lsp-headerline-breadcrumb-enable t)      ;; show breadcrumbs
     (lsp-modeline-code-actions-enable t)      ;; show if codeactions available
     (lsp-eldoc-enable-hover nil)              ;; do not show hover info in eldoc, I have lsp-ui-doc for that
-    (lsp-print-io t)                          ;; no logs, they make js lag like a little bitch
+    (lsp-print-io nil)                        ;; no logs, they make js lag like a little bitch
     (lsp-prefer-capf t)                       ;; try capf integration
     (lsp-signature-render-documentation nil)  ;; do not include docs in signature
     (lsp-modeline-diagnostics-enable nil)     ;; disable diagnostics in modeline, they are already present in spacemacs
     (lsp-modeline-code-actions-enable nil)    ;; disable code actions in modeline, they are already present in spacemacs
     (lsp-lens-enable t)                       ;; enable lenses if server supports them
-    (lsp-headerline-arrow "‣")                ;; change the breadcrumbs separator
 
     ;; PYLS configs
     (lsp-pyls-plugins-rope-completion-enabled nil)             ;; disable garbage rope completion in pyls
@@ -1021,10 +1020,14 @@ lines downward first."
     ;; SQLS configs
     (lsp-sqls-server "~/go/bin/sqls")   ;; path to language server
 
+    ;; Elixir-ls changes
+    (lsp-elixir-mix-env "dev")
+
     :config
     ;; Hacky way to update the var
     (mapc (lambda (val) (add-to-list 'lsp-file-watch-ignored-directories val))
           '("[/\\\\]_build\\'" "[/\\\\]deps\\'" "[/\\\\].elixir_ls\\'"))
+    (setq lsp-headerline-arrow "‣")  ;; change the breadcrumbs separator. Changing it in :custom doesn't work :\
     )
   (use-package lsp-ui
     :defer t
