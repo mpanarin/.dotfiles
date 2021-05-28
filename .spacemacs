@@ -99,6 +99,7 @@ This function should only modify configuration layer settings."
      pdf
      graphql
      osx
+     (terraform :variables terraform-backend 'lsp)
      )
 
    ;; List of additional packages that will be installed without being
