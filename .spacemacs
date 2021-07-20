@@ -137,16 +137,8 @@ This function should only modify configuration layer settings."
                                       pkgbuild-mode             ;; editing major mode for PKGBUILD files
                                       dash-functional
                                       frame-local
-                                      exec-path-from-shell
-                                      direnv
-
-;; packages needed for dev with Cask
-                                      ;; f
-                                      ;; ecukes
-                                      ;; shut-up
-                                      ;; el-mock
-                                      ;; ert-async
-                                      ;; ert-runner
+                                      exec-path-from-shell      ;; picks PATH from shell. As on osx apps are not picking the paths set on .zshenv
+                                      direnv                    ;; integration with .direnv
                                       )
 
    ;; A list of packages that cannot be updated.
