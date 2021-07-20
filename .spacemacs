@@ -143,7 +143,7 @@ This function should only modify configuration layer settings."
                                       )
 
    ;; A list of packages that cannot be updated.
-   dotspacemacs-frozen-packages '(doom-themes)
+   dotspacemacs-frozen-packages '(doom-themes solaire-mode)
 
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(lsp-python-ms)
