@@ -60,6 +60,7 @@ This function should only modify configuration layer settings."
              python-fill-column 80
              python-indent-offset 4
              python-backend 'lsp)
+     (ruby :variables ruby-backend 'robe)
      django
      (elixir :variables
              elixir-backend 'lsp)
