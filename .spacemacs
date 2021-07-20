@@ -609,7 +609,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile nil))
+   dotspacemacs-byte-compile t))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -1097,6 +1097,7 @@ lines downward first."
 (defun custom/elixir-specific ()
   "Changes specific to elixir-mode"
   (use-package elixir-mode
+    :load-path "/Users/admin/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
     :defer t
     :config
     (add-hook 'elixir-mode-hook '(lambda () (progn
@@ -1467,6 +1468,15 @@ lines downward first."
    '(flycheck-warning ((t (:underline "#e2c770"))))
    '(flyspell-duplicate ((t (:underline "DarkOrange"))))
    '(flyspell-incorrect ((t (:underline "#e74c3c"))))
+   ;; no wavy lsp header
+   '(lsp-headerline-breadcrumb-path-error-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Red1"))))
+   '(lsp-headerline-breadcrumb-path-hint-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-path-info-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-path-warning-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Yellow"))))
+   '(lsp-headerline-breadcrumb-symbols-error-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Red1"))))
+   '(lsp-headerline-breadcrumb-symbols-hint-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-symbols-info-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-symbols-warning-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Yellow"))))
    )
   (setq hl-todo-keyword-faces
     '(("TODO" . "#dc752f")
