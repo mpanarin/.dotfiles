@@ -139,5 +139,6 @@ ln -fs ~/.dotfiles/.fzf.bash ~/.fzf.bash
 ln -fs ~/.dotfiles/.fzf.zsh ~/.fzf.zsh
 ln -fs ~/.dotfiles/kitty.conf ~/.config/kitty/kitty.conf
 ln -fs ~/.dotfiles/snazzy.conf ~/.config/kitty/snazzy.conf
+ln -fs ~/.dotfiles/.ripgreprc ~/.ripgreprc
 ln -fs ~/.dotfiles/tmux_get_startup_command ~/tmux_get_startup_command
 # TODO: finish this ln -fs ~/.dotfiles/cal2org_sync.zsh ~/cal2org_sync.zsh
