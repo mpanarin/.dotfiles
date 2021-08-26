@@ -101,6 +101,9 @@ This function should only modify configuration layer settings."
      graphql
      osx
      (terraform :variables terraform-backend 'lsp)
+     (plantuml :variables
+               plantuml-default-exec-mode 'jar
+               plantuml-jar-path "/Users/admin/projects/solaris/identification-origination/docs/diagrams/bin/plantuml.jar")
      )
 
    ;; List of additional packages that will be installed without being
@@ -140,6 +143,8 @@ This function should only modify configuration layer settings."
                                       frame-local
                                       exec-path-from-shell      ;; picks PATH from shell. As on osx apps are not picking the paths set on .zshenv
                                       direnv                    ;; integration with .direnv
+                                      plantuml-mode             ;; mode for editing diagrams in PlantUML
+                                      inf-elixir                ;; Run iex
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -912,7 +917,6 @@ lines downward first."
                 "SPC ?"                 ;; useless help
                 "SPC ²"                 ;; useless select of window
                 "SPC `"                 ;; useless select of window
-                "SPC u"                 ;; doubt that I have ever used this universal arg
                 "SPC <f1>"              ;; what is even helm apropos?
 
                 ;; applications
@@ -1104,11 +1108,18 @@ lines downward first."
                                               (setq-local fill-column 98)
                                               (display-fill-column-indicator-mode 1))))
     (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m t") "tests" "testing related functionality")
+    (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m i") "IEx" "inferior elixir")
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
       (kbd "t b") 'exunit-verify-all
       (kbd "t a") 'exunit-verify
       (kbd "t k") 'exunit-rerun
-      (kbd "t t") 'exunit-verify-single))
+      (kbd "t t") 'exunit-verify-single
+      (kbd "i i") 'inf-elixir
+      (kbd "i I") 'inf-elixir-project
+      (kbd "i l") 'inf-elixir-send-line
+      (kbd "i r") 'inf-elixir-send-region
+      (kbd "i b") 'inf-elixir-send-buffer
+      ))
 
   ;; TODO: this works but breaks lsp checker completely
   ;; see https://github.com/flycheck/flycheck/issues/1762
@@ -1522,6 +1533,8 @@ lines downward first."
    '(hi-yellow ((t (:background "dark orange" :foreground "black" :weight bold))))
    ;; The line should be a bit more visible
    '(hl-line ((t (:background "gray19"))))
+   ;; Elixir atoms
+   '(elixir-atom-face ((t (:foreground "#46D9FF"))))
 
    ;; org levels
    '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
@@ -1585,7 +1598,7 @@ you should place your code here."
   (custom/treemacs-specific)
   (custom/helm-specific)
 
-  (custom/zoning)
+  ;; (custom/zoning)
 
   (custom/faces)
  )
