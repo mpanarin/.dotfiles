@@ -1,11 +1,14 @@
 # Path to oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
+
 # Name of the theme to load.
 ZSH_THEME="spaceship"
 
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
+
+plugins=(git python docker extract lol mix pip elixir asdf)
 
 # if not Emacs - use vi-mode and start tmux
 if [[ -z $INSIDE_EMACS ]]; then
@@ -14,9 +17,9 @@ if [[ -z $INSIDE_EMACS ]]; then
     ZSH_TMUX_AUTOSTART=false
     eval $(python3 ~/tmux_get_startup_command)
     powerline-config tmux setup
-    plugins=(git python docker extract lol mix pip elixir asdf zsh-autosuggestions zsh-vi-mode zsh-syntax-highlighting)
+    plugins+=(zsh-autosuggestions zsh-vi-mode zsh-syntax-highlighting)
 else
-    plugins=(git python docker extract lol mix pip elixir asdf zsh-syntax-highlighting)
+    plugins+=(zsh-syntax-highlighting)
     vterm_printf(){
         if [ -n "$TMUX" ]; then
             # Tell tmux to pass the escape sequences through
@@ -81,9 +84,8 @@ bindkey '\e ' autosuggest-accept
 # export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 # source /usr/bin/virtualenvwrapper.sh
 
-# Enable fzf
-export FZF_TMUX=1
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# ripgrep configurations
+RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
 # asdf-vm configs
 # . $HOME/.asdf/asdf.sh
@@ -155,6 +157,10 @@ function tatt() {
 function zvm_after_init() {
     zvm_bindkey viins '\e ' autosuggest-accept
 }
+
+# Enable fzf
+export FZF_TMUX=1
+zvm_after_init_commands+=('[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh')
 
 alias tkill='tmux kill-session -t'
 
