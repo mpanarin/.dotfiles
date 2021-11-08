@@ -101,7 +101,6 @@ This function should only modify configuration layer settings."
      (terraform :variables terraform-backend 'lsp)
      (plantuml :variables
                plantuml-default-exec-mode 'jar)
-     ,@(when (spacemacs/system-is-mac) '(osx))
      )
 
    ;; List of additional packages that will be installed without being
@@ -790,6 +789,7 @@ lines downward first."
     :custom
     (writeroom-width 125))
   (use-package solaire-mode  ;; enable Jolly Cooperation everywhere
+    :load-path "/home/m-panarin/projects/personal/elisp/emacs-solaire-mode"  ;; when custom load is needed
     :demand
     :init
     (solaire-global-mode 1))
@@ -951,6 +951,11 @@ lines downward first."
 
 (defun custom/spacemacs-improvements ()
   "Several fixes from spacemacs issues"
+  ;; do not kill emacs daemon on exit
+  (evil-leader/set-key "q q" 'spacemacs/frame-killer)
+  (evil-leader/set-key "q Q" 'spacemacs/prompt-kill-emacs)
+  ;; please use transparency
+  (spacemacs/enable-transparency)
   ;; TODO: switch to use-package here
   (with-eval-after-load 'spaceline    ;; Disable useless parts of spaceline
     (spaceline-toggle-minor-modes-off)
@@ -1137,7 +1142,7 @@ lines downward first."
   (use-package mix
     :defer t)
   (use-package elixir-mode
-    :load-path "/Users/admin/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
+    ;; :load-path "/home/m-panarin/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
     :defer t
     :config
     (add-hook 'elixir-mode-hook '(lambda () (progn
@@ -1479,6 +1484,14 @@ lines downward first."
                     ;; zone-pgm-random-life
                     ]))
   )
+
+(defun custom/eaf ()
+  ;; add emacs application framework
+  (use-package eaf
+    ;; :load-path "~/.emacs.d/private/local/emacs-application-framework"
+    :custom
+    (eaf-find-alternate-file-in-dired t)
+    (eaf-browser-enable-adblocker t)))
 
 ;; faces
 
@@ -1636,6 +1649,7 @@ you should place your code here."
   (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
+  (custom/eaf)
 
   ;; (custom/zoning)
 
