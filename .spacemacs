@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   `(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -49,9 +49,10 @@ This function should only modify configuration layer settings."
              docker-dockerfile-backend 'lsp)
      helm
      ranger
-     prodigy
      better-defaults
      emacs-lisp
+     (version-control :variables
+                      version-control-diff-tool 'git-gutter+)
      (git :variables
           git-enable-magit-todos-plugin t)
      lsp
@@ -60,11 +61,9 @@ This function should only modify configuration layer settings."
              python-fill-column 80
              python-indent-offset 4
              python-backend 'lsp)
-     (ruby :variables ruby-backend 'robe)
-     django
+     (ruby :variables ruby-backend 'lsp)
      (elixir :variables
              elixir-backend 'lsp)
-     phoenix
      erlang
      (sql :variables
           sql-capitalize-keywords t
@@ -99,11 +98,10 @@ This function should only modify configuration layer settings."
               ibuffer-group-buffers-by 'projects)
      pdf
      graphql
-     osx
      (terraform :variables terraform-backend 'lsp)
      (plantuml :variables
-               plantuml-default-exec-mode 'jar
-               plantuml-jar-path "/Users/admin/projects/solaris/identification-origination/docs/diagrams/bin/plantuml.jar")
+               plantuml-default-exec-mode 'jar)
+     ,@(when (spacemacs/system-is-mac) '(osx))
      )
 
    ;; List of additional packages that will be installed without being
@@ -113,7 +111,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(
+   dotspacemacs-additional-packages `(
 
 ;; General additional packages
                                       reverse-im                ;; allows usage shortcuts on russian keyboard
@@ -141,10 +139,12 @@ This function should only modify configuration layer settings."
                                       pkgbuild-mode             ;; editing major mode for PKGBUILD files
                                       dash-functional
                                       frame-local
-                                      exec-path-from-shell      ;; picks PATH from shell. As on osx apps are not picking the paths set on .zshenv
                                       direnv                    ;; integration with .direnv
                                       plantuml-mode             ;; mode for editing diagrams in PlantUML
                                       inf-elixir                ;; Run iex
+                                      ,@(when (spacemacs/system-is-mac) '(
+                                                                          exec-path-from-shell      ;; picks PATH from shell. As on osx apps are not picking the paths set on .zshenv
+                                                                          ))
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -318,14 +318,20 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.3)
+   dotspacemacs-mode-line-theme `(spacemacs
+                                  :separator wave
+                                  :separator-scale ,@(cond
+                                                      ((spacemacs/system-is-mac) '(1.3))
+                                                      ((spacemacs/system-is-linux) '(1.7))))
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
-   dotspacemacs-default-font '("Fira Code"
-                               :size 13
+   dotspacemacs-default-font `("Fira Code"
+                               :size ,@(cond
+                                        ((spacemacs/system-is-mac) '(12.5))
+                                        ((spacemacs/system-is-linux) '(15)))
                                :weight normal
                                :width normal)
 
@@ -438,16 +444,22 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup `(,@(cond
+                                           ((spacemacs/system-is-mac) t)
+                                           ((spacemacs/system-is-linux) nil)))
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
-   dotspacemacs-fullscreen-use-non-native t
+   dotspacemacs-fullscreen-use-non-native `(,@(cond
+                                               ((spacemacs/system-is-mac) t)
+                                               ((spacemacs/system-is-linux) nil)))
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup `(,@(cond
+                                          ((spacemacs/system-is-mac) nil)
+                                          ((spacemacs/system-is-linux) t)))
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -529,7 +541,9 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server nil
+   dotspacemacs-enable-server `(,@(cond
+                                   ((spacemacs/system-is-mac) nil)
+                                   ((spacemacs/system-is-linux) t)))
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -906,6 +920,20 @@ lines downward first."
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring])))))
 
+(defun custom/linux-config()
+  (when (spacemacs/system-is-linux)
+
+    (evil-leader/set-key ;; do not kill emacs daemon on exit
+      "q q" 'spacemacs/frame-killer
+      "q Q" 'spacemacs/prompt-kill-emacs)
+    (spacemacs/enable-transparency)  ;; enable transparency
+    ))
+
+(defun custom/osx-config()
+  (when (spacemacs/system-is-mac)
+    (exec-path-from-shell-initialize) ;; This is required in OSX as variables are not getting loaded from .zshrc
+    ))
+
 (defun custom/unbind-useless-shit()
   (let ((keys '(
 
@@ -925,6 +953,20 @@ lines downward first."
                 "SPC a u"               ;; Undo-tree-visualize is not even working
                 "SPC a P"               ;; I don't use `proced`
                 "SPC a Y"               ;; I don't use easy pg
+                "SPC a *"               ;; I don't use Calc
+                "SPC a l"               ;; I don't use launchctrl TODO: maybe?
+                "SPC a c"               ;; Empty, why is it here I don't know
+                "SPC a e"               ;; I don't use email in emacs
+                "SPC a f"               ;; fun. Empty
+                "SPC a m"               ;; music. Empty
+                "SPC a r"               ;; Empty
+                "SPC a w"               ;; Empty
+
+                ;; buffers
+                "SPC b a"               ;; persp-add-buffer, I don't use it
+                "SPC b B"               ;; global-list-buffer, I use ibuffer
+                "SPC b I"               ;; iBuffer, I rebinded it
+                "SPC b U"               ;; helm-buffer-list-unfiltered, I don't use it
                 )))
     (mapc (lambda (key) (unbind-key key 'evil-normal-state-local-map)) keys))
   )
@@ -1038,6 +1080,7 @@ lines downward first."
     (lsp-modeline-diagnostics-enable nil)     ;; disable diagnostics in modeline, they are already present in spacemacs
     (lsp-modeline-code-actions-enable nil)    ;; disable code actions in modeline, they are already present in spacemacs
     (lsp-lens-enable t)                       ;; enable lenses if server supports them
+    (lsp-lens-place-position 'above-line)     ;; place lenses above the line
 
     ;; PYLS configs
     (lsp-pyls-plugins-rope-completion-enabled nil)             ;; disable garbage rope completion in pyls
@@ -1304,7 +1347,6 @@ lines downward first."
     (org-pretty-entities t)        ;; add pretty entities
     (org-log-into-drawer t)        ;; log state changes to drawer
     (org-agenda-files (append      ;; add agenda files
-                       (file-expand-wildcards "~/projects/EVO/evo.org")
                        (file-expand-wildcards "~/org/*.org")))
     :bind
     (:map org-mode-map
@@ -1569,7 +1611,9 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (exec-path-from-shell-initialize) ;; This is required in OSX as variables are not getting loaded from .zshrc
+  (custom/osx-config)
+  (custom/linux-config)
+
   (custom/unbind-useless-shit)
 
   (custom/evil-motions)
