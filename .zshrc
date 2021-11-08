@@ -7,17 +7,17 @@ ZSH_THEME="spaceship"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
+plugins=(git python docker extract lol mix pip elixir asdf)
+
 # if not Emacs - use vi-mode and start tmux
 if [[ -z $INSIDE_EMACS ]]; then
     # TMUX startup
-    export PATH="$PATH:/home/$USER/.gem/ruby/2.7.0/bin"
-    source ~/.gem/ruby/2.7.0/gems/tmuxinator-1.1.4/completion/tmuxinator.zsh
     ZSH_TMUX_AUTOSTART=false
     eval $(~/tmux_get_startup_command)
     powerline-config tmux setup
-    plugins=(git python django docker extract lol mix pip elixir poetry kubectl asdf vi-mode)
+    plugins+=(zsh-autosuggestions zsh-vi-mode zsh-syntax-highlighting)
 else
-    plugins=(git python django docker extract lol mix pip elixir poetry kubectl asdf)
+    plugins+=(zsh-syntax-highlighting)
     vterm_printf(){
         if [ -n "$TMUX" ]; then
             # Tell tmux to pass the escape sequences through
@@ -32,6 +32,9 @@ else
     }
 fi
 
+# remove warning on insecure completions
+ZSH_DISABLE_COMPFIX=true
+
 source $ZSH/oh-my-zsh.sh
 
 # export LANG=en_US.UTF-8
@@ -42,9 +45,6 @@ if [[ -z $SSH_CONNECTION ]]; then
 else
   export EDITOR='vi'
 fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -72,15 +72,11 @@ SPACESHIP_BATTERY_SHOW=false
 SPACESHIP_DOCKER_SHOW=false
 
 # Enable zsh autosuggestions
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=0'
 bindkey '^ ' autosuggest-accept
-
-# Enable zsh syntax highlight
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # VIRTUALENV WRAPPER STUFFS
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
@@ -88,16 +84,14 @@ source /usr/bin/virtualenvwrapper.sh
 
 # Enable fzf
 export FZF_TMUX=1
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# added by pipsi (https://github.com/mitsuhiko/pipsi)
-export PATH="/home/m-panarin/.local/bin:$PATH"
+zvm_after_init_commands+=('[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh')
+# needed for Zsh-vi-mode to work with autosuggest
+function zvm_after_init() {
+    zvm_bindkey viins '^ ' autosuggest-accept
+}
 
 # Poetry
 export PATH="$PATH:/home/$USER/.poetry/bin"
-
-# Doom Emacs
-# export PATH="$PATH:/home/$USER/.emacs.d/bin"
 
 # Python startup
 export PYTHONSTARTUP="$(python -m jedi repl)"
@@ -121,6 +115,9 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 
 # disable automatic cd in zsh
 unsetopt AUTO_CD
+
+# Add elixir_ls to PATH
+PATH="~/elixir-ls/release/:$PATH"
 
 # Aliases
 alias gdt='git difftool'
