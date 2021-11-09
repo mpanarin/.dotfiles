@@ -4,8 +4,7 @@
 sudo pacman -Syu --noconfirm
 
 # install all needed packages
-sudo pacman -S --noconfirm python2-pip \
-     ranger \
+sudo pacman -S --noconfirm ranger \
      zsh \
      ruby \
      curl \
@@ -78,13 +77,13 @@ sh install.sh --unattended
 rm install.sh
 
 # install spaceship zsh theme
-git clone https://github.com/denysdovhan/spaceship-prompt.git $ZSH/custom/themes/spaceship-prompt
-ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme $ZSH/custom/themes/spaceship.zsh-theme
+git clone https://github.com/denysdovhan/spaceship-prompt.git ~/.oh-my-zsh/custom/themes/spaceship-prompt
+ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
 # install plugins
-git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH/custom/plugins/zsh-vi-mode
-git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH/custom/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/custom/plugins/zsh-syntax-highlighting
-git clone https://github.com/gusaiani/elixir-oh-my-zsh.git $ZSH/custom/plugins/elixir
+git clone https://github.com/jeffreytse/zsh-vi-mode ~/.oh-my-zsh/custom/plugins/zsh-vi-mode
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+git clone https://github.com/gusaiani/elixir-oh-my-zsh.git ~/.oh-my-zsh/custom/plugins/elixir
 
 # symlink zshrc
 ln -fs ~/.dotfiles/.zshrc ~/.zshrc
