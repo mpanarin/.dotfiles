@@ -34,8 +34,8 @@ sudo pacman -S --noconfirm python2-pip \
      libpng \
      xsel \
      flameshot \
-     otf-fira-code \
-     brave \
+     ttf-fira-code \
+     brave-browser \
      xclip \
      bat
 
