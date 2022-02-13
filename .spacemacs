@@ -797,7 +797,8 @@ lines downward first."
     :defer t
     :mode "\\.mako\\'"
     :custom
-    (web-mode-markup-indent-offset 2))
+    (web-mode-markup-indent-offset 2)
+    (web-mode-code-indent-offset 2))
   (use-package csv-mode  ;; Make csv open always aligned with delimiters
     :defer t
     :hook (csv-mode . (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))  ;; TODO: this probably can be done better
@@ -816,10 +817,6 @@ lines downward first."
     :defer t
     :custom
     (pdf-view-display-size 'fit-page))
-  (use-package sgml-mode  ;; used in rjsx for editing of jsx bits.
-    :defer t
-    :custom
-    (sgml-basic-offset 4))
   (use-package vterm
     :defer t
     :config
@@ -1101,10 +1098,17 @@ lines downward first."
     ;; Elixir-ls changes
     (lsp-elixir-mix-env "dev")
 
+    ;; JS configs
+    (lsp-disabled-clients
+     `(
+       ,@(when (spacemacs/system-is-mac) '(eslint))
+       ))
+
+
     :config
     ;; Hacky way to update the var
     (mapc (lambda (val) (add-to-list 'lsp-file-watch-ignored-directories val))
-          '("[/\\\\]_build\\'" "[/\\\\]deps\\'" "[/\\\\].elixir_ls\\'"))
+          '("[/\\\\]_build\\'" "[/\\\\]deps\\'" "[/\\\\].elixir_ls\\'" "[/\\\\]cypress\\'"))
     (setq lsp-headerline-arrow "‣")  ;; change the breadcrumbs separator. Changing it in :custom doesn't work :\
     )
   (use-package lsp-ui
@@ -1126,6 +1130,17 @@ lines downward first."
 
     ;; LSP-UI-PEEK
     (lsp-ui-peek-fontify 'always))  ;; always use fontify, otherwise highlight is broken in the left half
+  )
+
+(defun custom/jsts-specific ()
+  "Changes specific to javascript or typescript"
+  (use-package sgml-mode  ;; used in rjsx for editing of jsx bits.
+    :defer t
+    :custom
+    (sgml-basic-offset 2))
+  (use-package typescript-mode
+    :custom
+    (typescript-indent-level 2))
   )
 
 (defun custom/python-specific ()
@@ -1631,6 +1646,7 @@ you should place your code here."
   ;; (custom/centaur-tabs)
   (custom/tab-line-mode)
 
+  (custom/jsts-specific)
   (custom/python-specific)
   (custom/elixir-specific)
   (custom/elisp-specific)
