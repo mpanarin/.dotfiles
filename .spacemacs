@@ -1132,6 +1132,10 @@ lines downward first."
 
 (defun custom/elixir-specific ()
   "Changes specific to elixir-mode"
+  (use-package exunit
+    :defer t)
+  (use-package mix
+    :defer t)
   (use-package elixir-mode
     :load-path "/Users/admin/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
     :defer t
@@ -1151,6 +1155,7 @@ lines downward first."
       (kbd "i l") 'inf-elixir-send-line
       (kbd "i r") 'inf-elixir-send-region
       (kbd "i b") 'inf-elixir-send-buffer
+      (kbd "m") 'mix-execute-task
       ))
 
   ;; TODO: this works but breaks lsp checker completely
