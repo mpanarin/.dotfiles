@@ -90,6 +90,7 @@ RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 # asdf-vm configs
 # . $HOME/.asdf/asdf.sh
 # . $HOME/.asdf/completions/asdf.bash
+export ASDF_DIR='/usr/local/opt/asdf/libexec'
 export PATH="$HOME/.asdf/shims:$PATH"
 
 # potential fix for pasting
@@ -140,7 +141,7 @@ function tnew() {
     else
         name=" -s $1"
     fi
-    tmux detach-client -t /dev/pts/1 -E "tmux new $name"
+    tmux detach -E "tmux new $name"
 }
 
 function tatt() {
@@ -150,7 +151,7 @@ function tatt() {
     else
         name=" -t $1"
     fi
-    tmux detach-client -t /dev/pts/1 -E "tmux attach $name"
+    tmux detach -E "tmux attach $name"
 }
 
 # needed for Zsh-vi-mode to work with autosuggest
@@ -177,9 +178,16 @@ alias ezsh='vim ~/.zshrc && source ~/.zshrc'
 # Add gnubin to use make installed from homebrew
 PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
+# Add local bin to PATH
+PATH="$HOME/bin:$PATH"
+
 # Add elixir_ls to PATH
 PATH="/Users/admin/projects/personal/elixir/elixir-ls/release/:$PATH"
 
 eval "$(direnv hook zsh)"
 autoload -U +X bashcompinit && bashcompinit
 eval "$($HOME/.sbsub/bin/sb init -)"
+
+. /usr/local/opt/asdf/libexec/asdf.sh
+
+. /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
