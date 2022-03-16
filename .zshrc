@@ -96,9 +96,8 @@ export PATH="$PATH:/home/$USER/.poetry/bin"
 # Python startup
 export PYTHONSTARTUP="$(python -m jedi repl)"
 
-# asdf-vm configs
-export ASDF_DIR='/usr/local/opt/asdf/libexec'
-export PATH="$HOME/.asdf/shims:$PATH"
+# asdf configs
+. /opt/asdf-vm/asdf.sh
 
 # potential fix for pasting
 pasteinit() {
@@ -196,9 +195,3 @@ PATH="/Users/admin/projects/personal/elixir/elixir-ls/release/:$PATH"
 
 eval "$(direnv hook zsh)"
 autoload -U +X bashcompinit && bashcompinit
-eval "$($HOME/.sbsub/bin/sb init -)"
-
-. /usr/local/opt/asdf/libexec/asdf.sh
-
-. /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
-
