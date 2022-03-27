@@ -21,7 +21,6 @@ sudo pacman -S --noconfirm ranger \
      python-virtualenvwrapper \
      powerline-fonts \
      powerline \
-     powerline-vim \
      ruby-rdoc \
      unzip \
      docker \
@@ -38,7 +37,9 @@ sudo pacman -S --noconfirm ranger \
      xclip \
      bat \
      direnv \
-     neovim
+     neovim \
+     fd
+
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
@@ -60,8 +61,14 @@ mkdir -p ~/projects/personal/elisp
 mkdir -p ~/projects/personal/elixir
 mkdir -p ~/projects/personal/python
 
+# install chemacs
+git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
+
+# symlink chemacs profiles
+ln -sf ~/.dotfiles/.emacs-profiles.el ~/.emacs-profiles.el
+
 # install spacemacs
-git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d -b develop
+git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d.spacemacs -b develop
 
 # clone important packages packages
 git clone https://github.com/mickeynp/ligature.el.git ~/projects/personal/elisp/ligatures.el
