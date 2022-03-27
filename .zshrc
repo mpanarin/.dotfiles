@@ -7,7 +7,7 @@ ZSH_THEME="spaceship"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git python docker extract lol mix pip elixir asdf)
+plugins=(git docker docker-compose extract mix mix-fast pip elixir asdf direnv)
 
 # if not Emacs - use vi-mode and start tmux
 if [[ -z $INSIDE_EMACS ]]; then
@@ -116,7 +116,7 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 unsetopt AUTO_CD
 
 # Add elixir_ls to PATH
-PATH="~/elixir-ls/release/:$PATH"
+PATH="$HOME/projects/personal/elixir/elixir-ls/release:$PATH"
 
 # Aliases
 alias gdt='git difftool'
@@ -171,6 +171,7 @@ function tatt() {
 }
 
 alias vim='nvim'
+alias v='vim'
 
 alias gsubsi='g submodule init && g submodule sync && g submodule update'
 alias gsubi='g submodule update --init'
@@ -189,9 +190,6 @@ alias serv='sudo systemctl'
 
 # Add local bin to PATH
 PATH="$HOME/bin:$PATH"
-
-# Add elixir_ls to PATH
-PATH="/Users/admin/projects/personal/elixir/elixir-ls/release/:$PATH"
 
 eval "$(direnv hook zsh)"
 autoload -U +X bashcompinit && bashcompinit

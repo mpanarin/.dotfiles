@@ -116,13 +116,11 @@ This function should only modify configuration layer settings."
                                       reverse-im                ;; allows usage shortcuts on russian keyboard
                                       srcery-theme              ;; theme
                                       exunit                    ;; elixir test runner
-                                      autopair                  ;; autopairs quotes and brackets, used for snippets. TODO: should be considered to change to smartparens
                                       solaire-mode              ;; highlights test buffers with slightly brighter colors
                                       treemacs-magit            ;; magit integration
                                       treemacs-icons-dired      ;; use treemacs icons in dired
                                       magit-todos               ;; add TODOs and other keywords to the magit buffer
                                       python-pytest             ;; pytest runner
-                                      centaur-tabs              ;; beautiful tabs for emacs, TODO: requires further fixing with spaceline flickering.
                                       nov                       ;; awesome epub mode
                                       calfw                     ;; great emacs calendar
                                       calfw-org                 ;; integration of calendar with org
@@ -147,7 +145,7 @@ This function should only modify configuration layer settings."
                                       )
 
    ;; A list of packages that cannot be updated.
-   dotspacemacs-frozen-packages '(doom-themes solaire-mode)
+   dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(lsp-python-ms)
@@ -540,9 +538,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server `(,@(cond
-                                   ((spacemacs/system-is-mac) nil)
-                                   ((spacemacs/system-is-linux) t)))
+   dotspacemacs-enable-server nil
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -730,6 +726,7 @@ will turn into
   "On buffer save function triggering formatting for specific modes."
   (pcase major-mode
       ('elixir-mode (lsp-format-buffer))
+      ('js2-mode (lsp-format-buffer))
     ))
 
 
@@ -759,15 +756,6 @@ lines downward first."
         enable-local-variables :all              ;; allow unsafe vars in dir-locals
         enable-local-eval t                      ;; allow evals in dir-locals
         )
-
-  (use-package time
-    :demand
-    :custom
-    (display-time-default-load-average nil)
-    (display-time-24hr-format t)
-    :config
-    (display-time-mode 1)
-    )
 
   (use-package reverse-im  ;; allow usage of russian keyboard
     :demand
@@ -807,11 +795,7 @@ lines downward first."
     :hook (org-mode . smartparens-mode)
     )
   (use-package yasnippet
-    :defer t
-    :config
-    (add-hook 'yas-before-expand-snippet-hook (lambda () (autopair-mode 1)))
-    (add-hook 'yas-after-exit-snippet-hook (lambda () (autopair-mode -1)))
-    )
+    :defer t)
   (use-package pdf-tools
     :defer t
     :custom
@@ -862,6 +846,11 @@ lines downward first."
     :config
     (direnv-mode))
   (use-package all-the-icons)
+  (use-package undo-tree
+    :defer t
+    :custom
+    (undo-tree-auto-save-history nil)  ;; Do not make annoying ~undo-tree~ files.
+    )
   )
 
 (defun custom/ligatures ()
@@ -902,6 +891,14 @@ lines downward first."
 (defun custom/osx-config()
   (when (spacemacs/system-is-mac)
     (exec-path-from-shell-initialize) ;; This is required in OSX as variables are not getting loaded from .zshrc
+    (use-package time  ;; Display time in modeline
+      :demand
+      :custom
+      (display-time-default-load-average nil)
+      (display-time-24hr-format t)
+      :config
+      (display-time-mode 1)
+      )
     ))
 
 (defun custom/linux-config()
@@ -997,48 +994,6 @@ lines downward first."
       (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") 'custom/toggle-breakpoint-generic))
   (add-hook 'lsp-mode-hook (lambda () (custom-debug-mode t))))
 
-(defun custom/centaur-tabs ()
-  "Not currently used"
-  (use-package centaur-tabs
-    :demand
-    :config
-    (centaur-tabs-mode t)
-    (setq centaur-tabs-style "bar")
-    (setq centaur-tabs-height 32)
-    (setq centaur-tabs-set-icons t)
-    (setq centaur-tabs-set-bar 'over)
-    (setq centaur-tabs-set-close-button nil)
-    (setq centaur-tabs-cycle-scope 'tabs)
-    (centaur-tabs-group-by-projectile-project)
-    (defun centaur-tabs-hide-tab (x)
-      (let ((name (format "%s" x)))
-	      (or
-         (window-dedicated-p (selected-window))
-	       (string-prefix-p "*" name)
-	       (string-prefix-p "magit" name)
-	       )))
-    :hook (
-     (dashboard-mode . centaur-tabs-local-mode)
-     (treemacs-mode . centaur-tabs-local-mode)
-     (spacemacs-buffer-mode . centaur-tabs-local-mode)
-     (term-mode . centaur-tabs-local-mode)
-     (calendar-mode . centaur-tabs-local-mode)
-     (org-agenda-mode . centaur-tabs-local-mode)
-     (helpful-mode . centaur-tabs-local-mode)
-     (dired-mode . centaur-tabs-local-mode)
-     (zone-mode . centaur-tabs-local-mode)
-     (helm-mode . centaur-tabs-local-mode))
-    :bind
-    ("C-<prior>" . centaur-tabs-backward)
-    ("C-<next>" . centaur-tabs-forward)
-    ("C-c t" . centaur-tabs-counsel-switch-group)
-    (:map evil-normal-state-map
-	        ("g l" . centaur-tabs-forward)
-	        ("g h" . centaur-tabs-backward)
-		)
-    )
-  )
-
 (defun custom/tab-line-mode ()
   (load "~/.dotfiles/tab-line-custom"))
 
@@ -1056,10 +1011,8 @@ lines downward first."
     ;; General
     (lsp-file-watch-threshold nil)            ;; always filewatch
     (lsp-headerline-breadcrumb-enable t)      ;; show breadcrumbs
-    (lsp-modeline-code-actions-enable t)      ;; show if codeactions available
     (lsp-eldoc-enable-hover nil)              ;; do not show hover info in eldoc, I have lsp-ui-doc for that
     (lsp-print-io nil)                        ;; no logs, they make js lag like a little bitch
-    (lsp-prefer-capf t)                       ;; try capf integration
     (lsp-signature-render-documentation nil)  ;; do not include docs in signature
     (lsp-modeline-diagnostics-enable nil)     ;; disable diagnostics in modeline, they are already present in spacemacs
     (lsp-modeline-code-actions-enable nil)    ;; disable code actions in modeline, they are already present in spacemacs
@@ -1110,6 +1063,8 @@ lines downward first."
     ;; LSP-UI-DOC
     (lsp-ui-doc-position 'top)        ;; always keep doc at the top
     (lsp-ui-doc-include-signature t)  ;; add function signature to the buffer
+    (lsp-ui-doc-show-with-cursor t)   ;; show hover on cursor
+    (lsp-ui-doc-include-signature t)  ;; Add signature
 
     ;; LSP-UI-SIDELINE
     (lsp-ui-sideline-show-hover nil)         ;; do not show hover info, I have lsp-ui-doc for that
@@ -1467,31 +1422,6 @@ lines downward first."
   (define-key evil-normal-state-local-map (kbd "SPC x x") 'custom/expand-region)                      ;; Bind expand-region
   )
 
-(defun custom/zoning ()
-  "Changes specific to zoning"
-  (use-package zone
-    :defer t
-    :config
-    (zone-when-idle 240)
-    :custom
-    (zone-timer nil)
-    (zone-programs [
-                    zone-pgm-jitter
-                    zone-pgm-putz-with-case
-                    ;; zone-pgm-dissolve
-                    ;; zone-pgm-explode
-                    zone-pgm-whack-chars
-                    zone-pgm-rotate-LR-variable
-                    ;; zone-pgm-rotate-RL-variable
-                    zone-pgm-drip
-                    ;; zone-pgm-five-oclock-swan-dive
-                    ;; zone-pgm-martini-swan-dive
-                    ;; zone-pgm-rat-race
-                    ;; zone-pgm-stress
-                    ;; zone-pgm-stress-destress
-                    ;; zone-pgm-random-life
-                    ]))
-  )
 
 ;; faces
 
@@ -1635,7 +1565,6 @@ you should place your code here."
   (custom/lsp-generic)
   (custom/dap-generic)
 
-  ;; (custom/centaur-tabs)
   (custom/tab-line-mode)
 
   (custom/jsts-specific)
@@ -1649,8 +1578,6 @@ you should place your code here."
   (custom/markdown-specific)
   (custom/treemacs-specific)
   (custom/helm-specific)
-
-  ;; (custom/zoning)
 
   (custom/faces)
  )

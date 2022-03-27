@@ -36,7 +36,9 @@ sudo pacman -S --noconfirm ranger \
      ttf-fira-code \
      brave-browser \
      xclip \
-     bat
+     bat \
+     direnv \
+     neovim
 
 # remove yakuake as it annoys me as well as i don't use it at all.
 sudo pacman -R yakuake --noconfirm
@@ -49,15 +51,21 @@ sudo systemctl enable docker
 sudo systemctl start docker
 sudo usermod -a -G docker $USER
 
-# upgrade both pip versions to latest release
-sudo pip install --upgrade pip
-sudo pip2 install --upgrade pip
+# setup asdf plugins
+asdf plugin-add erlang
+asdf plugin-add elixir
 
-# setup asdf
-asdf plugin-add erlang elixir
+# create project directories
+mkdir -p ~/projects/personal/elisp
+mkdir -p ~/projects/personal/elixir
+mkdir -p ~/projects/personal/python
 
 # install spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d -b develop
+
+# clone important packages packages
+git clone https://github.com/mickeynp/ligature.el.git ~/projects/personal/elisp/ligatures.el
+git clone https://github.com/elixir-lsp/elixir-ls.git ~/projects/personal/elixir/elixir-ls
 
 # symlink the spacemacs config
 ln -fs ~/.dotfiles/.spacemacs ~/.spacemacs
