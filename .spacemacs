@@ -1106,7 +1106,7 @@ lines downward first."
   (use-package mix
     :defer t)
   (use-package elixir-mode
-    :load-path "/Users/admin/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
+    :load-path "~/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
     :defer t
     :config
     (add-hook 'elixir-mode-hook '(lambda () (progn

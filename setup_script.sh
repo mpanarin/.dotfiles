@@ -73,6 +73,7 @@ git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d.spacemacs -b develop
 # clone important packages packages
 git clone https://github.com/mickeynp/ligature.el.git ~/projects/personal/elisp/ligatures.el
 git clone https://github.com/mpanarin/emacs-solaire-mode.git ~/projects/personal/elisp/emacs-solaire-mode
+git clone https://github.com/mpanarin/emacs-elixir.git ~/projects/personal/elisp/emacs-elixir -b add_font-lock_to_arrows
 git clone https://github.com/elixir-lsp/elixir-ls.git ~/projects/personal/elixir/elixir-ls
 
 # symlink the spacemacs config
