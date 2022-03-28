@@ -777,6 +777,7 @@ lines downward first."
     :custom
     (writeroom-width 125))
   (use-package solaire-mode  ;; enable Jolly Cooperation everywhere
+    :load-path "~/projects/personal/elisp/emacs-solaire-mode"
     :demand
     :init
     (solaire-global-mode 1))
