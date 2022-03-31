@@ -530,7 +530,9 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server nil
+   dotspacemacs-enable-server `(,@(cond
+                                   ((spacemacs/system-is-mac) nil)
+                                   ((spacemacs/system-is-linux) t)))
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
