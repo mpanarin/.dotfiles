@@ -113,7 +113,6 @@ This function should only modify configuration layer settings."
 
 ;; General additional packages
                                       reverse-im                ;; allows usage shortcuts on russian keyboard
-                                      srcery-theme              ;; theme
                                       exunit                    ;; elixir test runner
                                       solaire-mode              ;; highlights test buffers with slightly brighter colors
                                       treemacs-magit            ;; magit integration
@@ -122,16 +121,11 @@ This function should only modify configuration layer settings."
                                       python-pytest             ;; pytest runner
                                       highlight-function-calls  ;; highlights function calls
                                       highlight-blocks          ;; highlights block, where cursor is
-                                      coffee-mode               ;; mode for editing coffee-script files
-                                      daemons                   ;; emacs UI for managing services from systemd and alike
-                                      ox-reveal                 ;; add export to reveal.js from org
                                       org-fancy-priorities      ;; fancy priorities in org mode
                                       emojify                   ;; because dank
                                       mix                       ;; minor mode for mix files
-                                      w3m
                                       pkgbuild-mode             ;; editing major mode for PKGBUILD files
                                       dash-functional
-                                      frame-local
                                       direnv                    ;; integration with .direnv
                                       plantuml-mode             ;; mode for editing diagrams in PlantUML
                                       inf-elixir                ;; Run iex
@@ -309,7 +303,6 @@ It should only modify the values of Spacemacs settings."
                          doom-peacock
                          ;; solarized-light-high-contrast
                          ;; doom-snazzy
-                         ;; srcery
                          ;; doom-molokai
                          ;; solarized-dark
                          spacemacs-light)
@@ -1188,9 +1181,7 @@ lines downward first."
                        (file-expand-wildcards "~/org/*.org")))
     :bind
     (:map org-mode-map
-          ("RET" . newline-and-indent))
-    :init
-    (require 'ox-reveal))
+          ("RET" . newline-and-indent)))
   (use-package helm-org-rifle
     :defer t
     :bind
