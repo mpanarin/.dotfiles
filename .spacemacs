@@ -51,8 +51,7 @@ This function should only modify configuration layer settings."
      ranger
      better-defaults
      emacs-lisp
-     (version-control :variables
-                      version-control-diff-tool 'git-gutter+)
+     version-control
      (git :variables
           git-enable-magit-todos-plugin t)
      lsp
@@ -142,6 +141,7 @@ This function should only modify configuration layer settings."
                                       ,@(when (spacemacs/system-is-mac) '(
                                                                           exec-path-from-shell      ;; picks PATH from shell. As on osx apps are not picking the paths set on .zshenv
                                                                           ))
+                                      fringe-helper
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -1169,14 +1169,14 @@ lines downward first."
      :map magit-todos-item-section-map
           (("j" . evil-next-visual-line)
            ("l" . evil-previous-visual-line))))
-  (use-package git-gutter+
+  (use-package git-gutter
     :defer t
     :config
     (let ((bitmap '()))
       (dotimes (_ 37) (push "..XXXXX." bitmap))
-      (eval `(fringe-helper-define 'git-gutter-fr+-added nil ,@bitmap))
-      (eval `(fringe-helper-define 'git-gutter-fr+-modified nil ,@bitmap))
-      (eval `(fringe-helper-define 'git-gutter-fr+-deleted nil ,@bitmap))))
+      (eval `(fringe-helper-define 'git-gutter-fr:added nil ,@bitmap))
+      (eval `(fringe-helper-define 'git-gutter-fr:modified nil ,@bitmap))
+      (eval `(fringe-helper-define 'git-gutter-fr:deleted nil ,@bitmap))))
 
   ;; A fix for a specific bug described here https://github.com/syl20bnr/spacemacs/issues/15089
   (setq auto-mode-alist (delete '("/git-rebase-todo$" . helm-ls-git-rebase-todo-mode) auto-mode-alist))
