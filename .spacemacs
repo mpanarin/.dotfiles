@@ -1284,6 +1284,9 @@ lines downward first."
       "..XXXXX."
       "..XXXXX.")
     )
+
+  ;; A fix for a specific bug described here https://github.com/syl20bnr/spacemacs/issues/15089
+  (setq auto-mode-alist (delete '("/git-rebase-todo$" . helm-ls-git-rebase-todo-mode) auto-mode-alist))
   )
 
 (defun custom/org-specific ()
