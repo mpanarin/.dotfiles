@@ -120,9 +120,6 @@ This function should only modify configuration layer settings."
                                       treemacs-icons-dired      ;; use treemacs icons in dired
                                       magit-todos               ;; add TODOs and other keywords to the magit buffer
                                       python-pytest             ;; pytest runner
-                                      nov                       ;; awesome epub mode
-                                      calfw                     ;; great emacs calendar
-                                      calfw-org                 ;; integration of calendar with org
                                       highlight-function-calls  ;; highlights function calls
                                       highlight-blocks          ;; highlights block, where cursor is
                                       coffee-mode               ;; mode for editing coffee-script files
@@ -329,6 +326,7 @@ It should only modify the values of Spacemacs settings."
                                   :separator-scale ,@(cond
                                                       ((spacemacs/system-is-mac) '(1.3))
                                                       ((spacemacs/system-is-linux) '(1.7))))
+
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
@@ -757,21 +755,6 @@ lines downward first."
     :demand
     :config
     (reverse-im-activate "russian-computer"))
-  (use-package nov  ;; associate epub file with nov-mode
-    :defer t
-    :mode ("\\.epub\\'" . nov-mode)
-    :custom
-    (nov-text-width 120)
-    :bind
-    (:map nov-mode-map
-	        ("C-j" . nov-next-document)
-	        ("C-k" . nov-previous-document)
-	        ("C-l" . nov-goto-toc)))
-  (use-package writeroom-mode  ;; configurate writeroom
-    :commands (writeroom-mode writeroom--enable writeroom--disable)
-    :defer t
-    :custom
-    (writeroom-width 125))
   (use-package solaire-mode  ;; enable Jolly Cooperation everywhere
     :load-path "~/projects/personal/elisp/emacs-solaire-mode"
     :demand
@@ -791,8 +774,6 @@ lines downward first."
     :defer t
     :hook (org-mode . smartparens-mode)
     )
-  (use-package yasnippet
-    :defer t)
   (use-package pdf-tools
     :defer t
     :custom
@@ -825,7 +806,7 @@ lines downward first."
     :bind
     (:map evil-normal-state-local-map
           ("SPC b b" . ibuffer)))
-  (use-package calendar  ;; TODO: probably should be dropped. Don't really use it anymore
+  (use-package calendar
     :defer t
     :custom
     (calendar-week-start-day 1))
@@ -1213,27 +1194,6 @@ lines downward first."
     :bind
     (:map evil-normal-state-local-map
           ("SPC a o R" . helm-org-rifle-agenda-files)))
-  (use-package calfw-org
-    :defer t
-    :bind
-    (:map cfw:calendar-mode-map
-          (("C-j" . cfw:navi-next-item-command)
-           ("C-k" . cfw:navi-prev-item-command)
-           ("RET" . cfw:org-open-agenda-day)
-           ("A" . org-agenda-list))
-    :map evil-normal-state-local-map
-          ("SPC a o a" . cfw:open-org-calendar)))
-  (use-package org-present
-    :defer t
-    :config
-    (add-hook 'org-present-mode-hook (lambda ()
-                                       (setq-local global-hl-line-mode nil)
-                                       (setq display-line-numbers nil)
-                                       (writeroom--enable)))
-    (add-hook 'org-present-mode-quit-hook (lambda ()
-                                            (setq-local global-hl-line-mode t)
-                                            (setq display-line-numbers t)
-                                            (writeroom--disable))))
   (use-package org-fancy-priorities  ;; fancy org priorities
     :defer t
     :hook
