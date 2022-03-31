@@ -364,24 +364,9 @@ It should only modify the values of Spacemacs settings."
    ;; works in the GUI. (default nil)
    dotspacemacs-distinguish-gui-tab nil
 
-   ;; TODO: check if this are still available
-   ;; If non-nil `Y' is remapped to `y$' in Evil states. (default nil)
-   dotspacemacs-remap-Y-to-y$ nil
-
-   ;; TODO: check if this are still available
-   ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
-   ;; there. (default t)
-   dotspacemacs-retain-visual-state-on-shift t
-
-   ;; TODO: check if this are still available
    ;; If non-nil, `J' and `K' move lines up and down when in visual mode.
    ;; (default nil)
    dotspacemacs-visual-line-move-text t
-
-   ;; TODO: check if this are still available
-   ;; If non-nil, inverse the meaning of `g' in `:substitute' Evil ex-command.
-   ;; (default nil)
-   dotspacemacs-ex-substitute-global nil
 
    ;; Name of the default layout (default "Default")
    dotspacemacs-default-layout-name "Default"
@@ -962,10 +947,11 @@ lines downward first."
 
 (defun custom/spacemacs-improvements ()
   "Several fixes from spacemacs issues"
-  ;; TODO: switch to use-package here
-  (with-eval-after-load 'spaceline    ;; Disable useless parts of spaceline
-    (spaceline-toggle-minor-modes-off)
-    (spaceline-toggle-purpose-off))
+  (use-package spaceline
+    :custom
+    (spaceline-purpose-p nil)     ;; disable purpose in spaceline
+    (spaceline-minor-modes-p nil) ;; disable minor modes in spaceline
+    )
 
   (setq auto-save-mode nil            ;; switch to a better autosave mode. at least in OSX
         auto-save-default nil         ;; switch to a better autosave mode
@@ -1002,7 +988,6 @@ lines downward first."
   "Generic LSP changes"
 
   (use-package lsp-mode
-    ;; :load-path "/home/m-panarin/projects/personal/elisp/lsp-mode/"  ;; when custom load is needed
     :defer t
     :commands lsp
     :ensure t
@@ -1342,10 +1327,6 @@ lines downward first."
                                             (setq-local global-hl-line-mode t)
                                             (setq display-line-numbers t)
                                             (writeroom--disable))))
-  ;; TODO: maybe it is present in some layer. Check it
-  ;; (use-package org-re-reveal
-  ;;   :after org
-  ;;   :demand t)
   (use-package org-fancy-priorities  ;; fancy org priorities
     :defer t
     :hook
@@ -1527,7 +1508,6 @@ lines downward first."
 
 (defun custom/faces ()
   "Customized faces for different themes"
-  ;; TODO: add faces for solair mode, no need for doom themes
   (custom/faces-all)
 
   (if (string= spacemacs--cur-theme "doom-snazzy")
