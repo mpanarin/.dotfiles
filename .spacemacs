@@ -48,10 +48,13 @@ This function should only modify configuration layer settings."
      (docker :variables
              docker-dockerfile-backend 'lsp)
      helm
-     ranger
-     better-defaults
+     (ranger :variables
+             ranger-override-dired 'ranger
+             ranger-enter-with-minus 'ranger
+             ranger-show-hidden t
+             ranger-cleanup-on-disable t
+             ranger-show-preview nil)
      emacs-lisp
-     version-control
      (git :variables
           git-enable-magit-todos-plugin t)
      lsp
@@ -63,7 +66,6 @@ This function should only modify configuration layer settings."
      (ruby :variables ruby-backend 'lsp)
      (elixir :variables
              elixir-backend 'lsp)
-     erlang
      (sql :variables
           sql-capitalize-keywords t
           sql-capitalize-keywords-disable-interactive t
@@ -92,11 +94,12 @@ This function should only modify configuration layer settings."
      (treemacs :variables
                treemacs-use-follow-mode t
                treemacs-use-filewatch-mode t
-               treemacs-use-scope-type 'Perspectives)
+               treemacs-use-scope-type 'Perspectives
+               treemacs-use-git-mode 'deferred
+               treemacs-lock-width t)
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      pdf
-     graphql
      (terraform :variables terraform-backend 'lsp)
      (plantuml :variables
                plantuml-default-exec-mode 'jar)
@@ -775,6 +778,7 @@ lines downward first."
     (pdf-view-display-size 'fit-page))
   (use-package vterm
     :defer t
+    :hook ((vterm-mode . (lambda () (setq-local evil-move-cursor-back nil))))
     :config
     (defun vterm-send-ctrl-d ()
       "Sends `C-d' to the libvterm."
@@ -874,20 +878,6 @@ lines downward first."
       )
     ))
 
-(defun custom/linux-config()
-  (when (spacemacs/system-is-linux)
-
-    (evil-leader/set-key ;; do not kill emacs daemon on exit
-      "q q" 'spacemacs/frame-killer
-      "q Q" 'spacemacs/prompt-kill-emacs)
-    (spacemacs/enable-transparency)  ;; enable transparency
-    ))
-
-(defun custom/osx-config()
-  (when (spacemacs/system-is-mac)
-    (exec-path-from-shell-initialize) ;; This is required in OSX as variables are not getting loaded from .zshrc
-    ))
-
 (defun custom/unbind-useless-shit()
   (let ((keys '(
 
@@ -925,13 +915,6 @@ lines downward first."
     (mapc (lambda (key) (unbind-key key 'evil-normal-state-local-map)) keys))
   )
 
-(defun custom/add-hooks ()
-  "This is all the hooks I use"
-  (add-hook 'python-mode-hook '(lambda () (display-fill-column-indicator-mode 1)))  ;; Add a line on 80 symbols
-  (add-hook 'vterm-mode-hook (lambda () (setq-local evil-move-cursor-back nil)))    ;; Make cursor fixed in vterm
-  (add-hook 'before-save-hook #'custom/format-on-save)                              ;; Add auto-formatting after save
-  )
-
 (defun custom/spacemacs-improvements ()
   "Several fixes from spacemacs issues"
   (use-package spaceline
@@ -947,6 +930,8 @@ lines downward first."
         create-lockfiles nil          ;; No lock files plz
         vc-follow-symlinks t          ;; Always follow symlinks pls
         )
+
+  (add-hook 'before-save-hook #'custom/format-on-save) ;; Add auto-formatting after save
   )
 
 (defun custom/dap-generic ()
@@ -1060,6 +1045,10 @@ lines downward first."
 
 (defun custom/python-specific ()
   "Changes specific to python-mode"
+  (use-package python-mode
+    :defer t
+    :hook ((python-mode . (lambda () (display-fill-column-indicator-mode 1)))))
+
   (use-package python-pytest
     :defer t
     :after python
@@ -1098,12 +1087,6 @@ lines downward first."
       (kbd "i b") 'inf-elixir-send-buffer
       (kbd "m") 'mix-execute-task
       ))
-
-  ;; TODO: this works but breaks lsp checker completely
-  ;; see https://github.com/flycheck/flycheck/issues/1762
-  ;; (add-hook 'lsp-mode-hook  (lambda ()
-  ;;                            (if (eq major-mode 'elixir-mode)
-  ;;                                (setq-local lsp-flycheck-live-reporting nil))))
   )
 
 (defun custom/elisp-specific ()
@@ -1211,17 +1194,15 @@ lines downward first."
   "Changes specific to treemacs-mode"
   (use-package treemacs
     :defer t
+    :custom
+    (treemacs-show-hidden-files nil)
     :config
-    (treemacs-git-mode 'deferred)  ;; Treemacs use deferred git-mode
-    (treemacs-toggle-show-dotfiles)  ;; Hide dotfiles by default
     (add-to-list 'treemacs-ignored-file-predicates  ;; Ignore *.pyc files
                  (lambda (filename filepath)
                    (string-match-p "\.pyc$" filename)))
     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)  ;; autohide files ignored by git please
     (define-key treemacs-mode-map (kbd "p") treemacs-project-map)  ;; set project map to 'p' as binding maps to maps is not working in :bind :\
     (define-key treemacs-mode-map (kbd "M-w") treemacs-workspace-map)  ;; set workspace map to 'W' as binding maps to maps is not working in :bind :\
-    :custom
-    (treemacs-lock-width 1)  ;; keep the width locked
     :bind
     (:map treemacs-mode-map
           ;; Revert navigation changes
@@ -1397,8 +1378,6 @@ you should place your code here."
   (custom/evil-motions)
   (custom/generic-improvements)
   (custom/ligatures)
-
-  (custom/add-hooks)
 
   (custom/spacemacs-improvements)
   (custom/generic-define-keys)
