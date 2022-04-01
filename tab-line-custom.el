@@ -22,11 +22,11 @@
 (setq tab-line-tabs-function 'custom-tab-line--exclude-buffer-show-f)
 
 ;; `tab-line-exclude-modes' should exclude helm, help, etc.
-(setq custom-tab-line-exclude-buffer-regexp '("^magit"  ; regex for modes in which tab-line should not be showed.
+(setq custom-tab-line-exclude-buffer-regexp '("^magit"  ; regex for buffer names to exclude tabs
                                               "^COMMIT"
                                               "^\*"
                                               "^\ \*"))
-(mapc (lambda (mode) (push mode tab-line-exclude-modes)) '(helm-mode help-mode magit-mode vterm-mode))
+(mapc (lambda (mode) (push mode tab-line-exclude-modes)) '(helm-mode help-mode magit-mode vterm-mode ranger-mode dired-mode))
 (defun tab-line-mode--turn-on ()
   "Turn on `tab-line-mode'.
 redefined to introduce regexps"
