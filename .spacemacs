@@ -1143,10 +1143,14 @@ lines downward first."
     :defer t
     :config
     (let ((bitmap '()))
-      (dotimes (_ 37) (push "..XXXXX." bitmap))
+      (dotimes (_ 37) (push "....XXX." bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:added nil ,@bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:modified nil ,@bitmap))
-      (eval `(fringe-helper-define 'git-gutter-fr:deleted nil ,@bitmap))))
+      (eval `(fringe-helper-define 'git-gutter-fr:deleted nil ,@bitmap)))
+    :custom-face
+    (git-gutter-fr:added ((t (:foreground "#98be65"))))
+    (git-gutter-fr:deleted ((t (:foreground "#ff5d38"))))
+    (git-gutter-fr:modified ((t (:foreground "#51afef")))))
 
   ;; A fix for a specific bug described here https://github.com/syl20bnr/spacemacs/issues/15089
   (setq auto-mode-alist (delete '("/git-rebase-todo$" . helm-ls-git-rebase-todo-mode) auto-mode-alist))
