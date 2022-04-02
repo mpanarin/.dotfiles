@@ -1127,6 +1127,10 @@ lines downward first."
     :custom
     (highlight-blocks-max-innermost-block-count 1)
     :hook (emacs-lisp-mode . highlight-blocks-mode)
+    :custom-face
+    ;; This face gets overwritten in emacsclient for some reason. So I have to define
+    ;; it here explicitly
+    (highlight-blocks-depth-1-face ((t (:background "gray10"))))
     )
   )
 
