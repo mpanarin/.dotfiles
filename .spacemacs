@@ -954,7 +954,34 @@ lines downward first."
   (add-hook 'lsp-mode-hook (lambda () (custom-debug-mode t))))
 
 (defun custom/tab-line-mode ()
-  (load "~/.dotfiles/tab-line-custom"))
+  (use-package simple-tabs
+    :load-path "~/projects/personal/elisp/simple-tabs/"
+    :demand
+    :custom
+    (simple-tabs-excluded-buffers-regexp '("magit"
+                                           "helm"
+                                           "^\*"))
+    (simple-tabs-disabled-in-buffers-regexp '("^magit"
+                                              "^COMMIT"
+                                              "^\*"
+                                              "^\ \*"))
+    (simple-tabs-disabled-in-modes '(completion-list-mode
+                                     helm-mode
+                                     help-mode
+                                     magit-mode
+                                     vterm-mode
+                                     ranger-mode
+                                     dired-mode))
+    :custom-face
+    (tab-line ((t (:underline "#83898d" :height 1.0))))
+    (tab-line-tab ((t (:inherit tab-line :box (:line-width 1 :color "#282725") :underline "#83898d"))))
+    (tab-line-tab-current ((t (:inherit tab-line-tab :box (:line-width 1 :color "#83898d") :underline "#282725"))))
+    (tab-line-tab-inactive ((t (:inherit tab-line-tab :overline "#282725"))))
+    :bind
+    (:map evil-normal-state-local-map ("SPC w t" . simple-tabs-command-map))
+    :config
+    (global-simple-tabs-mode 1))
+  )
 
 (defun custom/lsp-generic ()
   "Generic LSP changes"
