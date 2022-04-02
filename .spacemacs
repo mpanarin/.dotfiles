@@ -862,7 +862,6 @@ lines downward first."
     (evil-leader/set-key ;; do not kill emacs daemon on exit
       "q q" 'spacemacs/frame-killer
       "q Q" 'spacemacs/prompt-kill-emacs)
-    (spacemacs/enable-transparency)  ;; enable transparency
     ))
 
 (defun custom/osx-config()
