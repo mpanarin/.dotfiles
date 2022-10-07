@@ -8,7 +8,7 @@ ZSH_THEME="spaceship"
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git python docker extract lol mix pip elixir asdf)
+plugins=(git docker docker-compose extract mix mix-fast pip elixir asdf direnv)
 
 # if not Emacs - use vi-mode and start tmux
 if [[ -z $INSIDE_EMACS ]]; then
