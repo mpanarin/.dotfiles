@@ -182,7 +182,7 @@ alias xat='exa -lTh --git'
 alias b='bat'
 alias cat='bat'
 
-alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
+alias ezsh='nvim ~/.zshrc && source ~/.zshrc && omz reload'
 alias tkill='tmux kill-session -t'
 
 alias kub='kubectl'

@@ -135,14 +135,14 @@ This function should only modify configuration layer settings."
                                       ,@(when (spacemacs/system-is-mac) '(
                                                                           exec-path-from-shell      ;; picks PATH from shell. As on osx apps are not picking the paths set on .zshenv
                                                                           ))
-                                      fringe-helper
+                                      fringe-helper             ;; Adds special functions for defining fringe bitmaps
                                       )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(lsp-python-ms)
+   dotspacemacs-excluded-packages '(lsp-python-ms docker-tramp)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -252,6 +252,13 @@ It should only modify the values of Spacemacs settings."
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 999
 
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
+
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -331,7 +338,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-default-font `("Fira Code"
                                :size ,@(cond
                                         ((spacemacs/system-is-mac) '(12.5))
-                                        ((spacemacs/system-is-linux) '(15)))
+                                        ((spacemacs/system-is-linux) '(25)))
                                :weight normal
                                :width normal)
 
@@ -572,7 +579,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
@@ -749,6 +758,13 @@ lines downward first."
         enable-local-eval t                      ;; allow evals in dir-locals
         )
 
+  (use-package fringe-helper
+    :defer t
+    :config
+    (let ((bitmap '()))
+      (dotimes (_ 37) (push "..XXXXX." bitmap))
+      ;; Change a very small dot of syntax highlight to a properly visible line
+      (eval `(fringe-helper-define 'syntax-checking--fringe-indicator nil ,@bitmap))))
   (use-package reverse-im  ;; allow usage of russian keyboard
     :demand
     :config
@@ -1173,9 +1189,10 @@ lines downward first."
     :defer t
     :config
     (let ((bitmap '()))
-      (dotimes (_ 37) (push "....XXX." bitmap))
+      (dotimes (_ 37) (push "..XXXXX." bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:added nil ,@bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:modified nil ,@bitmap))
+      (eval `(fringe-helper-define 'syntax-checking--fringe-indicator nil ,@bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:deleted nil ,@bitmap)))
     :custom-face
     (git-gutter-fr:added ((t (:foreground "#98be65"))))
