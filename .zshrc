@@ -118,6 +118,9 @@ unsetopt AUTO_CD
 # Add elixir_ls to PATH
 PATH="$HOME/projects/personal/elixir/elixir-ls/release:$PATH"
 
+# add tmuxinator to PATH
+PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
+
 # Aliases
 alias gdt='git difftool'
 
@@ -187,6 +190,7 @@ alias tkill='tmux kill-session -t'
 
 alias kub='kubectl'
 alias serv='sudo systemctl'
+alias cdr='cd $(git rev-parse --show-toplevel)'
 
 # Add local bin to PATH
 PATH="$HOME/bin:$PATH"
