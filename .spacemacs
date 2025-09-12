@@ -27,12 +27,12 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   `(
+   `(systemd
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -66,6 +66,8 @@ This function should only modify configuration layer settings."
      (ruby :variables ruby-backend 'lsp)
      (elixir :variables
              elixir-backend 'lsp)
+     (go :variables
+         go-backend 'lsp)
      (sql :variables
           sql-capitalize-keywords t
           sql-capitalize-keywords-disable-interactive t
@@ -79,7 +81,8 @@ This function should only modify configuration layer settings."
                  typescript-backend 'lsp)
      rust
      themes-megapack
-     org
+     (org :variables
+          org-enable-reveal-js-support t)
      (shell :variables
             shell-pop-autocd-to-working-dir nil
             shell-default-height 30
@@ -87,7 +90,8 @@ This function should only modify configuration layer settings."
             shell-default-shell 'vterm)
      spell-checking
      syntax-checking
-     version-control
+     (version-control :variables
+                      version-control-diff-tool 'git-gutter)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t)
@@ -101,8 +105,10 @@ This function should only modify configuration layer settings."
               ibuffer-group-buffers-by 'projects)
      pdf
      (terraform :variables terraform-backend 'lsp)
-     (plantuml :variables
-               plantuml-default-exec-mode 'jar)
+     ;; this works but requires a bunch of face configs
+     ;; (tree-sitter :variables
+     ;;              tree-sitter-syntax-highlight-enable t
+     ;;              tree-sitter-fold-enable t)
      )
 
    ;; List of additional packages that will be installed without being
@@ -113,8 +119,8 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages `(
-
-;; General additional packages
+                                      
+                                      ;; General additional packages
                                       reverse-im                ;; allows usage shortcuts on russian keyboard
                                       exunit                    ;; elixir test runner
                                       solaire-mode              ;; highlights test buffers with slightly brighter colors
@@ -139,10 +145,14 @@ This function should only modify configuration layer settings."
                                       )
 
    ;; A list of packages that cannot be updated.
-   dotspacemacs-frozen-packages '()
+   dotspacemacs-frozen-packages '(
+                                  ;; https://github.com/emacs-evil/evil/commit/f29ad3c91e06ca1910f326b3b0a41ae59ba2c8b6#diff-e744c1dca164597eea78db1ed87a2f14b1c16e0fe8e0435fbc4b93865b55ef47L2582
+                                  ;; This refactoring broke shifting in visual mode
+                                  evil
+                                  )
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(lsp-python-ms docker-tramp)
+   dotspacemacs-excluded-packages '(lsp-python-ms docker-tramp majapahit-themes)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -200,14 +210,14 @@ It should only modify the values of Spacemacs settings."
    ;; This is an advanced option and should not be changed unless you suspect
    ;; performance issues due to garbage collection operations.
    ;; (default '(100000000 0.1))
-   dotspacemacs-gc-cons '(100000000 0.1)
+   dotspacemacs-gc-cons '(200000000 0.1)
 
    ;; Set `read-process-output-max' when startup finishes.
    ;; This defines how much data is read from a foreign process.
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1024 1024)
+   dotspacemacs-read-process-output-max (* 1024 1024 4)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -338,7 +348,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-default-font `("Fira Code"
                                :size ,@(cond
                                         ((spacemacs/system-is-mac) '(12.5))
-                                        ((spacemacs/system-is-linux) '(25)))
+                                        ((spacemacs/system-is-linux) '(15)))
                                :weight normal
                                :width normal)
 
@@ -419,6 +429,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
 
@@ -454,8 +468,8 @@ It should only modify the values of Spacemacs settings."
                                           ((spacemacs/system-is-linux) t)))
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -467,6 +481,11 @@ It should only modify the values of Spacemacs settings."
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
+
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 90
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -631,7 +650,8 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  (setenv "LSP_USE_PLISTS" "true")
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -639,14 +659,15 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
+dump."
+  )
 
 
 ;; helpful small custom functions
@@ -726,8 +747,8 @@ will turn into
 (defun custom/format-on-save ()
   "On buffer save function triggering formatting for specific modes."
   (pcase major-mode
-      ('elixir-mode (lsp-format-buffer))
-      ('js2-mode (lsp-format-buffer))
+    ('elixir-mode (lsp-format-buffer))
+    ('js2-mode (lsp-format-buffer))
     ))
 
 
@@ -751,29 +772,37 @@ lines downward first."
 (defun custom/generic-improvements ()
   "Generic improvements and packages that are either too small, or not fitting other categories."
   (add-hook 'focus-out-hook #'garbage-collect)   ;; garbage-collect on focus out. Increases snappiness
-  (fringe-mode '(16 . 8))                        ;; increase the left fringe width
+  (fringe-mode '(8 . 8))                         ;; increase the left fringe width
   (setq auto-save-no-message t                   ;; no messages on autosaving please (27.1)
         spacemacs-buffer--current-note-type nil  ;; remove note from home buffer
         enable-local-variables :all              ;; allow unsafe vars in dir-locals
         enable-local-eval t                      ;; allow evals in dir-locals
         )
+  (scroll-bar-mode -1)                           ;; inconvenient and useless
+
+  (setq helm-ag-use-grep-ignore-list nil)        ;; TEMPORARY, FIXES ISSUE WITH UPDATED RIPGREP AND HELM-AG
 
   (use-package fringe-helper
-    :defer t
+    :demand
     :config
     (let ((bitmap '()))
-      (dotimes (_ 37) (push "..XXXXX." bitmap))
+      (dotimes (_ 37) (push "....XXX." bitmap))
       ;; Change a very small dot of syntax highlight to a properly visible line
       (eval `(fringe-helper-define 'syntax-checking--fringe-indicator nil ,@bitmap))))
-  (use-package reverse-im  ;; allow usage of russian keyboard
-    :demand
-    :config
-    (reverse-im-activate "russian-computer"))
-  (use-package solaire-mode  ;; enable Jolly Cooperation everywhere
-    :load-path "~/projects/personal/elisp/emacs-solaire-mode"
-    :demand
-    :init
-    (solaire-global-mode 1))
+  ;; (use-package reverse-im  ;; allow usage of russian keyboard
+  ;;   :demand
+  ;;   :config
+  ;;   (reverse-im-activate "russian-computer"))
+  ;; (use-package solaire-mode  ;; enable Jolly Cooperation everywhere
+  ;;   :load-path "~/projects/personal/elisp/emacs-solaire-mode"
+  ;;   :demand
+  ;;   :init
+  ;;   (solaire-global-mode 1))
+  (use-package evil
+    :bind
+    (:map evil-visual-state-map
+          ("J" . drag-stuff-down)
+          ("K" . drag-stuff-up)))
   (use-package web-mode  ;; configure webmode
     :defer t
     :mode "\\.mako\\'"
@@ -783,6 +812,8 @@ lines downward first."
   (use-package csv-mode  ;; Make csv open always aligned with delimiters
     :defer t
     :hook (csv-mode . (lambda () (csv-toggle-invisibility) (csv-align-fields nil 1 (point-max))))  ;; TODO: this probably can be done better
+    :custom
+    (csv-separators '("," "	" ";"))
     )
   (use-package smartparens  ;; autopair stuff in snippets and org
     :defer t
@@ -808,10 +839,10 @@ lines downward first."
     :defer t
     :custom
     (flycheck-display-errors-delay 0.3))
-  (use-package evil-surround
-    :defer t
-    :config
-    (advice-add 'evil-surround-region :after (lambda (&rest args) (execute-kbd-macro "gv") (evil-forward-char))))  ;; FIXME: this interferes with "c s" surrounding
+  ;; (use-package evil-surround
+  ;;   :defer t
+  ;;   :config
+  ;;   (advice-add 'evil-surround-region :after (lambda (&rest args) (execute-kbd-macro "gv") (evil-forward-char))))  ;; FIXME: this interferes with "c s" surrounding
   (use-package ibuffer
     :defer t
     :config
@@ -848,37 +879,38 @@ lines downward first."
 
 (defun custom/ligatures ()
   (use-package ligature
-    :load-path "~/projects/personal/elisp/ligature.el"
+    :load-path "~/projects/personal/elisp/ligatures.el"
     :config
     ;; Enable traditional ligature support in eww-mode, if the
     ;; `variable-pitch' face supports it
     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
     ;; Enable all Cascadia Code ligatures in programming modes
     (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                        ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                        "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                        "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                        "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                        "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                        "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                        "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                        ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                        "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                        "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                        "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                        "\\\\" "://"  "~>>" "<<~"))
+                                         ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                         "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                         "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                         "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                         "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                         "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                         "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                         ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                         "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                         "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                         "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                         "\\\\" "://"  "~>>" "<<~"))
     ;; Enables ligature checks globally in all buffers. You can also do it
     ;; per mode with `ligature-mode'.
     (global-ligature-mode t))
   )
 
 (defun custom/linux-config()
-  (when (spacemacs/system-is-linux)
+  ;; (when (spacemacs/system-is-linux)
 
-    (evil-leader/set-key ;; do not kill emacs daemon on exit
-      "q q" 'spacemacs/frame-killer
-      "q Q" 'spacemacs/prompt-kill-emacs)
-    ))
+  ;;   (evil-leader/set-key ;; do not kill emacs daemon on exit
+  ;;     "q q" 'spacemacs/frame-killer
+  ;;     "q Q" 'spacemacs/prompt-kill-emacs)
+  ;;   )
+  )
 
 (defun custom/osx-config()
   (when (spacemacs/system-is-mac)
@@ -895,7 +927,7 @@ lines downward first."
 
 (defun custom/unbind-useless-shit()
   (let ((keys '(
-
+                
                 ;;general
                 "SPC \""                ;; Remove strange call to terminal here
                 "SPC *"                 ;; Remove search in project, I use `SPC s p`
@@ -905,7 +937,7 @@ lines downward first."
                 "SPC ²"                 ;; useless select of window
                 "SPC `"                 ;; useless select of window
                 "SPC <f1>"              ;; what is even helm apropos?
-
+                
                 ;; applications
                 "SPC a '"               ;; I use `SPC '` no need for this
                 "SPC a k"               ;; Don't know what paradox is, don't care
@@ -920,7 +952,7 @@ lines downward first."
                 "SPC a m"               ;; music. Empty
                 "SPC a r"               ;; Empty
                 "SPC a w"               ;; Empty
-
+                
                 ;; buffers
                 "SPC b a"               ;; persp-add-buffer, I don't use it
                 "SPC b B"               ;; global-list-buffer, I use ibuffer
@@ -964,8 +996,8 @@ lines downward first."
         ('rjsx-mode (custom/toggle-breakpoint "debugger;")))
       )
 
-      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b d") 'dap-breakpoint-toggle)
-      (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") 'custom/toggle-breakpoint-generic))
+    (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b d") 'dap-breakpoint-toggle)
+    (spacemacs/set-leader-keys-for-minor-mode 'custom-debug-mode (kbd "d b b") 'custom/toggle-breakpoint-generic))
   (add-hook 'lsp-mode-hook (lambda () (custom-debug-mode t))))
 
 (defun custom/tab-line-mode ()
@@ -1007,7 +1039,7 @@ lines downward first."
     :ensure t
     :diminish lsp-mode
     :custom
-
+    
     ;; General
     (lsp-file-watch-threshold nil)            ;; always filewatch
     (lsp-headerline-breadcrumb-enable t)      ;; show breadcrumbs
@@ -1018,32 +1050,33 @@ lines downward first."
     (lsp-modeline-code-actions-enable nil)    ;; disable code actions in modeline, they are already present in spacemacs
     (lsp-lens-enable t)                       ;; enable lenses if server supports them
     (lsp-lens-place-position 'above-line)     ;; place lenses above the line
-
+    
     ;; PYLS configs
-    (lsp-pyls-plugins-rope-completion-enabled nil)             ;; disable garbage rope completion in pyls
-    (lsp-pyls-plugins-jedi-completion-include-params nil)      ;; disable params in jedi completion, they are mediocre
-    (lsp-pyls-plugins-pylint-enabled t)                        ;; enable pylint by deafult
-    (lsp-pyls-plugins-flake8-enabled t)                        ;; enable flake8 by default
-    (lsp-pyls-plugins-flake8-filename ["~/.dotfiles/flake8"])  ;; set the default flake8 config
-    (lsp-pyls-plugins-pyflakes-enabled nil)                    ;; disable pyflakes by default
-    (lsp-pyls-plugins-mccabe-enabled nil)                      ;; disable mccabe by default
-    (lsp-pyls-plugins-pycodestyle-enabled nil)                 ;; disable pycodestyle by default
-    (lsp-pyls-plugins-pydocstyle-enabled nil)                  ;; disable pydocstyle by default
-    (lsp-pyls-plugins-jedi-completion-fuzzy nil)               ;; fuzzy off
-    (lsp-pyls-rename-backend 'rope)                            ;; rename to rope
-
+    (lsp-pylsp-plugins-rope-completion-enabled nil)             ;; disable garbage rope completion in pyls
+    (lsp-pylsp-plugins-jedi-completion-include-params nil)      ;; disable params in jedi completion, they are mediocre
+    (lsp-pylsp-plugins-pylint-enabled t)                        ;; enable pylint by deafult
+    (lsp-pylsp-plugins-flake8-enabled t)                        ;; enable flake8 by default
+    (lsp-pylsp-plugins-flake8-filename ["~/.dotfiles/flake8"])  ;; set the default flake8 config
+    (lsp-pylsp-plugins-pyflakes-enabled nil)                    ;; disable pyflakes by default
+    (lsp-pylsp-plugins-mccabe-enabled nil)                      ;; disable mccabe by default
+    (lsp-pylsp-plugins-pycodestyle-enabled nil)                 ;; disable pycodestyle by default
+    (lsp-pylsp-plugins-pydocstyle-enabled nil)                  ;; disable pydocstyle by default
+    (lsp-pylsp-plugins-jedi-completion-fuzzy nil)               ;; fuzzy off
+    
     ;; SQLS configs
     (lsp-sqls-server "~/go/bin/sqls")   ;; path to language server
-
+    
     ;; Elixir-ls changes
     (lsp-elixir-mix-env "dev")
-
+    (lsp-elixir-enable-test-lenses nil)
+    (lsp-elixir-dialyzer-enabled t)      ;; Should be disabled for some projects via dir-locals
+    
     ;; JS configs
     (lsp-disabled-clients
      `(
        ,@(when (spacemacs/system-is-mac) '(eslint))
        ))
-
+    
 
     :config
     ;; Hacky way to update the var
@@ -1054,24 +1087,57 @@ lines downward first."
   (use-package lsp-ui
     :defer t
     :config
-      ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
-      (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g d") 'lsp-ui-peek-find-definitions)
-      (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
-      (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
+    ;; Use lsp-ui-peek instead of xref, as xref + lsp in emacs27 is broken
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g d") 'lsp-ui-peek-find-definitions)
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g r") 'lsp-ui-peek-find-references)
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-ui-mode (kbd "g i") 'lsp-ui-peek-find-implementation)
     :custom
-
+    
     ;; LSP-UI-DOC
     (lsp-ui-doc-position 'top)        ;; always keep doc at the top
     (lsp-ui-doc-include-signature t)  ;; add function signature to the buffer
     (lsp-ui-doc-show-with-cursor t)   ;; show hover on cursor
     (lsp-ui-doc-include-signature t)  ;; Add signature
-
+    
     ;; LSP-UI-SIDELINE
     (lsp-ui-sideline-show-hover nil)         ;; do not show hover info, I have lsp-ui-doc for that
     (lsp-ui-sideline-show-code-actions nil)  ;; disable code actions as they are pretty lame
-
+    (lsp-ui-sideline-diagnostic-max-lines 10)
+    
     ;; LSP-UI-PEEK
     (lsp-ui-peek-fontify 'always))  ;; always use fontify, otherwise highlight is broken in the left half
+  
+  ;; Adds functions and advices from lsp-mode-booster
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+  (advice-add (if (progn (require 'json)
+                         (fboundp 'json-parse-buffer))
+                  'json-parse-buffer
+                'json-read)
+              :around
+              #'lsp-booster--advice-json-parse)
+
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; for check lsp-server-present?
+               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))  ;; native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+              (setcar orig-result command-from-exec-path))
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   )
 
 (defun custom/jsts-specific ()
@@ -1083,6 +1149,13 @@ lines downward first."
   (use-package typescript-mode
     :custom
     (typescript-indent-level 2))
+  (use-package js
+    :custom
+    (js-indent-level 2))
+  (use-package json-mode
+    :defer t
+    :config
+    (add-to-list 'spacemacs-indent-sensitive-modes 'json-mode))
   )
 
 (defun custom/python-specific ()
@@ -1109,12 +1182,13 @@ lines downward first."
   (use-package mix
     :defer t)
   (use-package elixir-mode
-    :load-path "~/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
+    ;; :load-path "~/projects/personal/elisp/emacs-elixir/"  ;; when custom load is needed
     :defer t
     :config
-    (add-hook 'elixir-mode-hook '(lambda () (progn
-                                              (setq-local fill-column 98)
-                                              (display-fill-column-indicator-mode 1))))
+    (add-hook 'elixir-mode-hook #'(lambda () (progn
+                                               (setq-local fill-column 98)
+                                               (display-fill-column-indicator-mode 1))))
+    (add-to-list 'spacemacs-indent-sensitive-modes 'elixir-mode)
     (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m t") "tests" "testing related functionality")
     (spacemacs/declare-prefix-for-mode 'elixir-mode (kbd "m i") "IEx" "inferior elixir")
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
@@ -1182,14 +1256,14 @@ lines downward first."
     (:map magit-todos-section-map
           (("j" . evil-next-visual-line)
            ("l" . evil-previous-visual-line))
-     :map magit-todos-item-section-map
+          :map magit-todos-item-section-map
           (("j" . evil-next-visual-line)
            ("l" . evil-previous-visual-line))))
   (use-package git-gutter
-    :defer t
+    :demand
     :config
     (let ((bitmap '()))
-      (dotimes (_ 37) (push "..XXXXX." bitmap))
+      (dotimes (_ 37) (push "....XXX." bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:added nil ,@bitmap))
       (eval `(fringe-helper-define 'git-gutter-fr:modified nil ,@bitmap))
       (eval `(fringe-helper-define 'syntax-checking--fringe-indicator nil ,@bitmap))
@@ -1244,7 +1318,7 @@ lines downward first."
 (defun custom/treemacs-specific ()
   "Changes specific to treemacs-mode"
   (use-package treemacs
-    :defer t
+    :demand
     :custom
     (treemacs-show-hidden-files nil)
     :config
@@ -1274,21 +1348,29 @@ lines downward first."
     (:map helm-map
           ;; Helm please. Allow me to move cursor normally
           ("<left>" . backward-char)
-          ("<right>" . forward-char)))
+          ("<right>" . forward-char)
+          ;; Allow me to use switch lines and sources with J/K
+          ("C-S-J" . helm-next-source)
+          ("C-S-K" . helm-previous-source)
+          ("C-j" . helm-next-line)
+          ("C-k" . helm-previous-line)))
   (use-package helm-ag
     :demand
     :bind
     (:map helm-ag-map
           ;; Helm-ag please. Allow me to move cursor normally
           ("<left>" . backward-char)
-          ("<right>" . forward-char))))
+          ("<right>" . forward-char)))
+  (use-package helm-swoop
+    :custom
+    (helm-swoop-pre-input-function (lambda () ""))))
 
 (defun custom/generic-define-keys ()
   "Generic key defines I use, that are not tied to some specific mode,
    or mode I rarely use."
   (define-key global-map (kbd "<menu>") nil)                                                          ;; Unbind annoying sticky M-x on <menu>
   ;; Swap safe revert buffer and persp remove buffer
-  (define-key evil-normal-state-local-map (kbd "SPC b r") 'spacemacs/safe-revert-buffer)
+  (define-key evil-normal-state-local-map (kbd "SPC b r") 'revert-buffer)
   (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
   (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)  ;; Bind copy whole buffer to lowercase y (whatafaqerino)
   (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)                     ;; Bind kill-all-persp
@@ -1343,23 +1425,23 @@ lines downward first."
    '(lsp-headerline-breadcrumb-symbols-warning-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Yellow"))))
    )
   (setq hl-todo-keyword-faces
-    '(("TODO" . "#dc752f")
-      ("NEXT" . "#dc752f")
-      ("THEM" . "#2d9574")
-      ("PROG" . "#4f97d7")
-      ("OKAY" . "#4f97d7")
-      ("DONT" . "#f2241f")
-      ("FAIL" . "#f2241f")
-      ("DONE" . "#86dc2f")
-      ("NOTE" . "#b1951d")
-      ("KLUDGE" . "#b1951d")
-      ("HACK" . "#b1951d")
-      ("TEMP" . "#b1951d")
-      ("FIXME" . "#f2241f")
-      ("DEPRECATE" . "#f2241f")
-      ("DEBUG" . "#dc752f")
-      ("XXX" . "#dc752f")
-      ("XXXX" . "#dc752f")))
+        '(("TODO" . "#dc752f")
+          ("NEXT" . "#dc752f")
+          ("THEM" . "#2d9574")
+          ("PROG" . "#4f97d7")
+          ("OKAY" . "#4f97d7")
+          ("DONT" . "#f2241f")
+          ("FAIL" . "#f2241f")
+          ("DONE" . "#86dc2f")
+          ("NOTE" . "#b1951d")
+          ("KLUDGE" . "#b1951d")
+          ("HACK" . "#b1951d")
+          ("TEMP" . "#b1951d")
+          ("FIXME" . "#f2241f")
+          ("DEPRECATE" . "#f2241f")
+          ("DEBUG" . "#dc752f")
+          ("XXX" . "#dc752f")
+          ("XXXX" . "#dc752f")))
   )
 
 (defun custom/faces-snazzy ()
@@ -1451,7 +1533,7 @@ you should place your code here."
   (custom/helm-specific)
 
   (custom/faces)
- )
+  )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -1460,17 +1542,42 @@ you should place your code here."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(org-fancy-priorities shut-up epl git commander f dash s org-wild-notifier ecukes el-mock ert-runner ert-async cask solaire-mode pretty-mode reverse-im nord-theme srcery-theme helpful toml-mode racer flycheck-rust cargo rust-mode org-sticky-header 2048-game dap-mode buffer-expose helm-gtags ggtags erlang counsel-gtags treemacs-evil lsp-ui doom-modeline lsp-mode counsel helm pythonic all-the-icons treemacs zenburn-theme zen-and-art-theme yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum white-sand-theme which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme treemacs-projectile toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon swiper sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection stickyfunc-enhance srefactor sql-indent spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme snazzy-theme smyx-theme smeargle slim-mode shrink-path shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme realgud ranger rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme prodigy prettier-js popwin pony-mode planet-theme pippel pipenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme pfuture persp-mode pdf-tools pcre2el password-generator paradox overseer orgit organic-green-theme org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme ob-elixir noctilux-theme naquadah-theme nameless mwim mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-svn magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode live-py-mode link-hint light-soap-theme kaolin-themes json-navigator js2-refactor js-doc jbeans-theme jazz-theme ir-black-theme inkpot-theme indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete ht hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md gandalf-theme fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-mix flycheck-credo flx-ido flatui-theme flatland-theme fill-column-indicator farmhouse-theme fancy-battery eziam-theme eyebrowse expand-region exotica-theme evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dracula-theme dotenv-mode doom-themes dockerfile-mode docker django-theme diminish diff-hl define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme csv-mode counsel-projectile company-web company-tern company-statistics company-lsp company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme centered-cursor-mode busybee-theme bubbleberry-theme browse-at-remote birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes alchemist aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(lsp-log-io nil nil nil "Customized with use-package lsp-mode")
+   '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
+   '(package-selected-packages
+     '(ox-reveal org-re-reveal xah-fly-keys systemd journalctl-mode org-fancy-priorities shut-up epl git commander f dash s org-wild-notifier ecukes el-mock ert-runner ert-async cask solaire-mode pretty-mode reverse-im nord-theme srcery-theme helpful toml-mode racer flycheck-rust cargo rust-mode org-sticky-header 2048-game buffer-expose helm-gtags ggtags erlang counsel-gtags treemacs-evil doom-modeline counsel helm pythonic all-the-icons zenburn-theme zen-and-art-theme yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum white-sand-theme which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme treemacs-projectile toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon swiper sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection stickyfunc-enhance srefactor sql-indent spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme snazzy-theme smyx-theme smeargle slim-mode shrink-path shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme realgud ranger rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme prodigy prettier-js popwin pony-mode planet-theme pippel pipenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme pfuture persp-mode pdf-tools pcre2el password-generator paradox overseer orgit organic-green-theme org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme ob-elixir noctilux-theme naquadah-theme nameless mwim mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-svn magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode live-py-mode link-hint light-soap-theme kaolin-themes json-navigator js2-refactor js-doc jbeans-theme jazz-theme ir-black-theme inkpot-theme indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete ht hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md gandalf-theme fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-mix flycheck-credo flx-ido flatui-theme flatland-theme fill-column-indicator farmhouse-theme fancy-battery eziam-theme eyebrowse expand-region exotica-theme evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dracula-theme dotenv-mode doom-themes dockerfile-mode docker django-theme diminish diff-hl define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme csv-mode counsel-projectile company-web company-tern company-statistics company-lsp company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme centered-cursor-mode busybee-theme bubbleberry-theme browse-at-remote birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes alchemist aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(elixir-atom-face ((t (:foreground "#46D9FF"))))
+   '(flycheck-error ((t (:underline "#e74c3c"))))
+   '(flycheck-info ((t (:underline "#b6e63e"))))
+   '(flycheck-warning ((t (:underline "#e2c770"))))
+   '(flyspell-duplicate ((t (:underline "DarkOrange"))))
+   '(flyspell-incorrect ((t (:underline "#e74c3c"))))
+   '(font-lock-type-face ((t (:foreground "#ff5d38"))))
+   '(font-lock-variable-name-face ((t (:foreground "#ff5d38"))))
+   '(hi-yellow ((t (:background "dark orange" :foreground "black" :weight bold))))
+   '(hl-line ((t (:background "gray19"))))
+   '(lsp-headerline-breadcrumb-path-error-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Red1"))))
+   '(lsp-headerline-breadcrumb-path-hint-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-path-info-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-path-warning-face ((t (:inherit lsp-headerline-breadcrumb-path-face :underline "Yellow"))))
+   '(lsp-headerline-breadcrumb-symbols-error-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Red1"))))
+   '(lsp-headerline-breadcrumb-symbols-hint-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-symbols-info-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Green"))))
+   '(lsp-headerline-breadcrumb-symbols-warning-face ((t (:inherit lsp-headerline-breadcrumb-symbols-face :underline "Yellow"))))
+   '(lsp-ui-peek-highlight ((t (:inherit lsp-ui-peek-header :background "#484745" :foreground "gray" :box 1))))
+   '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.15))))
+   '(org-level-4 ((t (:inherit outline-4 :height 1.1))))
+   '(org-level-5 ((t (:inherit outline-5 :height 0.8)))))
+  )

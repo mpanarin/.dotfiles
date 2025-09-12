@@ -12,3 +12,4 @@ __pycache__/
 tsconfig.json
 .DS_Store
 .mix_tasks
+.tool-versions
