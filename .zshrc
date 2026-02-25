@@ -1,5 +1,6 @@
 # Path to oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # Name of the theme to load.
 ZSH_THEME="spaceship"
@@ -13,7 +14,7 @@ plugins=(git docker docker-compose extract mix mix-fast pip asdf direnv)
 if [[ -z $INSIDE_EMACS ]]; then
     # TMUX startup
     ZSH_TMUX_AUTOSTART=false
-    eval $(~/tmux_get_startup_command)
+    eval $(~/.tmux_get_startup_command)
     powerline-config tmux setup
     plugins+=(
         zsh-autosuggestions
@@ -44,7 +45,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -z $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+  export EDITOR='vim'
 else
   export EDITOR='vi'
 fi
@@ -59,17 +60,17 @@ ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=0'
 
 # VIRTUALENV WRAPPER STUFFS
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-source /usr/bin/virtualenvwrapper.sh
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+# source /usr/bin/virtualenvwrapper.sh
 
 # Enable fzf
 export FZF_TMUX=1
 export FZF_TMUX_OPTS='-p 100%,40% -y P'
-source ~/.fzf.zsh
+source <(fzf --zsh)
 bindkey '^ ' autosuggest-accept
 
 # Poetry
-export PATH="$PATH:/home/$USER/.poetry/bin"
+# xport PATH="$PATH:/home/$USER/.poetry/bin"
 
 # Python startup
 export PYTHONSTARTUP="$(python -m jedi repl)"
@@ -90,27 +91,30 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 # disable automatic cd in zsh
 unsetopt AUTO_CD
 
+export GPG_TTY=$(tty)
+
 # GOOGLE CLOUD STUFF
-CLOUDSDK_ROOT_DIR=/opt/google-cloud-cli
-CLOUDSDK_PYTHON=/usr/bin/python
-CLOUDSDK_PYTHON_ARGS='-S -W ignore'
-PATH="$CLOUDSDK_ROOT_DIR/bin:$PATH"
-GOOGLE_CLOUD_SDK_HOME=$CLOUDSDK_ROOT_DIR
+# CLOUDSDK_ROOT_DIR=/opt/google-cloud-cli
+# CLOUDSDK_PYTHON=/usr/bin/python
+# CLOUDSDK_PYTHON_ARGS='-S -W ignore'
+# PATH="$CLOUDSDK_ROOT_DIR/bin:$PATH"
+# GOOGLE_CLOUD_SDK_HOME=$CLOUDSDK_ROOT_DIR
 
 # Add elixir_ls to PATH
 PATH="$HOME/projects/personal/elixir/elixir-ls/release:$PATH"
 
+# FIXME: fix tmuxinator
 # add tmuxinator to PATH
-PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
+# PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
 
 # Aliases
-alias gdt='git difftool'
+# alias gdt='git difftool'
 
 alias mux='tmuxinator'
 
-alias doco=docker-compose
-alias doco_rebuild='doco down -v && doco up --build'
-alias doco_log='docker-compose logs'
+# alias doco=docker-compose
+# alias doco_rebuild='doco down -v && doco up --build'
+# alias doco_log='docker-compose logs'
 
 function omae_wa_mou_shindeiru() {
     echo 'NANI?!'
@@ -123,17 +127,17 @@ function omae_wa_mou_shindeiru() {
     fi
 }
 
-function ranger-cd {
-    tempfile="$(mktemp -t tmp.XXXXXX)"
-    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    test -f "$tempfile" &&
-        if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-            cd -- "$(cat "$tempfile")"
-        fi
-    rm -f -- "$tempfile"
-}
+# function ranger-cd {
+    # tempfile="$(mktemp -t tmp.XXXXXX)"
+    # ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    # test -f "$tempfile" &&
+        # if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+            # cd -- "$(cat "$tempfile")"
+        # fi
+    # rm -f -- "$tempfile"
+# }
 
-bindkey -s '^o' 'ranger-cd\n'
+# bindkey -s '^o' 'ranger-cd\n'
 
 function tnew() {
     if [ -z "$1" ]
@@ -154,31 +158,31 @@ function tatt() {
     fi
     tmux detach -E "tmux attach $name"
 }
+alias tkill='tmux kill-session -t'
 
-source ~/.dotfiles/aws_profile.zsh
+# source ~/.dotfiles/aws_profile.zsh
 
-alias devops-profile=''
+# alias devops-profile=''
 
-alias vim='nvim'
-alias v='vim'
+# alias vim='nvim'
+# alias v='vim'
 
-alias gsubsi='g submodule init && g submodule sync && g submodule update'
-alias gsubi='g submodule update --init'
+# alias gsubsi='g submodule init && g submodule sync && g submodule update'
+# alias gsubi='g submodule update --init'
 
-alias xa='exa -lh --git'
-alias xat='exa -lTh --git'
+alias za='eza -lh --git'
+alias zat='eza -lTh --git'
 
 alias b='bat'
 alias cat='bat'
 
-alias ezsh='nvim ~/.zshrc && source ~/.zshrc && omz reload'
-alias tkill='tmux kill-session -t'
+alias ezsh='vim ~/.zshrc && source ~/.zshrc && omz reload'
 
-alias kube35aws='kubectl --kubeconfig ~/projects/35up/tatenen/staging/kubeconfig'
-alias kube35aws_prod='kubectl --kubeconfig ~/projects/35up/tatenen/production/kubeconfig'
-alias kube35gke='kubectl --kubeconfig ~/projects/35up/tatenen/staging/kubeconfig-gke'
-alias kub='kubectl'
-alias serv='sudo systemctl'
+# alias kube35aws='kubectl --kubeconfig ~/projects/35up/tatenen/staging/kubeconfig'
+# alias kube35aws_prod='kubectl --kubeconfig ~/projects/35up/tatenen/production/kubeconfig'
+# alias kube35gke='kubectl --kubeconfig ~/projects/35up/tatenen/staging/kubeconfig-gke'
+# alias kub='kubectl'
+# alias serv='sudo systemctl'
 alias cdr='cd $(git rev-parse --show-toplevel)'
 
 # Add local bin to PATH
@@ -188,7 +192,7 @@ eval "$(direnv hook zsh)"
 autoload -U +X bashcompinit && bashcompinit
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/mpanarin/google-cloud-sdk/path.zsh.inc' ]; then . '/home/mpanarin/google-cloud-sdk/path.zsh.inc'; fi
+# if [ -f '/home/mpanarin/google-cloud-sdk/path.zsh.inc' ]; then . '/home/mpanarin/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/mpanarin/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/mpanarin/google-cloud-sdk/completion.zsh.inc'; fi
+# if [ -f '/home/mpanarin/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/mpanarin/google-cloud-sdk/completion.zsh.inc'; fi
