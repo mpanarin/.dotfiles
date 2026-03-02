@@ -915,10 +915,8 @@ lines downward first."
     (spaceline-minor-modes-p nil) ;; disable minor modes in spaceline
     )
 
-  (setq auto-save-mode nil            ;; switch to a better autosave mode. at least in OSX
-        auto-save-default nil         ;; switch to a better autosave mode
-        auto-save-visited-mode t      ;; switch to a better autosave mode
-        auto-save-visited-interval 5  ;; Make auto-save more frequent and less painful
+  (setq auto-save-mode t              ;; return back to default save mode
+        auto-save-default t           ;; return back to default save mode
         create-lockfiles nil          ;; No lock files plz
         vc-follow-symlinks t          ;; Always follow symlinks pls
         )
