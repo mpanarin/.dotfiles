@@ -910,9 +910,9 @@ lines downward first."
 (defun custom/spacemacs-improvements ()
   "Several fixes from spacemacs issues"
   (use-package spaceline
-    :custom
-    (spaceline-purpose-p nil)     ;; disable purpose in spaceline
-    (spaceline-minor-modes-p nil) ;; disable minor modes in spaceline
+    :config
+    (setq spaceline-purpose-p nil)     ;; disable purpose in spaceline
+    (setq spaceline-minor-modes-p nil) ;; disable minor modes in spaceline
     )
 
   (setq auto-save-mode t              ;; return back to default save mode
