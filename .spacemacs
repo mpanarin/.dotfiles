@@ -806,8 +806,8 @@ lines downward first."
       (kill-buffer "*Ibuffer*"))
     (advice-add 'ibuffer-visit-buffer :after #'custom-ibuffer-close-on-select)
     :bind
-    (:map evil-normal-state-local-map
-          ("SPC b b" . ibuffer)))
+    (:map spacemacs-default-map
+          ("b b" . ibuffer)))
   (use-package calendar
     :defer t
     :custom
@@ -874,37 +874,37 @@ lines downward first."
   (let ((keys '(
                 
                 ;;general
-                "SPC \""                ;; Remove strange call to terminal here
-                "SPC *"                 ;; Remove search in project, I use `SPC s p`
-                "SPC /"                 ;; Remove search in project, I use `SPC s P`
-                "SPC ;"                 ;; Remove this commenting, I use `g c` in visual
-                "SPC ?"                 ;; useless help
-                "SPC ²"                 ;; useless select of window
-                "SPC `"                 ;; useless select of window
-                "SPC <f1>"              ;; what is even helm apropos?
+                "\""                ;; Remove strange call to terminal here
+                "*"                 ;; Remove search in project, I use `SPC s p`
+                "/"                 ;; Remove search in project, I use `SPC s P`
+                ";"                 ;; Remove this commenting, I use `g c` in visual
+                "?"                 ;; useless help
+                "²"                 ;; useless select of window
+                "`"                 ;; useless select of window
+                "<f1>"              ;; what is even helm apropos?
                 
                 ;; applications
-                "SPC a '"               ;; I use `SPC '` no need for this
-                "SPC a k"               ;; Don't know what paradox is, don't care
-                "SPC a u"               ;; Undo-tree-visualize is not even working
-                "SPC a P"               ;; I don't use `proced`
-                "SPC a Y"               ;; I don't use easy pg
-                "SPC a *"               ;; I don't use Calc
-                "SPC a l"               ;; I don't use launchctrl TODO: maybe?
-                "SPC a c"               ;; Empty, why is it here I don't know
-                "SPC a e"               ;; I don't use email in emacs
-                "SPC a f"               ;; fun. Empty
-                "SPC a m"               ;; music. Empty
-                "SPC a r"               ;; Empty
-                "SPC a w"               ;; Empty
+                "a '"               ;; I use `SPC '` no need for this
+                "a k"               ;; Don't know what paradox is, don't care
+                "a u"               ;; Undo-tree-visualize is not even working
+                "a P"               ;; I don't use `proced`
+                "a Y"               ;; I don't use easy pg
+                "a *"               ;; I don't use Calc
+                "a l"               ;; I don't use launchctrl TODO: maybe?
+                "a c"               ;; Empty, why is it here I don't know
+                "a e"               ;; I don't use email in emacs
+                "a f"               ;; fun. Empty
+                "a m"               ;; music. Empty
+                "a r"               ;; Empty
+                "a w"               ;; Empty
                 
                 ;; buffers
-                "SPC b a"               ;; persp-add-buffer, I don't use it
-                "SPC b B"               ;; global-list-buffer, I use ibuffer
-                "SPC b I"               ;; iBuffer, I rebinded it
-                "SPC b U"               ;; helm-buffer-list-unfiltered, I don't use it
+                "b a"               ;; persp-add-buffer, I don't use it
+                "b B"               ;; global-list-buffer, I use ibuffer
+                "b I"               ;; iBuffer, I rebinded it
+                "b U"               ;; helm-buffer-list-unfiltered, I don't use it
                 )))
-    (mapc (lambda (key) (unbind-key key 'evil-normal-state-local-map)) keys))
+    (mapc (lambda (key) (unbind-key key 'spacemacs-default-map)) keys))
   )
 
 (defun custom/spacemacs-improvements ()
@@ -970,7 +970,7 @@ lines downward first."
     (tab-line-tab-current ((t (:inherit tab-line-tab :box (:line-width 1 :color "#83898d") :underline "#282725"))))
     (tab-line-tab-inactive ((t (:inherit tab-line-tab :overline "#282725"))))
     :bind
-    (:map evil-normal-state-local-map ("SPC w t" . simple-tabs-command-map))
+    (:map spacemacs-default-map ("w t" . simple-tabs-command-map))
     :config
     (global-simple-tabs-mode 1))
   )
@@ -1241,8 +1241,8 @@ lines downward first."
   (use-package helm-org-rifle
     :defer t
     :bind
-    (:map evil-normal-state-local-map
-          ("SPC a o R" . helm-org-rifle-agenda-files)))
+    (:map spacemacs-default-map
+          ("a o R" . helm-org-rifle-agenda-files)))
   )
 
 (defun custom/markdown-specific ()
@@ -1310,12 +1310,12 @@ lines downward first."
    or mode I rarely use."
   (define-key global-map (kbd "<menu>") nil)                                                          ;; Unbind annoying sticky M-x on <menu>
   ;; Swap safe revert buffer and persp remove buffer
-  (define-key evil-normal-state-local-map (kbd "SPC b r") 'revert-buffer)
-  (define-key evil-normal-state-local-map (kbd "SPC b R") 'persp-remove-buffer)
-  (define-key evil-normal-state-local-map (kbd "SPC b y") 'spacemacs/copy-whole-buffer-to-clipboard)  ;; Bind copy whole buffer to lowercase y (whatafaqerino)
-  (define-key evil-normal-state-local-map (kbd "SPC b k") 'custom/kill-all-persp)                     ;; Bind kill-all-persp
-  (define-key evil-normal-state-local-map (kbd "SPC a o f") 'custom/helm-open-agenda-file)            ;; Bind open agenda file
-  (define-key evil-normal-state-local-map (kbd "SPC x x") 'custom/expand-region)                      ;; Bind expand-region
+  (define-key spacemacs-default-map (kbd "b r") 'revert-buffer)
+  (define-key spacemacs-default-map (kbd "b R") 'persp-remove-buffer)
+  (define-key spacemacs-default-map (kbd "b y") 'spacemacs/copy-whole-buffer-to-clipboard)  ;; Bind copy whole buffer to lowercase y (whatafaqerino)
+  (define-key spacemacs-default-map (kbd "b k") 'custom/kill-all-persp)                     ;; Bind kill-all-persp
+  (define-key spacemacs-default-map (kbd "a o f") 'custom/helm-open-agenda-file)            ;; Bind open agenda file
+  (define-key spacemacs-default-map (kbd "x x") 'custom/expand-region)                      ;; Bind expand-region
   )
 
 
