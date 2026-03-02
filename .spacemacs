@@ -1010,6 +1010,7 @@ lines downward first."
     (lsp-sqls-server "~/go/bin/sqls")   ;; path to language server
     
     ;; Elixir-ls changes
+    (lsp-elixir-server-command '("expert_darwin_arm64" "--stdio"))
     (lsp-elixir-mix-env "dev")
     (lsp-elixir-enable-test-lenses nil)
     (lsp-elixir-dialyzer-enabled t)      ;; Should be disabled for some projects via dir-locals
